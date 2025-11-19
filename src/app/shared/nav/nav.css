@@ -1,0 +1,26 @@
+@media screen and (max-width: 992px) {
+  .side-menu {
+    position: fixed;
+    top: 0;
+    background-color: #a5b2d2;
+    opacity: 0.95;
+    height: 100vh;
+    left: -100%;
+    transition: left 0.5s ease;
+    padding: 20px;
+    z-index: 100;
+    min-width: 60vw;
+    max-width: 100%;
+    box-shadow: 3px 5px 6px 0px #adadad;
+  }
+  .side-menu.open {
+    left: 0%;
+  }
+  ul {
+    max-height: 80vh;
+    overflow: scroll;
+  }
+  .close-btn:hover {
+    color: rgba(0, 0, 0, 0.606);
+  }
+}
