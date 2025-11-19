@@ -1,2 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-/* Importing a Google Font */ 
+/* Importing a Google Font */
+@import 'tailwindcss';
+
+@theme {
+  --color-rock-blue: #a5b2d2;
+  --color-light-blue: #d1daf1;
+}
