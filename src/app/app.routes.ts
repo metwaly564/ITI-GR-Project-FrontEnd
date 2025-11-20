@@ -10,4 +10,9 @@ export const routes: Routes = [
   },
   { path: 'home', component: Home },
   { path: 'singleproduct/:id', component: SingleProduct },
+
+  {
+    path: 'login',
+    loadComponent: () => import('./components/auth/login/login').then((m) => m.Login),
+  },
 ];
