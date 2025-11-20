@@ -1,27 +1,50 @@
-<section class="hero-banner">
-<div class="container">
-    <div class="hero-content">
-    <div class="hero-text">
-        <div class="delivery-badge">
-        Free Delivery on Orders Over 200 SAR
+<section class="bg-gradient-to-br from-[#a5b2d2] to-[#8a9bd6] py-12 text-white">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-8 max-w-6xl mx-auto">
+      
+      <div class="lg:w-1/2 space-y-6">
+        <div class="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-2">
+          <span class="text-sm font-semibold">Free Delivery on Orders Over 200 EGP</span>
         </div>
-        <h1>Get your medicines and health products delivered to your doorstep</h1>
-        <p>Your trusted pharmacy partner for all your healthcare needs. Fast, reliable, and convenient.</p>
-        <div class="hero-buttons">
-        <button class="btn-primary" routerLink="/products">
+        
+        <div class="space-y-4">
+          <h1 class="text-3xl lg:text-4xl font-bold leading-tight">
+            Get Your Medicines<br>
+            <span class="text-white/95">Delivered to Your Doorstep</span>
+          </h1>
+          
+          <p class="text-lg text-white/90 leading-relaxed">
+            Your trusted pharmacy partner for all healthcare needs.<br>
+            <span class="font-medium">Fast, reliable, and convenient.</span>
+          </p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+          <button 
+            class="bg-white text-[#a5b2d2] hover:bg-gray-50 px-8 py-3 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
+            routerLink="/products">
             Start Shopping
-        </button>
-        <button class="btn-secondary" routerLink="/about">
+          </button>
+          <button 
+            class="border-2 border-white text-white hover:bg-white hover:text-[#a5b2d2] px-8 py-3 rounded-lg font-semibold transition-all duration-200"
+            routerLink="/about">
             Learn More
-        </button>
+          </button>
         </div>
-    </div>
-    <div class="hero-image">
-        <div class="image-placeholder">
-        <i class="fas fa-heartbeat"></i>
-        <p>Healthcare Products</p>
+      </div>
+      
+      <div class="lg:w-1/2 flex justify-center">
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 shadow-lg">
+          <div class="flex flex-col items-center justify-center space-y-4">
+            <i class="fas fa-heartbeat text-5xl text-white/90"></i>
+            <div class="text-center">
+              <p class="text-xl font-semibold">Healthcare Products</p>
+              <p class="text-white/80 text-sm mt-1">Medicines • Vitamins • Supplements</p>
+            </div>
+          </div>
         </div>
+      </div>
+      
     </div>
-    </div>
-</div>
+  </div>
 </section>

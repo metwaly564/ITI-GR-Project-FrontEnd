@@ -7,7 +7,7 @@ import { FeatureSection } from './feature-section/feature-section';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Footer, Nav, HeroBanner, FeatureSection],
+  imports: [RouterOutlet, Nav, Footer],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

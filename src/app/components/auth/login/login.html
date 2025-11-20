@@ -1,66 +1,72 @@
-<div class="login-container">
-  <div class="login-card">
+<div class="min-h-screen bg-gradient-to-br from-[var(--color-light-blue)] to-[var(--color-rock-blue)] flex items-center justify-center p-6">
+  <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
     
-    <div class="login-header">
-      <div class="logo">
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center gap-3 text-2xl font-bold text-[var(--color-rock-blue)] mb-4">
         <i class="fas fa-heartbeat"></i>
         <span>Care Zone</span>
       </div>
-      <h2>Welcome Back</h2>
-      <p>Please login to your account</p>
+      <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>
+      <p class="text-gray-600">Please login to your account</p>
     </div>
 
-    <form class="login-form" (ngSubmit)="onlogin()">
+    <form class="space-y-6" (ngSubmit)="onlogin()">
       
-      <div class="form-group">
-        <label for="email">Email</label>
-        <div class="input-group">
-          <i class="fas fa-envelope"></i>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+        <div class="relative">
+          <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           <input 
             type="email" 
             id="email"
             [(ngModel)]="email"
             name="email"
             placeholder="Enter your email"
-            required>
+            required
+            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-rock-blue)] focus:border-transparent transition-all duration-200">
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input-group">
-          <i class="fas fa-lock"></i>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+        <div class="relative">
+          <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           <input 
             [type]="showPassword ? 'text' : 'password'" 
             id="password"
             [(ngModel)]="password"
             name="password" 
             placeholder="Enter your password"
-            required>
+            required
+            class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-rock-blue)] focus:border-transparent transition-all duration-200">
           <i 
-            class="fas fa-eye password-toggle"
+            class="fas fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600"
             (click)="togglePasswordVisibility()">
           </i>
         </div>
       </div>
 
-      <div class="form-options">
-        <label class="checkbox">
-          <input type="checkbox" name="rememberMe">
-          Remember me
+      <div class="flex items-center justify-between">
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" name="rememberMe" class="w-4 h-4 text-[var(--color-rock-blue)] rounded focus:ring-[var(--color-rock-blue)]">
+          <span class="text-sm text-gray-600">Remember me</span>
         </label>
-        <a href="#" class="forgot-link">Forgot password?</a>
+        <a href="#" class="text-sm text-[var(--color-rock-blue)] hover:text-[var(--color-light-blue)] transition-colors duration-200">Forgot password?</a>
       </div>
 
-      <button type="submit" class="login-btn">
+      <button 
+        type="submit" 
+        class="w-full bg-[var(--color-rock-blue)] hover:bg-[var(--color-light-blue)] text-white py-3 px-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 focus:ring-4 focus:ring-[var(--color-light-blue)]">
         Login
       </button>
 
     </form>
 
-    <div class="signup-link">
-      Don't have an account? 
-      <a href="/auth/register" class="signup-text">Sign Up</a>
+    <div class="text-center mt-6">
+      <p class="text-gray-600">
+        Don't have an account? 
+        <a href="/auth/register" class="text-[var(--color-rock-blue)] font-semibold hover:text-[var(--color-light-blue)] transition-colors duration-200 ml-1">Sign Up</a>
+      </p>
     </div>
 
   </div>

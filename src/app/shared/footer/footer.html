@@ -1,44 +1,66 @@
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Care Zone</h4>
-                <p>Your trusted healthcare partner.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Contact Us</h4>
-                <p><i class="fas fa-envelope"></i> info@carezone.com</p>
-                <p><i class="fas fa-phone"></i> +1 234 567 890</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <a routerLink="/about">About Us</a>
-                <a routerLink="/contact">Contact</a>
-            </div>
-            <div class="footer-section">
-                <h4>Follow Us</h4>
-                <p>Stay connected with us</p>
-                <div class="social-icons">
-                    <a href="#" class="social-link" title="Facebook">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="social-link" title="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-link" title="Twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-link" title="LinkedIn">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="#" class="social-link" title="YouTube">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                </div>
-            </div>
+<footer class="bg-[#a5b2d2] text-black py-8 mt-auto">
+  <div class="container mx-auto px-4">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+      
+      <div>
+        <h4 class="text-lg font-bold mb-4 text-gray-800">Care Zone</h4>
+        <p class="text-gray-700">Your trusted healthcare partner.</p>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-bold mb-4 text-gray-800">Contact Us</h4>
+        <div class="space-y-2">
+          <p class="flex items-center gap-2 text-gray-700">
+            <i class="fas fa-envelope w-4"></i>
+            info@carezone.com
+          </p>
+          <p class="flex items-center gap-2 text-gray-700">
+            <i class="fas fa-phone w-4"></i>
+            +1 234 567 890
+          </p>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Care Zone. All rights reserved.</p>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-bold mb-4 text-gray-800">Quick Links</h4>
+        <div class="space-y-2">
+          <a routerLink="/about" class="block text-gray-700 hover:text-gray-900 transition-colors duration-200">
+            About Us
+          </a>
+          <a routerLink="/contact" class="block text-gray-700 hover:text-gray-900 transition-colors duration-200">
+            Contact
+          </a>
         </div>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-bold mb-4 text-gray-800">Follow Us</h4>
+        <p class="text-gray-700 mb-4">Stay connected with us</p>
+        <div class="flex gap-3">
+          <a href="#" class="w-9 h-9 bg-gray-700 hover:bg-blue-600 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110" title="Facebook">
+            <i class="fab fa-facebook-f text-sm"></i>
+          </a>
+          <a href="#" class="w-9 h-9 bg-gray-700 hover:bg-pink-600 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110" title="Instagram">
+            <i class="fab fa-instagram text-sm"></i>
+          </a>
+          <a href="#" class="w-9 h-9 bg-gray-700 hover:bg-blue-400 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110" title="Twitter">
+            <i class="fab fa-twitter text-sm"></i>
+          </a>
+          <a href="#" class="w-9 h-9 bg-gray-700 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110" title="LinkedIn">
+            <i class="fab fa-linkedin-in text-sm"></i>
+          </a>
+          <a href="#" class="w-9 h-9 bg-gray-700 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110" title="YouTube">
+            <i class="fab fa-youtube text-sm"></i>
+          </a>
+        </div>
+      </div>
+
     </div>
+
+    <div class="border-t border-gray-400 pt-6 text-center">
+      <p class="text-gray-700">&copy; 2024 Care Zone. All rights reserved.</p>
+    </div>
+
+  </div>
 </footer>
