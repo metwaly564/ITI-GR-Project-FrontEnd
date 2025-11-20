@@ -1,7 +1,7 @@
 import { Component, inject, input } from '@angular/core';
 import { product } from '../../types';
-import { ProductServ } from '../../services/product-serv';
 import { CurrencyPipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-card',
@@ -11,4 +11,8 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class ProductCard {
   productdata = input.required<product>();
+  router = inject(Router);
+  goToSingleProductPage(id: number) {
+    this.router.navigateByUrl(`/singleproduct/${id}`);
+  }
 }

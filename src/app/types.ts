@@ -1,13 +1,27 @@
+////////////////////API//////////////////
 export interface product {
   id: number;
-  title: string;
+  name: string;
   description: string;
-  category: string;
   price: number;
-  rating: number;
-  stock: number;
-  images: string[];
+  discountPrice: number;
+  imageUrl: string;
+  isPrescriptionRequired: boolean;
+  isActive: boolean;
+  categoryId: number;
+  categoryName: string;
+  createdAt: string;
+  stock: Stock[];
 }
-export type products = {
-  products: product[];
-};
+export interface Stock {
+  productId: number;
+  productName: string;
+  branchId: number;
+  branchName: string;
+  quantity: number;
+  minimumStockLevel: number;
+  maximumStockLevel: number;
+  lastRestocked: string;
+  isLowStock: boolean;
+  isOutOfStock: boolean;
+}

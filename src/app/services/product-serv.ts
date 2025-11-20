@@ -1,18 +1,36 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { products } from '../types';
 import { catchError, map } from 'rxjs';
+import { product } from '../types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductServ {
-  private apidata = 'https://dummyjson.com/products';
+  private apidata = 'http://localhost:5062/api/Products';
   http = inject(HttpClient);
 
   getProduct() {
-    return this.http.get<products>(this.apidata).pipe(
-      map((res) => res.products),
+    return this.http.get<product[]>(this.apidata).pipe(
+      map((res) => res),
+      catchError((err: any) => {
+        alert(err.message);
+        return [];
+      })
+    );
+  }
+  getProductById(id: number) {
+    return this.http.get<product>(`${this.apidata}/${id}`).pipe(
+      map((res) => res),
+      catchError((err: any) => {
+        alert(err.message);
+        return [];
+      })
+    );
+  }
+  getfeatureProduct() {
+    return this.http.get<product[]>(`${this.apidata}/featured`).pipe(
+      map((res) => res),
       catchError((err: any) => {
         alert(err.message);
         return [];
