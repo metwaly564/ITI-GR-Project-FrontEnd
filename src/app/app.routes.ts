@@ -8,4 +8,7 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   { path: 'home', component: Home },
+
+    {path: 'login', loadComponent: () => import('./components/auth/login/login').then(m => m.Login)},
+
 ];
