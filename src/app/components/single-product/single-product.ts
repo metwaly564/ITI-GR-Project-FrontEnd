@@ -27,9 +27,9 @@ export class SingleProduct implements OnInit {
     this.productServ.getProductById(this.id()).subscribe((res) => {
       this.ProductById.set(res);
       if (this.ProductById()?.discountPrice) {
-        this.discount.set(this.ProductById()!.price - this.ProductById()!.discountPrice);
+        this.discount.set(this.ProductById()!.price - this.ProductById()!.discountPrice!);
         this.perdiscount.set(
-          ((this.ProductById()!.price - this.ProductById()!.discountPrice) * 100) / 100
+          ((this.ProductById()!.price - this.ProductById()!.discountPrice!) * 100) / 100
         );
       }
     });

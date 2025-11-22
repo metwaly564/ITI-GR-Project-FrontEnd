@@ -1,7 +1,11 @@
+<<<<<<< HEAD
+import { Component, signal } from '@angular/core';
+=======
 
 import { Component,  signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
+>>>>>>> main
 
 @Component({
   selector: 'app-nav',

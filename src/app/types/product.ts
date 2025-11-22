@@ -4,7 +4,7 @@ export interface product {
   name: string;
   description: string;
   price: number;
-  discountPrice: number;
+  discountPrice?: number;
   imageUrl: string;
   isPrescriptionRequired: boolean;
   isActive: boolean;

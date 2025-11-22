@@ -41,11 +41,11 @@ bg-light-blue hover:bg-rock-blue transition-colors duration-300 relative">
     <div class="text-start">
       @if(productdata().discountPrice){
       <span class="line-through text-gray-700">{{productdata().price}}</span>
-      <p class=" text-lg font-bold">{{productdata().discountPrice | currency:'EGP':'symbol' }} </p>
       }
-      @else{
-      <p class=" text-lg font-bold">{{productdata().price | currency:'EGP':'symbol' }} </p>
-      }
+
+      <p class=" text-lg font-bold">{{(productdata().discountPrice ??productdata().price) | currency:'EGP':'symbol' }}
+      </p>
+
 
     </div>
     <div class=" gap-1 flex justify-between items-center ">
