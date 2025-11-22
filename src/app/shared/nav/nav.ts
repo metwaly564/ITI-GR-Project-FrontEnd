@@ -1,8 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, inject, OnChanges, OnInit, signal, SimpleChanges } from '@angular/core';
+import { ProductServ } from '../../services/product-serv';
+import { CartServ } from '../../services/cart-serv';
 
 @Component({
   selector: 'app-nav',
-  imports: [],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })

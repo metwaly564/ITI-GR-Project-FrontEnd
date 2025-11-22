@@ -1,6 +1,7 @@
 <nav class="bg-rock-blue py-3">
   <div class="container flex justify-between items-center px-3 mx-auto">
     <button class="lg:hidden text-xl hover:opacity-70 cursor-pointer" (click)="openToggle()">
+
       <i class="fa-solid fa-bars"></i>
     </button>
     <a class="font-[cursive] text-black text-xl" href="#">CareZone</a>
@@ -19,7 +20,7 @@
             <i class="fa-solid fa-caret-down"></i>
           </a>
           @if(activeDropdownMenu() == 'cat') {
-          <ul class="lg:absolute p-3 lg:bg-white lg:border lg:border-gray-400 lg:rounded-lg">
+          <ul class="lg:absolute p-3 lg:bg-white lg:border lg:border-gray-400 lg:rounded-lg z-50">
             <li><a
                 class="text-black/65 py-2 px-3 inline-block lg:hover:bg-rock-blue w-full hover:bg-white max-w-52 rounded"
                 href="#">skincare</a>
@@ -36,29 +37,7 @@
           </ul>
           }
         </li>
-        <li>
-          <a class="text-black/65 py-2 px-3 inline-block cursor-pointer hover:bg-white w-full max-w-52 rounded lg:hover:bg-transparent"
-            (click)="setDropdownMenu('branches')" role="button"> Branches
-            <i class="fa-solid fa-caret-down"></i>
-          </a>
-          @if(activeDropdownMenu() == 'branches') {
-          <ul class="lg:absolute p-3 lg:bg-white lg:border lg:border-gray-400 lg:rounded-lg">
-            <li><a
-                class="text-black/65 py-2 px-3 inline-block lg:hover:bg-rock-blue w-full hover:bg-white max-w-52 rounded"
-                href="#">skincare</a>
-            </li>
-            <li><a
-                class="text-black/65 py-2 px-3 inline-block lg:hover:bg-rock-blue w-full hover:bg-white max-w-52 rounded"
-                href="#">haircare</a>
-            </li>
-            <li><a
-                class="text-black/65 py-2 px-3 inline-block lg:hover:bg-rock-blue w-full hover:bg-white max-w-52 rounded"
-                href="#">Something
-                else
-                here</a></li>
-          </ul>
-          }
-        </li>
+
         <li>
           <a class="text-black/65 py-2 px-3 inline-block cursor-pointer hover:bg-white w-full max-w-52 rounded lg:hover:bg-transparent"
             routerLink="/productList">about</a>
@@ -71,7 +50,16 @@
       <div class="w-full flex justify-between gap-3 lg:hidden absolute bottom-5 px-5 left-0 text-lg
 ">
         <a class="px-3 cursor-pointer "><i class="fa-solid fa-magnifying-glass"></i></a>
-        <a class="px-3 cursor-pointer"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a class="px-3 cursor-pointer relative"><i class="fa-solid fa-cart-shopping">
+          </i>
+          <!-- @if(totalItems > 0){
+          <span
+            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+            {{ totalItems }}
+          </span> 
+          }-->
+
+        </a>
         <a class="px-3 cursor-pointer"> <i class="fa-regular fa-heart"></i> </a>
         <a class="px-3 cursor-pointer"><i class="fa-solid fa-user"></i></a>
       </div>
@@ -79,7 +67,14 @@
 
     <div class="hidden lg:flex gap-2">
       <a class="px-2 cursor-pointer"><i class="fa-solid fa-magnifying-glass"></i></a>
-      <a class="px-2 cursor-pointer"><i class="fa-solid fa-cart-shopping"></i></a>
+      <a class="px-2 cursor-pointer relative"><i class="fa-solid fa-cart-shopping"></i>
+        <!-- @if(totalItems > 0){
+        <span
+          class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+          {{ totalItems }}
+        </span>
+        } -->
+      </a>
       <a class="px-2 cursor-pointer"> <i class="fa-regular fa-heart"></i> </a>
       <a class="px-2 cursor-pointer"><i class="fa-solid fa-user"></i></a>
     </div>

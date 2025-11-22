@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductServ } from '../../services/product-serv';
-import { product } from '../../types';
+import { product } from '../../types/product';
 import { Location } from '@angular/common';
+import { CartServ } from '../../services/cart-serv';
 
 @Component({
   selector: 'app-single-product',
@@ -12,6 +13,7 @@ import { Location } from '@angular/common';
 })
 export class SingleProduct implements OnInit {
   productServ = inject(ProductServ);
+  cartServ = inject(CartServ);
   activeRoute = inject(ActivatedRoute);
   location = inject(Location);
 
@@ -48,5 +50,8 @@ export class SingleProduct implements OnInit {
     } else {
       this.quantityNum.set(Number(+quantity + 1));
     }
+  }
+  addTocart(id: any, quantity: string) {
+    this.cartServ.addtocart(id, +quantity);
   }
 }

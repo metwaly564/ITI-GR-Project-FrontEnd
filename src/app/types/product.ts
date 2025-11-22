@@ -1,5 +1,5 @@
-////////////////////API//////////////////
 export interface product {
+  quantity: number;
   id: number;
   name: string;
   description: string;
@@ -11,7 +11,7 @@ export interface product {
   categoryId: number;
   categoryName: string;
   createdAt: string;
-  stock: Stock[];
+  stock: Stock[] | [];
 }
 export interface Stock {
   productId: number;
