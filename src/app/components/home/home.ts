@@ -15,18 +15,22 @@ import { HomeServ } from '../../services/home-serv';
   styleUrl: './home.css',
 })
 export class Home {
+  [x: string]: any;
   productserv = inject(ProductServ);
   homeServ = inject(HomeServ);
-  // allProducts = signal<product[]>([]);
+  //////////feature product //////////////
   featuredProducts = signal<product[]>([]);
   getfeaturedproduct = this.homeServ.getFeatureProduct().subscribe((res: any) => {
+    console.log(res);
+
     return this.featuredProducts.set(res);
   });
 
-  ////////////////for testing //////////////////
-  theproductserv = inject(TheproductServ);
-  theallProducts = signal<theproduct[]>([]);
-  theget = this.theproductserv.getProduct().subscribe((res) => {
-    this.theallProducts.set(res);
+  //////////pop product //////////////
+  popularProducts = signal<product[]>([]);
+  getPopularProduct = this.homeServ.getPopularProduct().subscribe((res: any) => {
+    console.log(res);
+
+    return this.popularProducts.set(res);
   });
 }

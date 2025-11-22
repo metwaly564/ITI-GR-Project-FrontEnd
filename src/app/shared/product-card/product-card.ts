@@ -1,8 +1,7 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { product } from '../../types/product';
 import { CurrencyPipe } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ProductServ } from '../../services/product-serv';
+import { Router } from '@angular/router';
 import { CartServ } from '../../services/cart-serv';
 
 @Component({
@@ -26,7 +25,6 @@ export class ProductCard implements OnInit {
   ///////////////quantity of cart product ///////////////
   quantityNum = signal<number>(1);
   decQuantity(quantity: any) {
-    console.log(quantity);
     if (+quantity <= 0) {
       return;
     } else {
@@ -45,8 +43,10 @@ export class ProductCard implements OnInit {
   perdiscout = signal<number>(0);
 
   ngOnInit(): void {
-    this.perdiscout.set(
-      ((this.productdata()!.price - this.productdata()!.discountPrice) * 100) / 100
-    );
+    if (this.productdata()?.discountPrice) {
+      this.perdiscout.set(
+        ((this.productdata()!.price - this.productdata()?.discountPrice) * 100) / 100
+      );
+    }
   }
 }

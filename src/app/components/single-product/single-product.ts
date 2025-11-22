@@ -27,10 +27,12 @@ export class SingleProduct implements OnInit {
     this.id.set(Number(this.activeRoute.snapshot.params['id']));
     this.productServ.getProductById(this.id()).subscribe((res) => {
       this.ProductById.set(res);
-      this.discount.set(this.ProductById()!.price - this.ProductById()!.discountPrice);
-      this.perdiscount.set(
-        ((this.ProductById()!.price - this.ProductById()!.discountPrice) * 100) / 100
-      );
+      if (this.ProductById()?.discountPrice) {
+        this.discount.set(this.ProductById()!.price - this.ProductById()!.discountPrice);
+        this.perdiscount.set(
+          ((this.ProductById()!.price - this.ProductById()!.discountPrice) * 100) / 100
+        );
+      }
     });
   }
   goBack() {

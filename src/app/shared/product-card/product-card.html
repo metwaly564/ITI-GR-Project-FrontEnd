@@ -1,23 +1,25 @@
   <div class="justify-between flex flex-col h-full border border-gray-300 rounded-2xl shadow-[1px_3px_6px_1px_#dadada]
- hover:shadow-[2px_5px_8px_2px_#969696] transition-all duration-300 overflow-hidden">
+ hover:shadow-[2px_5px_8px_2px_#969696] transition-all duration-300 overflow-hidden ">
     <div class="rounded-t-lg shadow-[0_2px_5px_rgba(176,176,176,0.2)]
 bg-light-blue hover:bg-rock-blue transition-colors duration-300 relative">
 
       <!-- <img class="max-w-full max-h-full transition-transform duration-300 hover:scale-110"
         src="{{productdata().imageUrl}}" /> -->
       <img class="max-w-full max-h-full transition-transform duration-300 hover:scale-110"
-        src="—Pngtree—3d illustration of lip gloss_15428395.png" />
+        src="—Pngtree—3d illustration of lip gloss_15428395.png" type="button"
+        (click)="goToSingleProductPage(productdata().id)" />
+      @if(perdiscout() > 0 ){
       <span
         class="absolute left-4 top-4 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-600 text-white shadow">{{perdiscout()}}%
         oFF
       </span>
+      }
+
     </div>
     <div class="flex justify-between items-center mt-3 mx-3">
       <button class=" text-lg font-bold text-left" (click)="goToSingleProductPage(productdata().id)">
         {{productdata().name}}
       </button>
-
-
     </div>
 
     @if (productdata().stock.length == 0 ) {
@@ -37,8 +39,14 @@ bg-light-blue hover:bg-rock-blue transition-colors duration-300 relative">
   <div class=" flex justify-between items-center my-6 mx-3">
 
     <div class="text-start">
+      @if(productdata().discountPrice){
       <span class="line-through text-gray-700">{{productdata().price}}</span>
       <p class=" text-lg font-bold">{{productdata().discountPrice | currency:'EGP':'symbol' }} </p>
+      }
+      @else{
+      <p class=" text-lg font-bold">{{productdata().price | currency:'EGP':'symbol' }} </p>
+      }
+
     </div>
     <div class=" gap-1 flex justify-between items-center ">
 

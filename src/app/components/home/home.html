@@ -1,6 +1,6 @@
-<!-- ////////////// product card ///////////////// -->
+<!-- ////////////// featured card ///////////////// -->
 <div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
-  <i class="fa-solid fa-arrow-trend-up text-rock-blue font-bold"></i>
+  <i class="fa-solid fa-arrow-trend-up text-green-600 font-bold"></i>
   <h2>Featured Products</h2>
 </div>
 <div class=" container px-3 mx-auto text-center mb-10 ">
@@ -10,48 +10,19 @@
     }
   </div>
 </div>
-<!-- ////////////// for testing ///////////////// -->
-<div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1 ">
-  <i class="fa-solid fa-arrows-rotate  text-rock-blue font-bold"></i>
-  <h2>all Products</h2>
+<!-- ////////////// popular card ///////////////// -->
+<div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
+  <i class="fa-solid fa-fire  text-green-600 font-bold"></i>
+  <h2>Popular Products</h2>
 </div>
-<div class=" container px-3 mx-auto text-center mb-10">
+<div class=" container px-3 mx-auto text-center mb-10 ">
   <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
-    @for (item of theallProducts(); track item.id ) {
-    <div class="justify-between flex flex-col h-full border border-gray-300 rounded-2xl shadow-[1px_3px_6px_1px_#dadada]
-hover:shadow-[2px_5px_8px_2px_#969696] transition-all duration-300 ">
-      <div class="rounded-t-lg shadow-[0_2px_5px_rgba(176,176,176,0.2)]
-bg-light-blue hover:bg-rock-blue transition-colors duration-300">
-        <img class="max-w-full max-h-full transition-transform duration-300 hover:scale-110" src="{{item.images[0]}}" />
-      </div>
-      <div class="flex justify-between items-center mt-3 mx-3">
-        <div class=" text-lg font-bold text-left cursor-pointer">
-          {{item.title}}
-        </div>
-        <div class=" flex items-center gap-1">
-          <p class="m-0"> {{item.rating}}</p>
-          <i class="fa-solid fa-star  text-[#ffc55a]"></i>
-        </div>
-      </div>
-
-      @if (item.stock < 10){ <div style="color: red;" class="text-left text-sm opacity-70 mx-3">
-        only
-        {{item.stock}} item in stock
-    </div>}
-
-    <div class=" flex justify-between items-center my-6 mx-3">
-      <p class=" text-lg font-bold">EGP{{item.price }} </p>
-      <div class=" gap-1 flex justify-between items-center ">
-        <i class=" fa-solid fa-cart-arrow-down card-button "></i>
-        <i class="fa-regular fa-heart card-button "></i>
-      </div>
-    </div>
-
+    @for (item of popularProducts (); track item.id ) {
+    <app-product-card [productdata]="item" class="w-full " />
+    }
   </div>
+</div>
 
-  }
-</div>
-</div>
 <app-hero-banner />
 <br />
 <app-feature-section />
