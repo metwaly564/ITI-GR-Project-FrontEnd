@@ -1,6 +1,4 @@
-import { Component, effect, inject, OnChanges, OnInit, signal, SimpleChanges } from '@angular/core';
-import { ProductServ } from '../../services/product-serv';
-import { CartServ } from '../../services/cart-serv';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-nav',

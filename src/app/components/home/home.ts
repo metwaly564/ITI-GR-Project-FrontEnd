@@ -26,30 +26,6 @@ export class Home {
   //////////popular product //////////////
   popularProducts = signal<product[]>([]);
   getPopularProduct = this.homeServ.getPopularProduct().subscribe((res: any) => {
-    console.log(res);
-
     return this.popularProducts.set(res);
   });
-
-  //////////// carsoul ////////////
-  slides = [
-    { image: 'https://picsum.photos/800/400?1' },
-    { image: 'https://picsum.photos/800/400?2' },
-    { image: 'https://picsum.photos/800/400?3' },
-  ];
-
-  currentIndex = signal(0);
-
-  next() {
-    if (this.currentIndex() == this.slides.length - 1) {
-      this.currentIndex.set(0);
-    }
-    this.currentIndex.set((this.currentIndex() + 1) % this.slides.length);
-    console.log(this.currentIndex);
-    console.log(this.slides.length);
-  }
-
-  prev() {
-    this.currentIndex.set((this.currentIndex() - 1 + this.slides.length) % this.slides.length);
-  }
 }

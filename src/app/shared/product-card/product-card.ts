@@ -33,7 +33,7 @@ export class ProductCard implements OnInit {
   ngOnInit(): void {
     if (this.productdata()?.discountPrice) {
       this.perdiscout.set(
-        ((this.productdata()!.price - this.productdata()?.discountPrice) * 100) / 100
+        ((this.productdata()!.price - (this.productdata()?.discountPrice ?? 0)) * 100) / 100
       );
     }
   }

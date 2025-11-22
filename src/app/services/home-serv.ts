@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { product } from '../types/product';
 import { catchError, map } from 'rxjs';
-import { Home } from '../components/home/home';
+import { Homets } from '../types/home';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +11,7 @@ export class HomeServ {
   http = inject(HttpClient);
 
   getFeatureProduct() {
-    return this.http.get<Home>(this.apidata).pipe(
+    return this.http.get<Homets>(this.apidata).pipe(
       map((res) => {
         return res.featuredProducts;
       }),
@@ -23,12 +22,23 @@ export class HomeServ {
     );
   }
   getPopularProduct() {
-    return this.http.get<Home>(this.apidata).pipe(
+    return this.http.get<Homets>(this.apidata).pipe(
       map((res) => {
         console.log(res);
         console.log(res.popularProducts);
 
         return res.popularProducts;
+      }),
+      catchError((err) => {
+        alert(err.message);
+        return [];
+      })
+    );
+  }
+  getbanners() {
+    return this.http.get<Homets>(this.apidata).pipe(
+      map((res) => {
+        return res.banners;
       }),
       catchError((err) => {
         alert(err.message);

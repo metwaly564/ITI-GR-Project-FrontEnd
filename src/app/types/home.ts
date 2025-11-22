@@ -1,4 +1,4 @@
-export interface Home {
+export interface Homets {
   banners: Banner[];
   categories: Category[];
   featuredProducts: FeaturedProduct[];
