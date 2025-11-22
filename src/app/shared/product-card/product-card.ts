@@ -3,6 +3,7 @@ import { product } from '../../types/product';
 import { CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartServ } from '../../services/cart-serv';
+import { ProductCart } from '../../types/cart';
 
 @Component({
   selector: 'app-product-card',
@@ -14,29 +15,16 @@ export class ProductCard implements OnInit {
   productdata = input.required<product>();
   cartServ = inject(CartServ);
   router = inject(Router);
+
   goToSingleProductPage(id: number) {
     this.router.navigateByUrl(`/singleproduct/${id}`);
   }
 
-  addTocart(id: number, quantity: string) {
-    this.cartServ.addtocart(id, +quantity);
-  }
-
-  ///////////////quantity of cart product ///////////////
-  quantityNum = signal<number>(1);
-  decQuantity(quantity: any) {
-    if (+quantity <= 0) {
-      return;
-    } else {
-      this.quantityNum.set(Number(+quantity - 1));
-    }
-  }
-  incQuantity(quantity: any) {
-    if (+quantity >= 10) {
-      return;
-    } else {
-      this.quantityNum.set(Number(+quantity + 1));
-    }
+  addTocart(id: number) {
+    const productofcart = localStorage.getItem('cart');
+    const productofcartarray: ProductCart[] = productofcart ? JSON.parse(productofcart) : [];
+    const exsistingproduct = productofcartarray.find((item) => item.id == id);
+    this.cartServ.addtocart(id, exsistingproduct ? exsistingproduct.quantity + 1 : 1);
   }
 
   /////////////////discount ////////////

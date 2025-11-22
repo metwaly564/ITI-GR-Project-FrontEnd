@@ -38,20 +38,15 @@ export class SingleProduct implements OnInit {
   goBack() {
     this.location.back();
   }
-  decQuantity(quantity: any) {
-    console.log(quantity);
+  decQuantity(quantity: string) {
     if (+quantity <= 0) {
       return;
     } else {
       this.quantityNum.set(Number(+quantity - 1));
     }
   }
-  incQuantity(quantity: any) {
-    if (+quantity >= 10) {
-      return;
-    } else {
-      this.quantityNum.set(Number(+quantity + 1));
-    }
+  incQuantity(quantity: string) {
+    this.quantityNum.set(Number(+quantity + 1));
   }
   addTocart(id: any, quantity: string) {
     this.cartServ.addtocart(id, +quantity);

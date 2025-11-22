@@ -1,3 +1,32 @@
+<!-- //////////////// carousel /////////////////// -->
+<!-- <div class="relative w-full overflow-hidden rounded-lg"> -->
+<!-- Slides Wrapper -->
+<!-- <div class="flex transition-transform duration-700" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
+    @for (item of slides; track $index) {
+    <div class="min-w-full">
+      <img [src]="item.image" class="w-full h-64 object-cover" />
+    </div>
+    }
+
+  </div> -->
+
+<!-- Prev Button -->
+<button
+  class="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full shadow bg-white/70 hover:bg-white disabled:bg-gray-300 disabled:cursor-not-allowed"
+  (click)="prev()" [disabled]="currentIndex() === 0">
+  ‹
+</button>
+
+<!-- Next Button -->
+<!-- <button
+    class="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full shadow bg-white/70 hover:bg-white disabled:bg-gray-300 disabled:cursor-not-allowed"
+    (click)="next()" [disabled]="currentIndex() === slides.length - 1">
+    ›
+  </button>
+</div> -->
+
+
+
 <!-- ////////////// featured card ///////////////// -->
 <div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
   <i class="fa-solid fa-arrow-trend-up text-green-600 font-bold"></i>
