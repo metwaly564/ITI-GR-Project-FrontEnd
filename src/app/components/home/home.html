@@ -1,0 +1,57 @@
+<!-- //////////////// carousel /////////////////// -->
+<!-- <div class="relative w-full overflow-hidden rounded-lg"> -->
+<!-- Slides Wrapper -->
+<!-- <div class="flex transition-transform duration-700" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
+    @for (item of slides; track $index) {
+    <div class="min-w-full">
+      <img [src]="item.image" class="w-full h-64 object-cover" />
+    </div>
+    }
+
+  </div> -->
+
+<!-- Prev Button -->
+<button
+  class="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full shadow bg-white/70 hover:bg-white disabled:bg-gray-300 disabled:cursor-not-allowed"
+  (click)="prev()" [disabled]="currentIndex() === 0">
+  ‹
+</button>
+
+<!-- Next Button -->
+<!-- <button
+    class="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full shadow bg-white/70 hover:bg-white disabled:bg-gray-300 disabled:cursor-not-allowed"
+    (click)="next()" [disabled]="currentIndex() === slides.length - 1">
+    ›
+  </button>
+</div> -->
+
+
+
+<!-- ////////////// featured card ///////////////// -->
+<div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
+  <i class="fa-solid fa-arrow-trend-up text-green-600 font-bold"></i>
+  <h2>Featured Products</h2>
+</div>
+<div class=" container px-3 mx-auto text-center mb-10 ">
+  <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
+    @for (item of featuredProducts(); track item.id ) {
+    <app-product-card [productdata]="item" class="w-full " />
+    }
+  </div>
+</div>
+<!-- ////////////// popular card ///////////////// -->
+<div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
+  <i class="fa-solid fa-fire  text-green-600 font-bold"></i>
+  <h2>Popular Products</h2>
+</div>
+<div class=" container px-3 mx-auto text-center mb-10 ">
+  <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
+    @for (item of popularProducts (); track item.id ) {
+    <app-product-card [productdata]="item" class="w-full " />
+    }
+  </div>
+</div>
+
+<app-hero-banner />
+<br />
+<app-feature-section />

@@ -1,4 +1,5 @@
-export interface product {
+///////////////////TESTING///////////////////
+export interface theproduct {
   id: number;
   title: string;
   description: string;
@@ -9,5 +10,5 @@ export interface product {
   images: string[];
 }
 export type products = {
-  products: product[];
+  products: theproduct[];
 };

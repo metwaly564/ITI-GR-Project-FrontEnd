@@ -1,9 +1,11 @@
-import { Component, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+
+import { Component,  signal } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-nav',
-  imports: [RouterLink],
+imports: [],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })
