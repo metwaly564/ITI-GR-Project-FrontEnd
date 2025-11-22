@@ -1,13 +1,23 @@
+<<<<<<< HEAD
 import { Component, signal } from '@angular/core';
+=======
+
+import { Component,  signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+
+>>>>>>> main
 
 @Component({
   selector: 'app-nav',
+imports: [RouterLink],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })
 export class Nav {
   isOpenMenu = signal(false);
   activeDropdownMenu = signal<string | null>(null);
+
+  constructor(private router: Router) {}
 
   openToggle() {
     this.isOpenMenu.set(!this.isOpenMenu());
@@ -17,4 +27,8 @@ export class Nav {
     if (menu == this.activeDropdownMenu()) this.activeDropdownMenu.set(null);
     else this.activeDropdownMenu.set(menu);
   }
+  goToProfile() {
+    this.router.navigate(['/Profile']);
+  }
+
 }
