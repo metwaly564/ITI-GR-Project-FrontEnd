@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ProductServ } from '../../services/product-serv';
 import { product } from '../../types/product';
 import { Location } from '@angular/common';
@@ -7,9 +7,8 @@ import { CartServ } from '../../services/cart-serv';
 
 @Component({
   selector: 'app-single-product',
-  imports: [RouterLink],
   templateUrl: './single-product.html',
-  styleUrl: './single-product.css',
+  styleUrls: ['./single-product.css'],
 })
 export class SingleProduct implements OnInit {
   productServ = inject(ProductServ);
