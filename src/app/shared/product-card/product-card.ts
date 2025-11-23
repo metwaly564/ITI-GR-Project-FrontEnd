@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, Signal, signal } from '@angular/core';
 import { product } from '../../types/product';
 import { CurrencyPipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ export class ProductCard implements OnInit {
   productdata = input.required<product>();
   cartServ = inject(CartServ);
   favServ = inject(FavServ);
+  isFav!: Signal<boolean>;
   router = inject(Router);
 
   goToSingleProductPage(id: number) {
@@ -30,8 +31,8 @@ export class ProductCard implements OnInit {
   }
   addToFav(id: number) {
     this.favServ.addToFav(id);
-    this.productdata().isFav = !this.productdata().isFav;
-    console.log(this.productdata().isFav);
+    /////////////////???????
+    // this.productdata().isFav = !this.productdata().isFav;
   }
 
   /////////////////discount ////////////
@@ -43,5 +44,6 @@ export class ProductCard implements OnInit {
         ((this.productdata()!.price - (this.productdata()?.discountPrice ?? 0)) * 100) / 100
       );
     }
+    this.isFav = computed(() => this.favServ.favlist().some((f) => f.id === this.productdata().id));
   }
 }

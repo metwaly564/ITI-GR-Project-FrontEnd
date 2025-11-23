@@ -51,8 +51,9 @@ bg-light-blue hover:bg-rock-blue transition-colors duration-300 relative">
     <div class=" gap-1 flex justify-between items-center ">
       <button (click)="addTocart(productdata()!.id )">
         <i class=" fa-solid fa-cart-arrow-down card-button "></i></button>
-      <button (click)="addToFav(productdata()!.id )"> <i class="fa-heart card-button"
-          [ngClass]="productdata().isFav  ? 'fa-solid ' : 'fa-regular '"></i>
+      <button (click)="addToFav(productdata()!.id )">
+
+        <i class="fa-heart card-button" [ngClass]="isFav()  ? 'fa-solid ' : 'fa-regular '"></i>
       </button>
     </div>
   </div>

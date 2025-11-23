@@ -40,7 +40,10 @@
 
             <div class="ml-auto text-right">
               <div class=" gap-1 flex justify-between items-center ">
-                <button (click)="addToFav(ProductById()!.id )"><i class="fa-regular fa-heart card-button "></i>
+                <button (click)="addToFav(ProductById()!.id )"><i class="fa-heart card-button"
+                    [ngClass]="  isFav() ? 'fa-solid ' : 'fa-regular '">
+
+                  </i>
                 </button>
               </div>
             </div>

@@ -1,8 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, Signal, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductServ } from '../../services/product-serv';
 import { product } from '../../types/product';
-import { Location } from '@angular/common';
+import { Location, NgClass } from '@angular/common';
 import { CartServ } from '../../services/cart-serv';
 import { FavServ } from '../../services/fav-serv';
 
@@ -10,6 +10,7 @@ import { FavServ } from '../../services/fav-serv';
   selector: 'app-single-product',
   templateUrl: './single-product.html',
   styleUrls: ['./single-product.css'],
+  imports: [NgClass],
 })
 export class SingleProduct implements OnInit {
   productServ = inject(ProductServ);
@@ -23,6 +24,7 @@ export class SingleProduct implements OnInit {
   discount = signal<number>(0);
   perdiscount = signal<number>(0);
   quantityNum = signal<number>(1);
+  isFav!: Signal<boolean>;
 
   ngOnInit(): void {
     this.id.set(Number(this.activeRoute.snapshot.params['id']));
@@ -35,6 +37,9 @@ export class SingleProduct implements OnInit {
         );
       }
     });
+    this.isFav = computed(() =>
+      this.favServ.favlist().some((f) => f.id === this.ProductById()?.id)
+    );
   }
   goBack() {
     this.location.back();

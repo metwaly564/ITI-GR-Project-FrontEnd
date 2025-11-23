@@ -14,12 +14,11 @@ export class ProductServ {
   getProduct() {
     return this.http.get<product[]>(this.apidata).pipe(
       map((res) => {
-        const favs: FavCart[] = JSON.parse(localStorage.getItem('fav') || '[]');
         let favproduct = localStorage.getItem('fav');
         const favproductArray: FavCart[] = favproduct ? JSON.parse(favproduct) : [];
         return res.map((p) => ({
           ...p,
-          isFav: favproductArray.find((f) => f.id == p.id),
+          isFav: !!favproductArray.find((f) => f.id == p.id),
         }));
       }),
       catchError((err: any) => {
@@ -31,8 +30,12 @@ export class ProductServ {
   getProductById(id: number) {
     return this.http.get<product>(`${this.apidata}/${id}`).pipe(
       map((res) => {
-        isFav: false;
-        return res;
+        let favproduct = localStorage.getItem('fav');
+        const favproductArray: FavCart[] = favproduct ? JSON.parse(favproduct) : [];
+        return {
+          ...res,
+          isFav: !!favproductArray.find((f) => f.id == id),
+        };
       }),
       catchError((err: any) => {
         alert(err.message);

@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { FavCart } from '../types/cart';
 
 @Injectable({
@@ -6,6 +6,8 @@ import { FavCart } from '../types/cart';
 })
 export class FavServ {
   favCount = signal(0);
+  favlist = signal<FavCart[]>(JSON.parse(localStorage.getItem('fav') || '[]'));
+
   constructor() {
     this.favCount.set(this.getallfav());
   }
@@ -17,20 +19,20 @@ export class FavServ {
   }
 
   addToFav(id: number) {
-    let favproduct = localStorage.getItem('fav');
-    const favproductArray: FavCart[] = favproduct ? JSON.parse(favproduct) : [];
-    console.log(favproductArray.find((f) => f.id == id));
+    this.favlist.update((favs: FavCart[]) => {
+      const exciting = favs.find((item: FavCart) => item.id == id);
+      let updated;
+      if (exciting) {
+        updated = favs.filter((item) => item.id != id);
+      } else {
+        updated = [...favs, { id }];
+      }
+      localStorage.setItem('fav', JSON.stringify(updated));
+      return updated;
+    });
 
-    let excitingindex = favproductArray.findIndex((item: FavCart) => item.id == id);
-    if (excitingindex > -1) {
-      let updatefav = favproductArray.filter((item) => item.id != id);
-      localStorage.setItem('fav', JSON.stringify(updatefav));
-    } else {
-      favproductArray.push({
-        id: id,
-      });
-      localStorage.setItem('fav', JSON.stringify(favproductArray));
-    }
     this.favCount.set(this.getallfav());
   }
+
+  isFav = (id: number) => computed(() => this.favlist().some((f) => f.id === id));
 }
