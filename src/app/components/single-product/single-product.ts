@@ -4,6 +4,7 @@ import { ProductServ } from '../../services/product-serv';
 import { product } from '../../types/product';
 import { Location } from '@angular/common';
 import { CartServ } from '../../services/cart-serv';
+import { FavServ } from '../../services/fav-serv';
 
 @Component({
   selector: 'app-single-product',
@@ -13,6 +14,7 @@ import { CartServ } from '../../services/cart-serv';
 export class SingleProduct implements OnInit {
   productServ = inject(ProductServ);
   cartServ = inject(CartServ);
+  favServ = inject(FavServ);
   activeRoute = inject(ActivatedRoute);
   location = inject(Location);
 
@@ -47,7 +49,10 @@ export class SingleProduct implements OnInit {
   incQuantity(quantity: string) {
     this.quantityNum.set(Number(+quantity + 1));
   }
-  addTocart(id: any, quantity: string) {
+  addTocart(id: number, quantity: string) {
     this.cartServ.addtocart(id, +quantity);
+  }
+  addToFav(id: number) {
+    this.favServ.addToFav(id);
   }
 }

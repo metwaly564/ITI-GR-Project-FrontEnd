@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CartServ } from '../../services/cart-serv';
+import { FavServ } from '../../services/fav-serv';
 
 @Component({
   selector: 'app-nav',
@@ -12,6 +13,7 @@ export class Nav {
   isOpenMenu = signal(false);
   activeDropdownMenu = signal<string | null>(null);
   cartserv = inject(CartServ);
+  favserv = inject(FavServ);
 
   constructor(private router: Router) {}
 

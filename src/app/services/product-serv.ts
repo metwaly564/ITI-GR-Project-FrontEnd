@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, map } from 'rxjs';
 import { product } from '../types/product';
+import { FavCart } from '../types/cart';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,15 @@ export class ProductServ {
 
   getProduct() {
     return this.http.get<product[]>(this.apidata).pipe(
-      map((res) => res),
+      map((res) => {
+        const favs: FavCart[] = JSON.parse(localStorage.getItem('fav') || '[]');
+        let favproduct = localStorage.getItem('fav');
+        const favproductArray: FavCart[] = favproduct ? JSON.parse(favproduct) : [];
+        return res.map((p) => ({
+          ...p,
+          isFav: favproductArray.find((f) => f.id == p.id),
+        }));
+      }),
       catchError((err: any) => {
         alert(err.message);
         return [];
@@ -21,7 +30,10 @@ export class ProductServ {
   }
   getProductById(id: number) {
     return this.http.get<product>(`${this.apidata}/${id}`).pipe(
-      map((res) => res),
+      map((res) => {
+        isFav: false;
+        return res;
+      }),
       catchError((err: any) => {
         alert(err.message);
         return [];
