@@ -1,21 +1,17 @@
-<<<<<<< HEAD
-import { Component, signal } from '@angular/core';
-=======
-
-import { Component,  signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-
->>>>>>> main
+import { CartServ } from '../../services/cart-serv';
 
 @Component({
   selector: 'app-nav',
-imports: [RouterLink],
+  imports: [RouterLink],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })
 export class Nav {
   isOpenMenu = signal(false);
   activeDropdownMenu = signal<string | null>(null);
+  cartserv = inject(CartServ);
 
   constructor(private router: Router) {}
 
@@ -30,5 +26,4 @@ export class Nav {
   goToProfile() {
     this.router.navigate(['/Profile']);
   }
-
 }
