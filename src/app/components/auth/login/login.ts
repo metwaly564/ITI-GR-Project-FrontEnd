@@ -1,16 +1,21 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';   // 👈 مهم جداً
 import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [
+    FormsModule,     // ngModel
+    CommonModule     // ngClass + *ngIf + pipe ops
+  ],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
 export class Login {
-   email: string = '';
+
+  email: string = '';
   password: string = '';
   showPassword: boolean = false;
   isLoading: boolean = false;
@@ -18,9 +23,9 @@ export class Login {
   constructor(private auth: Auth) {}
 
   onLogin() {
-    
+
     this.isLoading = true;
-    
+
     console.log(' Sending login request...');
     console.log(' Email:', this.email);
     console.log(' Password:', this.password);
@@ -29,7 +34,7 @@ export class Login {
       next: (res) => {
         this.isLoading = false;
         console.log(' Login success:', res);
-        
+
         if (res.token) {
           localStorage.setItem('token', res.token);
           alert('Logged in successfully!');
