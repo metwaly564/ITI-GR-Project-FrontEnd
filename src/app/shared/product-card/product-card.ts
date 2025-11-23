@@ -24,7 +24,7 @@ export class ProductCard implements OnInit {
     const productofcart = localStorage.getItem('cart');
     const productofcartarray: ProductCart[] = productofcart ? JSON.parse(productofcart) : [];
     const exsistingproduct = productofcartarray.find((item) => item.id == id);
-    this.cartServ.addtocart(id, exsistingproduct ? exsistingproduct.quantity + 1 : 1);
+    let x = this.cartServ.addtocart(id, exsistingproduct ? exsistingproduct.quantity + 1 : 1);
   }
 
   /////////////////discount ////////////

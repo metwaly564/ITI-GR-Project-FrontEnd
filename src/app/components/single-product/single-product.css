@@ -1,25 +1,96 @@
+/* Glass effect */
+
 .glass {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(6px);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
 }
+
 .price-shadow {
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
 }
 
 .card-button {
-  display: flex;
-  justify-content: center;
-  border-radius: 50%;
-  border: 1px solid #d1daf1;
-  background-color: #d1daf1;
-  color: black;
-  width: 35px;
-  height: 35px;
-  align-items: center;
-  cursor: pointer;
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid #d1daf1;
+    background-color: #d1daf1;
+    color: black;
+    width: 35px;
+    height: 35px;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .card-button:hover {
-  background-color: #a5b2d2;
-  color: white;
+    background-color: #a5b2d2;
+    color: white;
+    transform: scale(1.1);
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-pop {
+    animation: pop 0.6s ease-out forwards;
+}
+
+@keyframes fadeSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-slide {
+    animation: fadeSlide 0.8s ease-out forwards;
+}
+
+
+/* Button glow */
+
+.btn-glow {
+    transition: all 0.3s ease;
+}
+
+.btn-glow:hover {
+    box-shadow: 0 0 15px rgba(165, 178, 210, 0.7);
+    transform: translateY(-2px) scale(1.02);
+}
+
+img {
+    transition: transform 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.05);
 }

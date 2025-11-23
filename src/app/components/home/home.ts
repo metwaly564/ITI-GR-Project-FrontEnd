@@ -18,8 +18,6 @@ export class Home {
   //////////feature product //////////////
   featuredProducts = signal<product[]>([]);
   getfeaturedproduct = this.homeServ.getFeatureProduct().subscribe((res: any) => {
-    console.log(res);
-
     return this.featuredProducts.set(res);
   });
 
