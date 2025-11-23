@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CartServ } from '../../services/cart-serv';
-=======
-import { Component,  signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
->>>>>>> main
 
 @Component({
   selector: 'app-nav',
