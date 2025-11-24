@@ -2,7 +2,7 @@ import { Component, computed, inject, OnInit, Signal, signal } from '@angular/co
 import { ActivatedRoute } from '@angular/router';
 import { ProductServ } from '../../services/product-serv';
 import { product } from '../../types/product';
-import { Location, NgClass } from '@angular/common';
+import { Location } from '@angular/common';
 import { CartServ } from '../../services/cart-serv';
 import { FavServ } from '../../services/fav-serv';
 
@@ -10,7 +10,6 @@ import { FavServ } from '../../services/fav-serv';
   selector: 'app-single-product',
   templateUrl: './single-product.html',
   styleUrls: ['./single-product.css'],
-  imports: [NgClass],
 })
 export class SingleProduct implements OnInit {
   productServ = inject(ProductServ);

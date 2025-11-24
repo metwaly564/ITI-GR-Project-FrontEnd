@@ -79,7 +79,7 @@
             </div>
             <button id="addToCart"
               class="ml-auto flex-1 lg:flex-none bg-light-blue hover:bg-rock-blue hover:text-white font-semibold rounded-lg px-6 py-3 shadow"
-              (click)="addTocart(ProductById()?.id , inputQuantity.value)"
+              (click)="addTocart(ProductById()?.id!, inputQuantity.value)"
               [disabled]="ProductById()?.stock?.[0]!.quantity <=0">
               Add to Cart</button>
           </div>
