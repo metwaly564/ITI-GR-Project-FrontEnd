@@ -43,4 +43,4 @@ export class ProfileComponent implements OnInit {
   }
 }
 
-export { Profile };
+
