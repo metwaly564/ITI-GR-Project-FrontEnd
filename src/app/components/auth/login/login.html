@@ -1,89 +1,73 @@
-<div class="min-h-screen bg-gradient-to-br from-[var(--color-light-blue)] to-[var(--color-rock-blue)] 
-flex items-center justify-center p-6 relative overflow-hidden">
+<div class="min-h-screen bg-gradient-to-br from-[var(--color-light-blue)] to-[var(--color-rock-blue)] flex items-center justify-center p-6">
+  <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+    
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center gap-3 text-2xl font-bold text-[var(--color-rock-blue)] mb-4">
+        <i class="fas fa-heartbeat"></i>
+        <span>Care Zone</span>
+      </div>
+      <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>
+      <p class="text-gray-600">Please login to your account</p>
+    </div>
 
-    <!-- FLOATING BACKGROUND ICONS -->
-    <i class="fas fa-stethoscope text-white text-5xl opacity-20 absolute top-10 left-10 animate-float"></i>
-    <i class="fas fa-capsules text-white text-4xl opacity-20 absolute bottom-16 right-14 animate-float" style="animation-delay: 1.2s"></i>
-    <i class="fas fa-syringe text-white text-4xl opacity-10 absolute top-1/2 left-1/3 animate-float" style="animation-delay: .6s"></i>
-
-    <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md animate-pop backdrop-blur-xl">
-
-        <div class="text-center mb-8 animate-fade-slide">
-            <div class="flex items-center justify-center gap-3 text-2xl font-bold text-[var(--color-rock-blue)] mb-4">
-                <i class="fas fa-heartbeat animate-float text-3xl"></i>
-                <span>Care Zone</span>
-            </div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>
-            <p class="text-gray-600">Please login to your account</p>
+    <form class="space-y-6" (ngSubmit)="onLogin()">
+      
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+        <div class="relative">
+          <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          <input 
+            type="email" 
+            id="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-rock-blue)] focus:border-transparent transition-all duration-200">
         </div>
+      </div>
 
-        <form class="space-y-6 animate-fade-slide" style="animation-delay: .15s" (ngSubmit)="onLogin()">
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+        <div class="relative">
+          <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          <input 
+            [type]="showPassword ? 'text' : 'password'" 
+            id="password"
+            [(ngModel)]="password"
+            name="password" 
+            placeholder="Enter your password"
+            required
+            class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-rock-blue)] focus:border-transparent transition-all duration-200">
+          <i 
+            class="fas fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600"
+            (click)="togglePasswordVisibility()">
+          </i>
+        </div>
+      </div>
 
-            <!-- EMAIL -->
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                <div class="relative">
-                    <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 
-                     transition-all duration-200 peer-focus:text-[var(--color-rock-blue)]"></i>
-
-                    <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="Enter your email" required class="peer w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg 
-                   focus:ring-2 focus:ring-[var(--color-rock-blue)]
-                   focus:border-transparent transition-all duration-200 
-                   hover:shadow-sm">
-                </div>
-            </div>
-
-            <!-- PASSWORD -->
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                <div class="relative">
-                    <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 
-                     transition-all duration-200 peer-focus:text-[var(--color-rock-blue)]"></i>
-
-                    <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password" placeholder="Enter your password" required class="peer w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg
-                   focus:ring-2 focus:ring-[var(--color-rock-blue)] 
-                   focus:border-transparent transition-all duration-200 
-                   hover:shadow-sm">
-
-                    <i 
-                    class="fas absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer
-                        transition-transform duration-300 hover:scale-110 hover:text-gray-600"
-                        [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
-                        (click)="togglePasswordVisibility()">
-                    </i>
-
-                </div>
-            </div>
-
-            <!-- REMEMBER + FORGOT -->
-            <div class="flex items-center justify-between animate-fade-slide" style="animation-delay: .3s">
-                <label class="flex items-center space-x-2 cursor-pointer">
-          <input type="checkbox" class="w-4 h-4 text-[var(--color-rock-blue)] rounded focus:ring-[var(--color-rock-blue)]">
+      <div class="flex items-center justify-between">
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" name="rememberMe" class="w-4 h-4 text-[var(--color-rock-blue)] rounded focus:ring-[var(--color-rock-blue)]">
           <span class="text-sm text-gray-600">Remember me</span>
         </label>
-                <a href="#" class="text-sm text-[var(--color-rock-blue)] hover:text-[var(--color-light-blue)]
-           transition-colors duration-200">
-           Forgot password?
-        </a>
-            </div>
+        <a href="#" class="text-sm text-[var(--color-rock-blue)] hover:text-[var(--color-light-blue)] transition-colors duration-200">Forgot password?</a>
+      </div>
 
-            <!-- BUTTON -->
-            <button type="submit" class="w-full bg-[var(--color-rock-blue)] hover:bg-[var(--color-light-blue)] text-white py-3 px-4 rounded-lg font-semibold 
-               transition-all duration-200 transform hover:scale-105 hover:shadow-lg 
-               focus:ring-4 focus:ring-[var(--color-light-blue)]">
+      <button 
+        type="submit" 
+        class="w-full bg-[var(--color-rock-blue)] hover:bg-[var(--color-light-blue)] text-white py-3 px-4 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 focus:ring-4 focus:ring-[var(--color-light-blue)]">
         Login
       </button>
-        </form>
 
-        <div class="text-center mt-6 animate-fade-slide" style="animation-delay:.45s">
-            <p class="text-gray-600">
-                Don't have an account?
-                <a href="/auth/register" class="text-[var(--color-rock-blue)] font-semibold hover:text-[var(--color-light-blue)]
-           transition-colors duration-200 ml-1">
-           Sign Up
-        </a>
-            </p>
-        </div>
+    </form>
 
+    <div class="text-center mt-6">
+      <p class="text-gray-600">
+        Don't have an account? 
+        <a href="/auth/register" class="text-[var(--color-rock-blue)] font-semibold hover:text-[var(--color-light-blue)] transition-colors duration-200 ml-1">Sign Up</a>
+      </p>
     </div>
+
+  </div>
 </div>

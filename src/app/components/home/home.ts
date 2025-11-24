@@ -5,6 +5,7 @@ import { ProductCard } from '../../shared/product-card/product-card';
 import { HeroBanner } from './hero-banner/hero-banner';
 import { FeatureSection } from './feature-section/feature-section';
 import { HomeServ } from '../../services/home-serv';
+import { Homets } from '../../types/home';
 
 @Component({
   selector: 'app-home',
@@ -15,15 +16,13 @@ import { HomeServ } from '../../services/home-serv';
 export class Home {
   productserv = inject(ProductServ);
   homeServ = inject(HomeServ);
-  //////////feature product //////////////
-  featuredProducts = signal<product[]>([]);
-  getfeaturedproduct = this.homeServ.getFeatureProduct().subscribe((res: any) => {
-    return this.featuredProducts.set(res);
-  });
-
-  //////////popular product //////////////
   popularProducts = signal<product[]>([]);
-  getPopularProduct = this.homeServ.getPopularProduct().subscribe((res: any) => {
-    return this.popularProducts.set(res);
+  featuredProducts = signal<product[]>([]);
+
+  homeData = this.homeServ.getHomeData().subscribe((res: Homets) => {
+    console.log(res);
+
+    this.featuredProducts.set(res.featuredProducts);
+    this.popularProducts.set(res.popularProducts);
   });
 }

@@ -12,6 +12,7 @@ export interface product {
   categoryName: string;
   createdAt: string;
   stock: Stock[] | [];
+  isFav: boolean;
 }
 export interface Stock {
   productId: number;
