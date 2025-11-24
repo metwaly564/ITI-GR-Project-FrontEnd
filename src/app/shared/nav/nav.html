@@ -21,19 +21,13 @@
           </a>
           @if(activeDropdownMenu() == 'cat') {
           <ul class="lg:absolute p-3 lg:bg-white lg:border lg:border-gray-400 lg:rounded-lg z-50">
+            @for (item of categories(); track $index) {
             <li><a
                 class="text-black/65 py-2 px-3 inline-block lg:hover:bg-rock-blue w-full hover:bg-white max-w-52 rounded"
-                href="#">skincare</a>
+                href="#">{{item.name}}</a>
             </li>
-            <li><a
-                class="text-black/65 py-2 px-3 inline-block lg:hover:bg-rock-blue w-full hover:bg-white max-w-52 rounded"
-                href="#">haircare</a>
-            </li>
-            <li><a
-                class="text-black/65 py-2 px-3 inline-block lg:hover:bg-rock-blue w-full hover:bg-white max-w-52 rounded"
-                href="#">Something
-                else
-                here</a></li>
+            }
+
           </ul>
           }
         </li>

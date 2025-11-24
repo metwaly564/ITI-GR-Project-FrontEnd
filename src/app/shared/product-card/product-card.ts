@@ -3,7 +3,7 @@ import { product } from '../../types/product';
 import { CurrencyPipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartServ } from '../../services/cart-serv';
-import { FavCart, ProductCart } from '../../types/cart';
+import { ProductCart } from '../../types/cart';
 import { FavServ } from '../../services/fav-serv';
 
 @Component({

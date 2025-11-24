@@ -2,6 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CartServ } from '../../services/cart-serv';
 import { FavServ } from '../../services/fav-serv';
+import { HomeServ } from '../../services/home-serv';
+import { Category, Homets } from '../../types/home';
 
 @Component({
   selector: 'app-nav',
@@ -14,6 +16,12 @@ export class Nav {
   activeDropdownMenu = signal<string | null>(null);
   cartserv = inject(CartServ);
   favserv = inject(FavServ);
+  homeServ = inject(HomeServ);
+  categories = signal<Category[]>([]);
+
+  homeData = this.homeServ.getHomeData().subscribe((res: Homets) => {
+    this.categories.set(res.categories);
+  });
 
   constructor(private router: Router) {}
 

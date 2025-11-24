@@ -97,3 +97,12 @@
     </section>
   </main>
 </div>
+<div class=" container px-3 mx-auto text-center mb-10 flex ">
+
+  <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
+
+    @for (item of relatedProducts(); track item.id ) {
+    <app-product-card [productdata]="item" class="w-full " />
+    }
+  </div>
+</div>
