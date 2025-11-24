@@ -1,16 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
-import { Profile } from './../../services/profile';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+} from '@angular/forms';
+import { Profile } from '../../../services/profile';
 
 @Component({
   selector: 'app-profile',
- standalone: true,
+  standalone: true,
   imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css'],
 })
 export class ProfileComponent implements OnInit {
-
   profileForm: FormGroup;
 
   constructor(private fb: FormBuilder, private profileService: Profile) {
@@ -42,5 +47,3 @@ export class ProfileComponent implements OnInit {
     }
   }
 }
-
-

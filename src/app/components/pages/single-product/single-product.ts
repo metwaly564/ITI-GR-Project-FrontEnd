@@ -1,13 +1,13 @@
 import { Component, computed, effect, inject, OnInit, Signal, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProductServ } from '../../services/product-serv';
-import { product } from '../../types/product';
+import { ProductServ } from '../../../services/product-serv';
+import { product } from '../../../types/product';
 import { Location, NgClass } from '@angular/common';
-import { CartServ } from '../../services/cart-serv';
-import { FavServ } from '../../services/fav-serv';
-import { Category, Homets } from '../../types/home';
-import { HomeServ } from '../../services/home-serv';
-import { ProductCard } from '../../shared/product-card/product-card';
+import { CartServ } from '../../../services/cart-serv';
+import { FavServ } from '../../../services/fav-serv';
+import { Category, Homets } from '../../../types/Homets';
+import { HomeServ } from '../../../services/home-serv';
+import { ProductCard } from '../../../shared/product-card/product-card';
 
 @Component({
   selector: 'app-single-product',

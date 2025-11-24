@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { Home } from './components/home/home';
-import { SingleProduct } from './components/single-product/single-product';
+import { SingleProduct } from './components/pages/single-product/single-product';
+import { Home } from './components/pages/home/home';
 
 export const routes: Routes = [
   {
@@ -11,8 +11,13 @@ export const routes: Routes = [
   { path: 'home', component: Home },
   { path: 'singleproduct/:id', component: SingleProduct },
 
-    {path: 'login', loadComponent: () => import('./components/auth/login/login').then(m => m.Login)},
-    {path:'profile', loadComponent: () => import('./components/profile/profile').then(m => m.ProfileComponent)},
-
-
+  {
+    path: 'login',
+    loadComponent: () => import('./components/auth/login/login').then((m) => m.Login),
+  },
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('./components/pages/profile/profile').then((m) => m.ProfileComponent),
+  },
 ];

@@ -1,11 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { ProductServ } from '../../services/product-serv';
-import { product } from '../../types/product';
-import { ProductCard } from '../../shared/product-card/product-card';
+import { ProductServ } from '../../../services/product-serv';
+import { product } from '../../../types/product';
+import { ProductCard } from '../../../shared/product-card/product-card';
 import { HeroBanner } from './hero-banner/hero-banner';
 import { FeatureSection } from './feature-section/feature-section';
-import { HomeServ } from '../../services/home-serv';
-import { Category, Homets } from '../../types/home';
+import { HomeServ } from '../../../services/home-serv';
+import { Category, Homets } from '../../../types/Homets';
 
 @Component({
   selector: 'app-home',
