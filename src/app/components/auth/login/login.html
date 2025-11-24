@@ -45,9 +45,13 @@ flex items-center justify-center p-6 relative overflow-hidden">
                    focus:border-transparent transition-all duration-200 
                    hover:shadow-sm">
 
-                    <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer
-                   transition-transform duration-300 hover:scale-110 hover:text-gray-600" (click)="togglePasswordVisibility()">
-          </i>
+                    <i 
+                    class="fas absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer
+                        transition-transform duration-300 hover:scale-110 hover:text-gray-600"
+                        [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                        (click)="togglePasswordVisibility()">
+                    </i>
+
                 </div>
             </div>
 
