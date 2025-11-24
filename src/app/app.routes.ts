@@ -12,6 +12,8 @@ export const routes: Routes = [
   { path: 'singleproduct/:id', component: SingleProduct },
 
     {path: 'login', loadComponent: () => import('./components/auth/login/login').then(m => m.Login)},
+    {path:'about', loadComponent: () => import('./pages/about/about').then(m => m.About)},
+    {path:'contact', loadComponent: () => import('./pages/contact/contact').then(m => m.Contact)},
     {path:'profile', loadComponent: () => import('./components/profile/profile').then(m => m.ProfileComponent)},
 
 
