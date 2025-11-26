@@ -15,17 +15,7 @@ export class HomeServ {
     return this.http.get<Homets>(this.apidata).pipe(
       map((res: Homets) => {
         const favproduct = JSON.parse(localStorage.getItem('fav') || '[]');
-        return {
-          ...res,
-          featuredProducts: res.featuredProducts.map((item) => ({
-            ...item,
-            isFav: !!favproduct.find((fav: FavCart) => fav.id == item.id),
-          })),
-          popularProducts: res.popularProducts.map((item) => ({
-            ...item,
-            isFav: !!favproduct.find((fav: FavCart) => fav.id == item.id),
-          })),
-        };
+        return res;
       }),
       catchError((err) => {
         alert(err.message);

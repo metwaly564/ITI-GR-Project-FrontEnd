@@ -1,4 +1,4 @@
-<div class="bg-gray-50 text-gray-800 antialiased">
+<div class=" text-gray-800 pb-16">
   <main class="max-w-6xl mx-auto p-6 lg:p-10">
     <button class="hover:text-black text-gray-700 flex gap-1 items-center mb-3 cursor-pointer" (click)="goBack()"><i
         class="fa-solid fa-angles-left"></i>
@@ -24,28 +24,32 @@
 
       <div class="bg-white rounded-xl shadow lg:p-8 flex justify-between flex-col  p-6 ">
         <div class="top">
-          <h1 class="text-2xl lg:text-3xl font-extrabold leading-tight">{{ProductById()?.name}} </h1>
+          <h1 class="text-2xl lg:text-3xl font-bold leading-tight">{{ProductById()?.name}} </h1>
           <div class="mt-4 flex items-end gap-4">
             <div>
               @if(ProductById()?.discountPrice ){
-              <div class="text-3xl lg:text-4xl font-extrabold price-shadow">{{ProductById()?.discountPrice}}</div>
-              <div class="text-sm text-gray-400 line-through">{{ProductById()?.price}}</div>
-              <div class="text-sm text-green-600 font-medium mt-1">You save EGP {{discount()}}</div>
+              <div class="text-3xl lg:text-4xl font-bold price-shadow">{{ProductById()?.discountPrice}}</div>
+              <div class="text-sm text-gray-400 line-through">{{ProductById()?.price | currency:'EGP':'symbol'}}</div>
+              <div class="text-sm text-green-600 font-medium mt-1">You save {{discount() | currency:'EGP':'symbol'}}
+              </div>
               }
               @else {
-              <div class="text-3xl lg:text-4xl font-extrabold price-shadow">{{ProductById()?.price}}</div>
+              <div class="text-3xl lg:text-4xl font-bold price-shadow">
+                {{ProductById()?.price  | currency:'EGP':'symbol'}}</div>
               }
 
             </div>
 
             <div class="ml-auto text-right">
               <div class=" gap-1 flex justify-between items-center ">
-                <i class="fa-regular fa-heart card-button "></i>
+                <button (click)="addToFav(ProductById()!.id )">
+                  <i class="fa-heart card-button" [ngClass]="isFav()  ? 'fa-solid ' : 'fa-regular '"></i>
+                </button>
               </div>
             </div>
           </div>
         </div>
-        <div class="mt-5 border rounded-lg p-4 bg-gray-50 flex items-center gap-4">
+        <div class="mt-5 border rounded-lg p-4 flex items-center gap-4">
           <div class="flex-1 text-sm">
             <div class="font-medium">Delivery in 10-15 mins</div>
             <div class="text-xs text-gray-500">Shipment of 1 item</div>
@@ -92,13 +96,19 @@
       </div>
     </section>
   </main>
-</div>
-<div class=" container px-3 mx-auto text-center mb-10 flex ">
-
-  <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
-
-    @for (item of relatedProducts(); track item.id ) {
-    <app-product-card [productdata]="item" class="w-full " />
+  <div class=" container px-3 mx-auto  flex flex-col ">
+    @if(relatedProducts().length >= 1){
+    <hr>
+    <div class="flex justify-start items-center gap-1.5"> <i
+        class="fa-solid fa-heart-circle-plus text-[22px] lg:text-[26px] font-extrabold leading-tight text-green-600"></i>
+      <h1 class="text-[22px] lg:text-[26px] font-extrabold leading-tight my-8 text-start">related Products</h1>
+    </div>
     }
+    <div class="grid gap-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+
+      @for (item of relatedProducts(); track item.id ) {
+      <app-product-card [productdata]="item" class="w-full " />
+      }
+    </div>
   </div>
 </div>
