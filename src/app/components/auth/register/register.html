@@ -27,7 +27,7 @@
       'border-red-500': firstName?.invalid && (firstName?.touched || firstName?.dirty)
   }">
         @if(firstName?.invalid && (firstName?.touched || firstName?.dirty)){
-        <span class="text-red-600"> first name is required </span>
+        <span class="text-red-600 text-sm"> first name is required </span>
         }
       </div>
 
@@ -40,22 +40,19 @@
       'border-red-500': lastName?.invalid && (lastName?.touched || lastName?.dirty)
   }">
         @if(lastName?.invalid && (lastName?.touched || lastName?.dirty)){
-        <span class="text-red-600"> last name is required </span>
+        <span class="text-red-600 text-sm"> last name is required </span>
         }
       </div>
 
       <div>
         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
         <div class="relative">
-          <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           <input type="email" id="email" name="email" placeholder="Enter your email"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rock-blue focus:border-transparent transition-all duration-200  placeholder:text-gray-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rock-blue focus:border-transparent transition-all duration-200  placeholder:text-gray-500"
             formControlName="email" [ngClass]="{
       'border-rock-blue': email?.valid && (email?.touched || email?.dirty),
       'border-red-500': email?.invalid && (email?.touched || email?.dirty)
   }">
-
-
         </div>
         @if(email?.hasError('required') && (email?.touched || email?.dirty)){
         <span class="text-red-500 text-sm">email is required</span>
@@ -69,10 +66,9 @@
       <div>
         <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
         <div class="relative">
-          <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-          <input [type]="showPassword ? 'text' : 'password'" id="password" name="password"
+          <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" #passinput
             placeholder="Enter your password"
-            class="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rock-blue focus:border-transparent transition-all duration-200  placeholder:text-gray-500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rock-blue focus:border-transparent transition-all duration-200  placeholder:text-gray-500"
             formControlName="password" [ngClass]="{
       'border-rock-blue': password?.valid && (password?.touched || password?.dirty),
       'border-red-500': password?.invalid && (password?.touched || password?.dirty)
@@ -93,6 +89,33 @@
       </div>
 
       <div>
+        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">confirm Password</label>
+        <div class="relative">
+          <input [type]="showPassword ? 'text' : 'password'" id="confirmPassword" name="password" #confirminput
+            (input)="confirmPass(passinput.value , confirminput.value)"
+            (blur)="confirmPass(passinput.value , confirminput.value)" placeholder="Enter your password"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rock-blue focus:border-transparent transition-all duration-200  placeholder:text-gray-500"
+            formControlName="confirmPassword" [ngClass]="{
+      'border-rock-blue': isConfirm == true ,
+      'border-red-500': (isConfirm  == false && confirminput.value.length >= 1) ||(confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)),
+  }">
+          <i class="fas fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600"
+            (click)="togglePasswordVisibility()">
+          </i>
+        </div>
+        @if(confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)){
+        <span class="text-red-600 text-sm"> password is required </span>}
+        @if (isConfirm == true){
+        <span class="text-green-600 text-sm"> password match
+        </span>
+        } @else if (isConfirm == false && confirminput.value.length >= 1) {
+        <span class="text-red-600 text-sm"> password didn't match
+        </span>
+        }
+
+      </div>
+
+      <div>
         <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
         <input type="text" id="phone" name="phone" placeholder="Enter your phone number"
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rock-blue focus:border-transparent transition-all duration-200  placeholder:text-gray-500"
@@ -104,7 +127,7 @@
         <span class="text-red-500 text-sm">Phone number is required</span>
         }
 
-        @if(phone?.hasError('minlength') && (phone?.touched || phone?.dirty)){
+        @if(phone?.hasError('pattern') && (phone?.touched || phone?.dirty)){
         <span class="text-red-500 text-sm">Must be a valid Egyptian number </span>
         }
       </div>

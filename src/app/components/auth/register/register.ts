@@ -22,6 +22,7 @@ export class Register implements OnInit {
   router = inject(Router);
 
   isLoading = false;
+  isConfirm = false;
   showPassword: boolean = false;
   formGroup!: FormGroup;
   error = signal<string | null>(null);
@@ -38,7 +39,15 @@ export class Register implements OnInit {
         '',
         [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/)],
       ],
-      phoneNumber: ['', [Validators.required, Validators.minLength(11)]],
+      confirmPassword: ['', [Validators.required]],
+      phoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(11),
+          Validators.pattern(/^01[0,1,2,5][0-9]{8}$/),
+        ],
+      ],
     });
   }
   get firstName() {
@@ -52,6 +61,9 @@ export class Register implements OnInit {
   }
   get password() {
     return this.formGroup.get('password');
+  }
+  get confirmPassword() {
+    return this.formGroup.get('confirmPassword');
   }
   get phone() {
     return this.formGroup.get('phoneNumber');
@@ -72,7 +84,13 @@ export class Register implements OnInit {
         },
       });
     }
-    console.log(this.isLoading);
+  }
+  confirmPass(pass: string, confirm: string) {
+    if (pass == confirm) {
+      this.isConfirm = true;
+    } else {
+      this.isConfirm = false;
+    }
   }
 
   togglePasswordVisibility() {
