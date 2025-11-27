@@ -21,7 +21,6 @@ export class ProductCard implements OnInit {
 
   goToSingleProductPage(id: number) {
     this.router.navigateByUrl(`/singleproduct/${id}`);
-    console.log(this.router.navigateByUrl(`/singleproduct/${id}`));
   }
 
   addTocart(id: number) {
@@ -32,7 +31,6 @@ export class ProductCard implements OnInit {
   }
   addToFav(id: number) {
     this.favServ.addToFav(id);
-    /////////////////???????
     this.productdata().isFav = !this.productdata().isFav;
   }
 

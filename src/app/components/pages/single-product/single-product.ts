@@ -17,7 +17,6 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class SingleProduct implements OnInit {
   productId!: number;
-
   productServ = inject(ProductServ);
   cartServ = inject(CartServ);
   favServ = inject(FavServ);
@@ -36,9 +35,11 @@ export class SingleProduct implements OnInit {
   ngOnInit(): void {
     this.activeRoute.paramMap.subscribe((params) => {
       this.productId = Number(params.get('id'));
-      this.productServ.getProductByCategory(this.productId).subscribe((res) => {
-        this.productsByCategory = res.filter((item) => item.id != this.productId).splice(0, 8);
-        this.relatedProducts.set(this.productsByCategory);
+      this.productServ.getProductById(this.productId).subscribe((res) => {
+        this.productServ.getProductByCategory(res.categoryId).subscribe((res) => {
+          this.productsByCategory = res.filter((item) => item.id != this.productId).splice(0, 8);
+          this.relatedProducts.set(this.productsByCategory);
+        });
       });
       this.productServ.getProductById(this.productId).subscribe((res) => {
         this.ProductById.set(res);
@@ -75,6 +76,5 @@ export class SingleProduct implements OnInit {
   }
   addToFav(id: number) {
     this.favServ.addToFav(id);
-    console.log(this.relatedProducts());
   }
 }
