@@ -1,0 +1,29 @@
+<div class="flex  w-full ">
+  <form class="w-[30%] flex">
+    <select id=" countries"
+      class=" w-[50%] w-full block px-3 py-3  bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
+      <option selected>Choose brances</option>
+      @for(item of brances(); track $index){
+      <option>{{item.name}}</option>
+      }
+    </select>
+    <select id="countries"
+      class=" w-[50%] block w-full px-3 py-3  bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
+      <option selected>all categories</option>
+
+      @for (item of categories(); track $index) {
+      <option>{{item.name}}</option>
+      }
+    </select>
+  </form>
+  <div class="w-[70%]  flex relative">
+    <input class=" w-full block
+px-3 py-3 bg-neutral-secondary-medium border border-default-medium text-heading text-sm
+    rounded-base focus:ring-brand focus:border-brand shadow-xs ">
+    <button
+      class=" rounded-2xl bg-light-blue hover:bg-rock-blue  hover:text-white absolute text-end flex justify-end top-2/4  transform translate-y-[-50%] me-2 py-2 px-3 right-0 cursor-pointer">
+      search</button>
+
+  </div>
+
+</div>
