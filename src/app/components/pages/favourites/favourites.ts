@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CartServ } from '../../../services/cart-serv';
@@ -17,6 +17,7 @@ export class  FavouritesComponent {
   private favServ = inject(FavServ);
   private cartServ = inject(CartServ);
   private productServ = inject(ProductServ);
+  private location = inject(Location);
 
   favIds = this.favServ.favlist;
 
@@ -46,6 +47,9 @@ export class  FavouritesComponent {
   addToCart(productId: number) {
     this.cartServ.addtocart(productId, 1);
     alert('Product added to cart!');
+  }
+  goBack() {
+    this.location.back();
   }
 
   clearFav() {
