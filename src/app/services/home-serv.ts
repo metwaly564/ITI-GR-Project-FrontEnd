@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, map } from 'rxjs';
-import { Homets } from '../types/home';
-import { FavCart } from '../types/cart';
+import { Homets } from '../types/Homets';
 
 @Injectable({
   providedIn: 'root',

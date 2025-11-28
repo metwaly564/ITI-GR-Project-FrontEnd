@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { HomeServ } from '../../../../services/home-serv';
-import { Category } from '../../../../types/home';
+import { Category } from '../../../../types/Homets';
 import { BranchServ } from '../../../../services/branch-serv';
 import { BranchesTs } from '../../../../types/branches';
 
