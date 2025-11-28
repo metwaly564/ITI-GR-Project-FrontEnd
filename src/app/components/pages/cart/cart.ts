@@ -4,6 +4,7 @@ import { inject } from '@angular/core';
 import { CartServ } from '../../../services/cart-serv';
 import { CurrencyPipe } from '@angular/common';
 import { ProductServ } from '../../../services/product-serv';
+import { signal } from '@angular/core';
 
 
 @Component({
@@ -18,11 +19,9 @@ export class CartComponent {
   private cartServ = inject(CartServ);
   private productServ = inject(ProductServ);
 
-  cartCount = this.cartServ.cartcount;
+  cartItemsIds = signal<{ id: number; quantity: number }[]>([]);
 
-  cartItemsFromLocal: any[] = [];
-
-  fullCartItems: any[] = [];
+  fullCart = signal<any[]>([]);
 
   constructor() {
     this.loadCart();
@@ -30,59 +29,61 @@ export class CartComponent {
 
   loadCart() {
     const stored = localStorage.getItem('cart');
-    this.cartItemsFromLocal = stored ? JSON.parse(stored) : [];
-    this.fullCartItems = [];
+    const ids = stored ? JSON.parse(stored) : [];
+    this.cartItemsIds.set(ids);
 
-    this.cartItemsFromLocal.forEach(item => {
-      this.productServ.getProductById(item.id).subscribe(product => {
-        this.fullCartItems.push({
-          ...product,
-          quantity: item.quantity
-        });
-      });
+    this.productServ.getProduct().subscribe((products) => {
+      const full = ids
+        .map((c: any) => {
+          const product = products.find((p) => p.id === c.id);
+          return product
+            ? { ...product, quantity: c.quantity }
+            : null;
+        })
+        .filter((x: any) => x);
+
+      this.fullCart.set(full);
     });
   }
 
-  increaseQuantity(item: any) {
-    this.cartServ.addtocart(item.id, item.quantity + 1);
+  increase(productId: number, quantity: number) {
+    this.cartServ.addtocart(productId, quantity + 1);
     this.loadCart();
   }
 
-  decreaseQuantity(item: any) {
-    if (item.quantity > 1) {
-      this.cartServ.addtocart(item.id, item.quantity - 1);
+  decrease(productId: number, quantity: number) {
+    if (quantity > 1) {
+      this.cartServ.addtocart(productId, quantity - 1);
       this.loadCart();
     }
   }
 
-  removeFromCart(id: number) {
-    this.cartServ.addtocart(id, 0);
+  remove(productId: number) {
+    this.cartServ.addtocart(productId, 0);
     this.loadCart();
   }
 
-  getSubtotal(): number {
-    return this.fullCartItems.reduce((sum, item) =>
-      sum + item.price * item.quantity, 0
+  clearCart() {
+    if (confirm('Are you sure you want to clear your cart?')) {
+      localStorage.removeItem('cart');
+      this.fullCart.set([]);
+      this.cartServ.cartcount.set(0);
+    }
+  }
+
+  
+  getSubtotal() {
+    return this.fullCart().reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
     );
   }
 
-  getShipping(): number {
-    return this.fullCartItems.length > 0 ? 5 : 0;
+  getShipping() {
+    return this.fullCart().length > 0 ? 5 : 0;
   }
 
-  getTotal(): number {
+  getTotal() {
     return this.getSubtotal() + this.getShipping();
   }
-  clearCart() {
-  if (confirm('Are you sure you want to clear your cart?')) {
-    
-    localStorage.removeItem('cart');
-
-    this.cartServ.cartcount.set(0);
-
-    this.fullCartItems = [];
-    this.cartItemsFromLocal = [];
-  }
-}
-
 }

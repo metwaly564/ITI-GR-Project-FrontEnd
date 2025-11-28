@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CartServ } from '../../../services/cart-serv';
 import { FavServ } from '../../../services/fav-serv';
 import { ProductServ } from '../../../services/product-serv';
-import { product } from '../../../types/product';
+import { signal } from '@angular/core';
 
 @Component({
   selector: 'app-favourites',
@@ -13,32 +13,34 @@ import { product } from '../../../types/product';
   styleUrl: './favourites.css',
 })
 export class  FavouritesComponent {
-  
+
   private favServ = inject(FavServ);
   private cartServ = inject(CartServ);
   private productServ = inject(ProductServ);
 
-  favIds = this.favServ.favlist;    
-  fullFavList: any[] = [];           
+  favIds = this.favServ.favlist;
+
+  fullFavList = signal<any[]>([]);
 
   constructor() {
     this.loadFavProducts();
   }
 
   loadFavProducts() {
-    this.productServ.getProduct().subscribe((allProducts: product[]) => {
+    this.productServ.getProduct().subscribe((products) => {
+      const ids = this.favServ.favlist();
 
-      const favIdsArray = this.favIds(); 
+      const mapped = ids
+        .map((fav) => products.find((p) => p.id === fav.id))
+        .filter((x) => x);
 
-      this.fullFavList = allProducts.filter(p =>
-        favIdsArray.some(f => f.id === p.id)
-      );
+      this.fullFavList.set(mapped);
     });
   }
 
   removeFromFav(productId: number) {
-    this.favServ.addToFav(productId);  
-    this.loadFavProducts();               
+    this.favServ.addToFav(productId);
+    this.loadFavProducts(); 
   }
 
   addToCart(productId: number) {
@@ -48,9 +50,8 @@ export class  FavouritesComponent {
 
   clearFav() {
     if (confirm('Are you sure you want to clear all favourites?')) {
-      const favs = this.favIds();
-      favs.forEach(item => this.favServ.addToFav(item.id));
-      this.fullFavList = [];
+      this.favServ.favlist.set([]);
+      this.fullFavList.set([]);
     }
   }
 }
