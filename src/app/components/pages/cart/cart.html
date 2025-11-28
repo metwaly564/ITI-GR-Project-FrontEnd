@@ -26,7 +26,7 @@
         @for (item of fullCart(); track item.id) {
           <div class="bg-white shadow-md rounded-xl p-6 flex items-center justify-between">
 
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 flex-1">
               <div class="w-16 h-16 bg-gray-200 flex items-center justify-center rounded-lg">
                 <i class="fas fa-pills text-gray-600 text-xl"></i>
               </div>
@@ -37,30 +37,35 @@
               </div>
             </div>
 
-            <div class="flex items-center gap-3">
+          
+            <div class="flex items-center gap-8 shrink-0">
+
+              <div class="flex items-center gap-3">
+                <button
+                  (click)="decrease(item.id, item.quantity)"
+                  class="w-8 h-8 text-lg bg-gray-200 hover:bg-gray-300 rounded-full font-bold"
+                >
+                  -
+                </button>
+
+                <span class="font-semibold text-lg w-6 text-center">{{ item.quantity }}</span>
+
+                <button
+                  (click)="increase(item.id, item.quantity)"
+                  class="w-8 h-8 text-lg bg-gray-200 hover:bg-gray-300 rounded-full font-bold"
+                >
+                  +
+                </button>
+              </div>
+
               <button
-                (click)="decrease(item.id, item.quantity)"
-                class="w-8 h-8 text-lg bg-gray-200 hover:bg-gray-300 rounded-full font-bold"
+                (click)="remove(item.id)"
+                class="text-red-500 hover:text-red-700 text-lg"
               >
-                -
+                <i class="fas fa-trash"></i>
               </button>
 
-              <span class="font-semibold text-lg w-6 text-center">{{ item.quantity }}</span>
-
-              <button
-                (click)="increase(item.id, item.quantity)"
-                class="w-8 h-8 text-lg bg-gray-200 hover:bg-gray-300 rounded-full font-bold"
-              >
-                +
-              </button>
             </div>
-
-            <button
-              (click)="remove(item.id)"
-              class="text-red-500 hover:text-red-700 text-lg"
-            >
-              <i class="fas fa-trash"></i>
-            </button>
 
           </div>
         }
@@ -85,7 +90,8 @@
           <span class="font-bold text-lg text-[#a5b2d2]">{{ getTotal() | currency:'EGP' }}</span>
         </div>
 
-        <button    [routerLink]="['/checkout']"
+        <button
+          [routerLink]="['/checkout']"
           class="w-full mt-6 bg-[#a5b2d2] hover:bg-[#8a9bd6] text-white py-3 rounded-lg font-semibold transition-colors"
         >
           Checkout
