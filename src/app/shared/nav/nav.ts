@@ -3,7 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CartServ } from '../../services/cart-serv';
 import { FavServ } from '../../services/fav-serv';
 import { HomeServ } from '../../services/home-serv';
-import { Category, Homets } from '../../types/home';
+import { Category, Homets } from '../../types/Homets';
 
 @Component({
   selector: 'app-nav',
