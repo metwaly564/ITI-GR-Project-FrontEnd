@@ -31,8 +31,7 @@ export class ProductCard implements OnInit {
   }
   addToFav(id: number) {
     this.favServ.addToFav(id);
-    /////////////////???????
-    // this.productdata().isFav = !this.productdata().isFav;
+    this.productdata().isFav = !this.productdata().isFav;
   }
 
   /////////////////discount ////////////

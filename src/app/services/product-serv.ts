@@ -43,4 +43,17 @@ export class ProductServ {
       })
     );
   }
+  getProductByCategory(id: number) {
+    // let categoryId = this.getProductById(id).subscribe((res) => console.log(res.categoryId));
+    return this.http.get<product[]>(`${this.apidata}/category/${id}`).pipe(
+      map((res) => {
+        console.log(res);
+        return res;
+      }),
+      catchError((err: any) => {
+        alert(err.message);
+        return [];
+      })
+    );
+  }
 }

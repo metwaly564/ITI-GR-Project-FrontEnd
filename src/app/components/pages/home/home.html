@@ -1,28 +1,28 @@
-<!-- ////////////// featured card ///////////////// -->
-<div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
-  <i class="fa-solid fa-arrow-trend-up text-green-600 font-bold"></i>
-  <h2>Featured Products</h2>
-</div>
-<div class=" container px-3 mx-auto text-center mb-10 ">
-  <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
-    @for (item of featuredProducts(); track item.id ) {
-    <app-product-card [productdata]="item" class="w-full " />
-    }
+  <!-- ////////////// featured card ///////////////// -->
+  <div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
+    <i class="fa-solid fa-arrow-trend-up text-green-600 font-bold"></i>
+    <h2>Featured Products</h2>
   </div>
-</div>
-<!-- ////////////// popular card ///////////////// -->
-<div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
-  <i class="fa-solid fa-fire  text-green-600 font-bold"></i>
-  <h2>Popular Products</h2>
-</div>
-<div class=" container px-3 mx-auto text-center mb-10 ">
-  <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
-    @for (item of popularProducts (); track item.id ) {
-    <app-product-card [productdata]="item" class="w-full " />
-    }
+  <div class=" container px-3 mx-auto text-center mb-10 ">
+    <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
+      @for (item of featuredProducts(); track item.id ) {
+      <app-product-card [productdata]="item" class="w-full " />
+      }
+    </div>
   </div>
-</div>
+  <!-- ////////////// popular card ///////////////// -->
+  <div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
+    <i class="fa-solid fa-fire  text-green-600 font-bold"></i>
+    <h2>Popular Products</h2>
+  </div>
+  <div class=" container px-3 mx-auto text-center mb-10 ">
+    <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
+      @for (item of popularProducts (); track item.id ) {
+      <app-product-card [productdata]="item" class="w-full " />
+      }
+    </div>
+  </div>
 
-<app-hero-banner />
-<br />
-<app-feature-section />
+  <app-hero-banner />
+  <br />
+  <app-feature-section />

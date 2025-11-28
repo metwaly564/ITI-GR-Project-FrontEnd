@@ -40,7 +40,7 @@ bg-light-blue hover:bg-rock-blue transition-colors duration-300 relative">
 
     <div class="text-start">
       @if(productdata().discountPrice){
-      <span class="line-through text-gray-700">{{productdata().price}}</span>
+      <span class="line-through text-gray-700">{{productdata().price}} </span>
       }
 
       <p class=" text-lg font-bold">{{(productdata().discountPrice ??productdata().price) | currency:'EGP':'symbol' }}
@@ -52,8 +52,7 @@ bg-light-blue hover:bg-rock-blue transition-colors duration-300 relative">
       <button (click)="addTocart(productdata()!.id )">
         <i class=" fa-solid fa-cart-arrow-down card-button "></i></button>
       <button (click)="addToFav(productdata()!.id )">
-
-        <i class="fa-heart card-button" [ngClass]="isFav()  ? 'fa-solid ' : 'fa-regular '"></i>
+        <i class="fa-heart card-button " [ngClass]="isFav()  ? 'fa-solid ' : 'fa-regular '"></i>
       </button>
     </div>
   </div>
