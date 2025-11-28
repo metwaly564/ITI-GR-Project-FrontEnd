@@ -20,6 +20,15 @@ export const routes: Routes = [
   },
   {path:'contact',
   loadComponent: () => import('./components/pages/contact/contact').then((m) => m.Contact)},
+   {path:'cart',
+  loadComponent: () => import('./components/pages/cart/cart').then((m) => m.CartComponent)
+  },
+  {path:'favorite',
+  loadComponent: () => import('./components/pages/favourites/favourites').then((m) => m.FavouritesComponent)
+  },
+ {path:'checkout',
+  loadComponent: () => import('./components/pages/checkout/checkout').then((m) => m.CheckoutComponent)
+  },
   {
     path: 'profile',
     loadComponent: () =>

@@ -73,7 +73,7 @@
 
     <div class="hidden lg:flex gap-2">
       <a class="px-2 cursor-pointer"><i class="fa-solid fa-magnifying-glass"></i></a>
-      <a class="px-2 cursor-pointer relative"><i class="fa-solid fa-cart-shopping">
+      <a class="px-2 cursor-pointer relative" [routerLink]="['/cart']"><i class="fa-solid fa-cart-shopping">
           @if(cartserv.cartcount() != 0){
           <span
             class="absolute -top-2 -right-2  bg-green-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
@@ -87,7 +87,7 @@
         </span>
         } -->
       </a>
-      <a class="px-2 cursor-pointer relative"> <i class="fa-solid fa-heart"></i>
+      <a class="px-2 cursor-pointer relative" [routerLink]="['/favorite']"> <i class="fa-solid fa-heart"></i>
         @if(favserv.favCount() != 0){<span
           class="absolute -top-2 -right-2  bg-green-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
           {{favserv.favCount()}}
