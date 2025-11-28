@@ -6,10 +6,11 @@ import { HeroBanner } from './hero-banner/hero-banner';
 import { FeatureSection } from './feature-section/feature-section';
 import { HomeServ } from '../../../services/home-serv';
 import { Category, Homets } from '../../../types/Homets';
+import { Branches } from './branches/branches';
 
 @Component({
   selector: 'app-home',
-  imports: [ProductCard, HeroBanner, FeatureSection],
+  imports: [ProductCard, HeroBanner, FeatureSection, Branches],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
