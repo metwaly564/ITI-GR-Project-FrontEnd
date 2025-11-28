@@ -11,6 +11,7 @@ export class ProductServ {
   private apidata = 'http://localhost:5062/api/Products';
   http = inject(HttpClient);
 
+  
   getProduct() {
     return this.http.get<product[]>(this.apidata).pipe(
       map((res) => {

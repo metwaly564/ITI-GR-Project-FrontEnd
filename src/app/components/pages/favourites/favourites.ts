@@ -52,6 +52,7 @@ export class  FavouritesComponent {
     if (confirm('Are you sure you want to clear all favourites?')) {
       this.favServ.favlist.set([]);
       this.fullFavList.set([]);
+      this.favServ.clearAllFav();
     }
   }
 }

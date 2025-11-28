@@ -17,12 +17,10 @@ export class CheckoutComponent {
   orderNumber = 'ORD-' + Date.now().toString().slice(-6);
 
   constructor() {
-    // نفرغ الكارت بعد ما نعمل order
     this.clearCart();
   }
 
   clearCart() {
-    // نمسح كل الـ items من الكارت
     const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
     cartItems.forEach((item: any) => {
       this.cartServ.addtocart(item.id, 0);

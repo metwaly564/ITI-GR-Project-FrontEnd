@@ -33,6 +33,12 @@ export class FavServ {
 
     this.favCount.set(this.getallfav());
   }
+  clearAllFav() {
+  localStorage.removeItem('fav');
+  this.favlist.set([]);
+  this.favCount.set(0);
+}
+
 
   isFav = (id: number) => computed(() => this.favlist().some((f) => f.id === id));
 }
