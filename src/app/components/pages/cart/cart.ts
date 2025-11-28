@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { inject } from '@angular/core';
 import { CartServ } from '../../../services/cart-serv';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, Location } from '@angular/common';
 import { ProductServ } from '../../../services/product-serv';
 import { signal } from '@angular/core';
 
@@ -18,6 +18,7 @@ export class CartComponent {
 
   private cartServ = inject(CartServ);
   private productServ = inject(ProductServ);
+  private location = inject(Location);
 
   cartItemsIds = signal<{ id: number; quantity: number }[]>([]);
 
@@ -72,6 +73,9 @@ export class CartComponent {
   }
 
   
+  goBack() {
+    this.location.back();
+  }
   getSubtotal() {
     return this.fullCart().reduce(
       (sum, item) => sum + item.price * item.quantity,
