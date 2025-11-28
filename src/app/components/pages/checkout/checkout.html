@@ -1,0 +1,29 @@
+<section class="py-12 bg-gray-50 min-h-screen">
+  <div class="container mx-auto px-4">
+    
+    <div class="max-w-md mx-auto text-center">
+      
+      <div class="mb-8">
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-check text-green-500 text-2xl"></i>
+        </div>
+      </div>
+
+      <h1 class="text-2xl font-bold text-gray-800 mb-4">Order Confirmed! </h1>
+      <p class="text-gray-600 mb-6">Thank you for your purchase. Your order has been successfully placed.</p>
+
+      <div class="bg-white rounded-xl p-6 shadow-lg mb-8">
+        <p class="text-gray-700 mb-2">Your order number is:</p>
+        <p class="text-[#a5b2d2] font-bold text-xl">{{ orderNumber }}</p>
+      </div>
+
+      <button 
+        (click)="backToHome()"
+        class="bg-[#a5b2d2] hover:bg-[#8a9bd6] text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+        Continue Shopping
+      </button>
+
+    </div>
+
+  </div>
+</section>

@@ -9,6 +9,7 @@ export class CartServ {
 
   constructor() {
     this.cartcount.set(this.gettotalcart());
+    
   }
   gettotalcart() {
     const cart = localStorage.getItem('cart');
@@ -38,3 +39,4 @@ export class CartServ {
     }
   }
 }
+

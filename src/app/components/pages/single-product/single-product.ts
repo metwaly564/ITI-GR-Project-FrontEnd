@@ -2,7 +2,7 @@ import { Component, computed, effect, inject, OnInit, Signal, signal } from '@an
 import { ActivatedRoute } from '@angular/router';
 import { ProductServ } from '../../../services/product-serv';
 import { product } from '../../../types/product';
-import { Location, NgClass } from '@angular/common';
+import { Location } from '@angular/common';
 import { CartServ } from '../../../services/cart-serv';
 import { FavServ } from '../../../services/fav-serv';
 import { Category, Homets } from '../../../types/Homets';
@@ -13,7 +13,7 @@ import { ProductCard } from '../../../shared/product-card/product-card';
   selector: 'app-single-product',
   templateUrl: './single-product.html',
   styleUrls: ['./single-product.css'],
-  imports: [NgClass, ProductCard],
+  imports: [ ProductCard],
 })
 export class SingleProduct implements OnInit {
   constructor() {
