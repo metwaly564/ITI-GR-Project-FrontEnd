@@ -72,9 +72,9 @@
               {{ProductById()?.stock?.[0]?.quantity}}
             </span></label>
           }
-          <div class="flex items-center gap-3">
+          <div class="flex items-center w-fit gap-2">
             <div class="flex items-center rounded-lg border overflow-hidden">
-              <button id="dec" class="px-4 py-2 text-xl  hover:bg-light-blue"
+              <button id="dec" class="px-4 py-1.5 text-xl  hover:bg-light-blue"
                 (click)="decQuantity(inputQuantity.value)">−</button>
               <input id="qty" type="number" value="{{quantityNum()}}" min="1" max="10"
                 class="w-16 text-center outline-none p-2" aria-label="Quantity" #inputQuantity />
@@ -82,7 +82,7 @@
                 (click)="incQuantity(inputQuantity.value)">+</button>
             </div>
             <button id="addToCart"
-              class="ml-auto flex-1 lg:flex-none bg-light-blue hover:bg-rock-blue hover:text-white font-semibold rounded-lg px-6 py-3 shadow"
+              class="ml-auto flex-1 lg:flex-none bg-light-blue hover:bg-rock-blue hover:text-white font-semibold rounded-lg px-6 py-2.5 shadow"
               (click)="addTocart(ProductById()?.id!, inputQuantity.value)"
               [disabled]="ProductById()?.stock?.[0]!.quantity <=0">
               Add to Cart</button>

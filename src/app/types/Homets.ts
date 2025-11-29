@@ -1,13 +1,13 @@
 import { product } from './product';
 
 export interface Homets {
-  banners: Banner[];
+  banners: BannerTs[];
   categories: Category[];
   featuredProducts: product[];
   popularProducts: product[];
 }
 
-export interface Banner {
+export interface BannerTs {
   id: number;
   title: string;
   description: string;

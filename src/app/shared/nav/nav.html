@@ -1,10 +1,10 @@
-<nav class="bg-rock-blue py-3">
+<nav class="bg-white py-3 border-b border-gray-300 shadow-[-1px_2px_7px_1px_rgba(0,0,0,0.3)] sticky z-50 top-0">
   <div class="container flex justify-between items-center px-3 mx-auto">
     <button class="lg:hidden text-xl hover:opacity-70 cursor-pointer" (click)="openToggle()">
 
       <i class="fa-solid fa-bars"></i>
     </button>
-    <a class="font-[cursive] text-black text-xl" href="#">CareZone</a>
+    <a class="font-[cursive] font-bold text-black text-2xl" href="#">CareZone</a>
     <div [class.open]="isOpenMenu()" class="side-menu">
       <button (click)="openToggle()" class="lg:hidden float-end cursor-pointer text-xl hover:opacity-70"><i
           class="fa-solid fa-xmark"></i></button>
@@ -20,7 +20,7 @@
             <i class="fa-solid fa-caret-down"></i>
           </a>
           @if(activeDropdownMenu() == 'cat') {
-          <ul class="lg:absolute p-3 lg:bg-white lg:border lg:border-gray-400 lg:rounded-lg z-50">
+          <ul class="lg:absolute p-3 lg:bg-white lg:border lg:border-gray-400 lg:rounded-lg z-50 ">
             @for (item of categories(); track $index) {
             <li><a
                 class="text-black/65 py-2 px-3 inline-block lg:hover:bg-rock-blue w-full hover:bg-white max-w-52 rounded"
@@ -38,7 +38,7 @@
         </li>
         <li>
           <a class="text-black/65 py-2 px-3 inline-block cursor-pointer hover:bg-white w-full max-w-52 rounded lg:hover:bg-transparent"
-          [routerLink]="['/contact']">contact us</a>
+            [routerLink]="['/contact']">contact us</a>
         </li>
       </ul>
       <div class="w-full flex justify-between gap-3 lg:hidden absolute bottom-5 px-5 left-0 text-lg

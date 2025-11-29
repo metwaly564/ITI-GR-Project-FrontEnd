@@ -24,6 +24,7 @@ export class Register implements OnInit {
   isLoading = false;
   isConfirm = false;
   showPassword: boolean = false;
+  showPasswordConfirm: boolean = false;
   formGroup!: FormGroup;
   error = signal<string | null>(null);
 
@@ -95,5 +96,8 @@ export class Register implements OnInit {
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+  togglePasswordVisibilityConfirm() {
+    this.showPasswordConfirm = !this.showPasswordConfirm;
   }
 }

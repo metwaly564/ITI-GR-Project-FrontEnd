@@ -1,0 +1,39 @@
+<div class=" relative h-[85vh] overflow-hidden" (mouseenter)="stopAutoplay()" (mouseleave)="startAutoplay()">
+  <div class="flex transition-transform duration-500 ease-in-out h-full  "
+    [style.transform]="'translateX(-' + currentSlide * 100 + '%)'">
+    @for (banner of banners(); track $index) {
+    <div class="relative w-full h-full flex-none ">
+      <img src="{{banner.imageUrl}}" class="h-full w-full object-cover block bg-rock-blue" />
+      <!-- <div class="absolute inset-0 bg-black/60 z-1"></div> -->
+      <div
+        class="z-10 absolute bg-black/50 right-1/2 transform translate-x-1/2 bottom-1/2 translate-y-1/2 w-max h-fit max-w-[80%] max-h-[80%] p-6 text-center rounded-lg min-w-[40%] min-h-[40%] items-center flex flex-col justify-center">
+        <h2 class="text-white text-4xl font-bold mb-3">{{ banner.title }}</h2>
+        <p class="text-white text-lg mb-5">{{ banner.description }}</p>
+        <div class="flex justify-center items-center gap-2">
+          <a class="text-sm cursor-pointer text-white m-0" href="{{ banner.link }}">
+            Learn More
+          </a>
+          <i class="fa-solid fa-arrow-right text-sm cursor-pointer text-white mt-0.5"></i>
+        </div>
+
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- ////////////// next/prev buttons //////////// -->
+  <button
+    class=" w-10 h-10 leading-5 z-2 cursor-pointer absolute text-white p-3 border-none text-lg top-1/2 transform -translate-y-1/2 bg-black/50 rounded-full left-2.5 container mx-auto px-3"
+    (click)="prevSlide()">&#10094;</button>
+  <button
+    class="next w-10 h-10 leading-5 z-2 cursor-pointer absolute text-white p-3 border-none text-lg top-1/2 transform -translate-y-1/2 bg-black/50 rounded-full right-2.5 container mx-auto px-3"
+    (click)="nextSlide()">&#10095;</button>
+
+  <!-- ////////// pagination ///////////// -->
+  <div class="z-2 w-full absolute bottom-4 text-center">
+    @for (banner of banners(); track $index) {
+    <span (click)="goToSlide($index)" class="inline-block w-3 h-3 mx-1 cursor-pointer rounded-full " [ngClass]="{
+        'bg-white/50': $index != currentSlide ,'bg-white': $index === currentSlide}"></span>
+    }
+  </div>
+</div>

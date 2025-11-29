@@ -3,8 +3,8 @@
     <label class="text-nowrap">Select Branch</label>
     <select id=" countries" class=" block px-3 py-3 outline-none text-blue-800">
       <option selected>Choose brances</option>
-      @for(item of brances(); track $index){
-      <option>{{item.name}}</option>
+      @for(branch of brances(); track $index){
+      <option value="{{branch.id}}">{{branch.name}}</option>
       }
     </select>
   </form>

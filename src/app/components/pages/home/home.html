@@ -1,27 +1,57 @@
+  <app-banner />
   <app-branches />
+  <app-categories-section />
   <!-- ////////////// featured card ///////////////// -->
-  <div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
-    <i class="fa-solid fa-arrow-trend-up text-green-600 font-bold"></i>
-    <h2>Featured Products</h2>
-  </div>
-  <div class=" container px-3 mx-auto text-center mb-10 ">
-    <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
-      @for (item of featuredProducts(); track item.id ) {
-      <app-product-card [productdata]="item" class="w-full " />
-      }
+  <div class="bg-indigo-50 py-10 ">
+    <div class="container px-3 mx-auto flex items-center mb-10 text-2xl gap-1 justify-center ">
+      <i class="fa-solid fa-fire  text-green-600 font-bold text-3xl"></i>
+      <h2 class="text-3xl font-bold ">Popular Products</h2>
+    </div>
+    <div class=" container px-3 mx-auto text-center mb-10 ">
+      <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
+        @for (item of popularProducts(); track item.id ) {
+        <app-product-card [productdata]="item" class="w-full " />
+        }
+      </div>
     </div>
   </div>
   <!-- ////////////// popular card ///////////////// -->
-  <div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
-    <i class="fa-solid fa-fire  text-green-600 font-bold"></i>
-    <h2>Popular Products</h2>
-  </div>
-  <div class=" container px-3 mx-auto text-center mb-10 ">
-    <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
-      @for (item of popularProducts (); track item.id ) {
-      <app-product-card [productdata]="item" class="w-full " />
-      }
+  <div class="bg-white py-10 ">
+
+    <div class="container px-3 mx-auto flex items-center mb-10 text-2xl gap-1 justify-center">
+      <i class="fa-solid fa-star  text-green-600 font-bold text-3xl"></i>
+      <h2 class="text-3xl font-bold ">Featured Products</h2>
     </div>
+    <div class=" container px-3 mx-auto text-center mb-10 ">
+      <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
+        @for (item of featuredProducts (); track item.id ) {
+        <app-product-card [productdata]="item" class="w-full " />
+        }
+      </div>
+    </div>
+  </div>
+  <!-- ////////////// more products ///////////////// -->
+  <div class="bg-indigo-50 py-10 w-full">
+    <div class="container px-3 mx-auto flex items-center mb-10 text-2xl gap-1 justify-center ">
+      <i class="fa-solid fa-arrow-rotate-right text-green-600 font-bold text-3xl"></i>
+      <h2 class="text-3xl font-bold ">More Products</h2>
+    </div>
+    <div class=" container px-3 mx-auto text-center mb-10 ">
+      <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
+        @for (item of allproducts(); track item.id ) {
+        <app-product-card [productdata]="item" class="w-full " />
+        }
+      </div>
+    </div>
+    <!-- <button class="block mx-auto bg-black mb-10 rounded-xl text-white text-sm px-4 py-2">See More </button> -->
+    <button
+      class=" block mx-auto mb-10 bg-white text-[#a5b2d2] hover:bg-gray-50 px-8 py-3 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
+      [routerLink]="'/'">
+      Learn More
+    </button>
+
+
+
   </div>
 
   <app-hero-banner />
