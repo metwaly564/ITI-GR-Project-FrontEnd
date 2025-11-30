@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ProductServ } from '../../../services/product-serv';
 import { product } from '../../../types/product';
 import { ProductCard } from '../../../shared/product-card/product-card';
@@ -13,6 +14,8 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   imports: [
     ProductCard,
     HeroBanner,
@@ -22,6 +25,12 @@ import { RouterLink } from '@angular/router';
     CategoriesSection,
     RouterLink,
   ],
+=======
+  imports: [ProductCard, HeroBanner, FeatureSection, RouterLink],
+>>>>>>> Stashed changes
+=======
+  imports: [ProductCard, HeroBanner, FeatureSection, RouterLink],
+>>>>>>> Stashed changes
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

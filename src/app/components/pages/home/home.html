@@ -1,3 +1,5 @@
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   <app-banner />
   <app-branches />
   <app-categories-section />
@@ -14,6 +16,31 @@
         }
       </div>
     </div>
+=======
+=======
+>>>>>>> Stashed changes
+<!-- ////////////// Recommendation Banner ///////////////// -->
+<div class="container px-3 mx-auto my-10">
+  <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white text-center">
+    <h2 class="text-2xl font-bold mb-2">Get Personalized Product Recommendations</h2>
+    <p class="mb-4">Tell us about your skin type and concerns, and we'll recommend the perfect products for you!</p>
+    <a routerLink="/recommendation" class="inline-block bg-white text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+      Get Recommendations →
+    </a>
+  </div>
+</div>
+
+<!-- ////////////// featured card ///////////////// -->
+<div class="container px-3 mx-auto flex items-center mt-10 mb-5 text-2xl gap-1">
+  <i class="fa-solid fa-arrow-trend-up text-green-600 font-bold"></i>
+  <h2>Featured Products</h2>
+</div>
+<div class=" container px-3 mx-auto text-center mb-10 ">
+  <div class="grid gap-5 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
+    @for (item of featuredProducts(); track item.id ) {
+    <app-product-card [productdata]="item" class="w-full " />
+    }
+>>>>>>> Stashed changes
   </div>
   <!-- ////////////// popular card ///////////////// -->
   <div class="bg-white py-10 ">

@@ -42,5 +42,9 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'home',
     pathMatch: 'full',
+
+    path: 'recommendation',
+    loadComponent: () =>
+      import('./components/pages/recommendation/recommendation').then((m) => m.RecommendationComponent),
   },
 ];

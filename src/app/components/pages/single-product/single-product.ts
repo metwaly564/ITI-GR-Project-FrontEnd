@@ -14,7 +14,15 @@ import { NgClass } from '@angular/common';
   selector: 'app-single-product',
   templateUrl: './single-product.html',
   styleUrls: ['./single-product.css'],
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   imports: [NgClass, ProductCard, CurrencyPipe],
+=======
+  imports: [ProductCard],
+>>>>>>> Stashed changes
+=======
+  imports: [ProductCard],
+>>>>>>> Stashed changes
 })
 export class SingleProduct implements OnInit {
   productId!: number;

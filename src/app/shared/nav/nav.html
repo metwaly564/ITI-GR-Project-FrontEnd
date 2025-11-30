@@ -4,7 +4,19 @@
 
       <i class="fa-solid fa-bars"></i>
     </button>
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <a class="font-[cursive] font-bold text-black text-2xl" href="#">CareZone</a>
+=======
+    <a class="flex items-center" href="#" routerLink="/">
+      <img [src]="'/assets/images/logo.png'" alt="CareZone Logo" class="h-16 w-auto" />
+    </a>
+>>>>>>> Stashed changes
+=======
+    <a class="flex items-center" href="#" routerLink="/">
+      <img [src]="'/assets/images/logo.png'" alt="CareZone Logo" class="h-16 w-auto" />
+    </a>
+>>>>>>> Stashed changes
     <div [class.open]="isOpenMenu()" class="side-menu">
       <button (click)="openToggle()" class="lg:hidden float-end cursor-pointer text-xl hover:opacity-70"><i
           class="fa-solid fa-xmark"></i></button>
@@ -39,6 +51,14 @@
         <li>
           <a class="text-black/65 py-2 px-3 inline-block cursor-pointer hover:bg-white w-full max-w-52 rounded lg:hover:bg-transparent"
             [routerLink]="['/contact']">contact us</a>
+        </li>
+        <li>
+          <a class="text-black/65 py-2 px-3 inline-block cursor-pointer hover:bg-white w-full max-w-52 rounded lg:hover:bg-transparent"
+          [routerLink]="['/recommendation']">Get Recommendations</a>
+        </li>
+        <li>
+          <a class="text-black/65 py-2 px-3 inline-block cursor-pointer hover:bg-white w-full max-w-52 rounded lg:hover:bg-transparent"
+          [routerLink]="['/recommendation']">Get Recommendations</a>
         </li>
       </ul>
       <div class="w-full flex justify-between gap-3 lg:hidden absolute bottom-5 px-5 left-0 text-lg
