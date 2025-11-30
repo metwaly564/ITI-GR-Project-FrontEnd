@@ -75,7 +75,14 @@ export class RecommendationComponent {
   }
 
   getSkinTypeName(type: SkinType): string {
-    return SkinType[type];
+    const skinTypeNames: { [key: number]: string } = {
+      1: 'Normal',
+      2: 'Dry',
+      3: 'Oily',
+      4: 'Combination',
+      5: 'Sensitive'
+    };
+    return skinTypeNames[type] || 'Normal';
   }
 }
 
