@@ -2,27 +2,17 @@ import { Component, computed, effect, inject, OnInit, Signal, signal } from '@an
 import { ActivatedRoute } from '@angular/router';
 import { ProductServ } from '../../../services/product-serv';
 import { product } from '../../../types/product';
-import { Location } from '@angular/common';
+import { Location, CommonModule } from '@angular/common';
 import { CartServ } from '../../../services/cart-serv';
 import { FavServ } from '../../../services/fav-serv';
 import { HomeServ } from '../../../services/home-serv';
 import { ProductCard } from '../../../shared/product-card/product-card';
-import { CurrencyPipe } from '@angular/common';
-import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-single-product',
   templateUrl: './single-product.html',
   styleUrls: ['./single-product.css'],
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  imports: [NgClass, ProductCard, CurrencyPipe],
-=======
-  imports: [ProductCard],
->>>>>>> Stashed changes
-=======
-  imports: [ProductCard],
->>>>>>> Stashed changes
+  imports: [CommonModule, ProductCard],
 })
 export class SingleProduct implements OnInit {
   productId!: number;

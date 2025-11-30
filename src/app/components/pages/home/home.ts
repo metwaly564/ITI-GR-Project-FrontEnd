@@ -10,12 +10,9 @@ import { Category, Homets } from '../../../types/Homets';
 import { Branches } from './branches/branches';
 import { Banner } from './banner/banner';
 import { CategoriesSection } from './categories-section/categories-section';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
   imports: [
     ProductCard,
     HeroBanner,
@@ -25,12 +22,6 @@ import { RouterLink } from '@angular/router';
     CategoriesSection,
     RouterLink,
   ],
-=======
-  imports: [ProductCard, HeroBanner, FeatureSection, RouterLink],
->>>>>>> Stashed changes
-=======
-  imports: [ProductCard, HeroBanner, FeatureSection, RouterLink],
->>>>>>> Stashed changes
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

@@ -39,12 +39,13 @@ export const routes: Routes = [
     loadComponent: () => import('./components/auth/register/register').then((m) => m.Register),
   },
   {
-    path: '**',
-    redirectTo: 'home',
-    pathMatch: 'full',
-
     path: 'recommendation',
     loadComponent: () =>
       import('./components/pages/recommendation/recommendation').then((m) => m.RecommendationComponent),
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
+    pathMatch: 'full',
   },
 ];
