@@ -30,6 +30,8 @@ export class ProductServ {
       categoryId: dto.categoryId,
       categoryName: dto.categoryName,
       createdAt: dto.createdAt,
+      rank: dto.rank,
+      maxOrderQuantity: dto.maxOrderQuantity,
       stock: this.mapStockDTOsToStocks(dto.stock),
       quantity: dto.stock.reduce((sum, s) => sum + s.quantity, 0),
       isFav: !!favproductArray.find((f) => f.id == dto.id),

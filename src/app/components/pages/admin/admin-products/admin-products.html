@@ -30,12 +30,12 @@
   </div>
 
   <!-- Loading Indicator -->
-  <div *ngIf="isLoading && products.length === 0" class="loading">
+  <div *ngIf="isLoading" class="loading">
     <p>Loading products...</p>
   </div>
 
   <!-- Products Table -->
-  <div *ngIf="!isLoading || products.length > 0" class="products-table-container">
+  <div *ngIf="!isLoading" class="products-table-container">
     <table class="products-table">
       <thead>
         <tr>

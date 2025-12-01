@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { product } from '../types/product';
+import { Observable, map, catchError, of } from 'rxjs';
+import { product, ProductDTO } from '../types/product';
 
 export interface CreateProductDTO {
   name: string;
@@ -12,6 +12,8 @@ export interface CreateProductDTO {
   isActive: boolean;
   categoryId: number;
   stock?: number;
+  rank?: number;
+  maxOrderQuantity?: number;
 }
 
 export interface UpdateProductDTO {
@@ -23,6 +25,8 @@ export interface UpdateProductDTO {
   isActive?: boolean;
   categoryId?: number;
   stock?: number;
+  rank?: number;
+  maxOrderQuantity?: number;
 }
 
 export interface ApiResponse<T> {
@@ -48,11 +52,51 @@ export class AdminService {
     });
   }
 
+  // Helper to map ProductDTO to product
+  private mapProductDTOToProduct(dto: ProductDTO): product {
+    return {
+      id: dto.id,
+      name: dto.productName || '',
+      imageUrl: dto.productImage || '',
+      price: dto.price,
+      discountPrice: dto.discountPrice,
+      description: dto.description,
+      isPrescriptionRequired: dto.isPrescriptionRequired,
+      isActive: dto.isActive,
+      categoryId: dto.categoryId,
+      categoryName: dto.categoryName,
+      createdAt: dto.createdAt,
+      rank: dto.rank,
+      maxOrderQuantity: dto.maxOrderQuantity,
+      stock: dto.stock || [],
+      quantity: dto.stock?.reduce((sum, s) => sum + s.quantity, 0) || 0,
+      isFav: false,
+    };
+  }
+
   // Get all products
   getProducts(): Observable<ApiResponse<product[]>> {
-    return this.http.get<ApiResponse<product[]>>(
+    return this.http.get<ApiResponse<ProductDTO[]>>(
       `${this.baseUrl}/AdminProducts`,
       { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(response => {
+        console.log('Raw API response:', response); // Debug log
+        return {
+          ...response,
+          data: response.data?.map(dto => this.mapProductDTOToProduct(dto)) || []
+        };
+      }),
+      catchError(error => {
+        console.error('Error in getProducts:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to load products',
+          data: [],
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<product[]>);
+      })
     );
   }
 
@@ -80,15 +124,26 @@ export class AdminService {
     if (productData.stock !== undefined) {
       formData.append('stock', productData.stock.toString());
     }
+    if (productData.rank !== undefined) {
+      formData.append('rank', productData.rank.toString());
+    }
+    if (productData.maxOrderQuantity !== undefined) {
+      formData.append('maxOrderQuantity', productData.maxOrderQuantity.toString());
+    }
     
     if (image) {
       formData.append('image', image);
     }
 
-    return this.http.post<ApiResponse<product>>(
+    return this.http.post<ApiResponse<ProductDTO>>(
       `${this.baseUrl}/AdminProducts`,
       formData,
       { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(response => ({
+        ...response,
+        data: response.data ? this.mapProductDTOToProduct(response.data) : null as any
+      }))
     );
   }
 
@@ -114,15 +169,26 @@ export class AdminService {
     if (productData.stock !== undefined) {
       formData.append('stock', productData.stock.toString());
     }
+    if (productData.rank !== undefined) {
+      formData.append('rank', productData.rank.toString());
+    }
+    if (productData.maxOrderQuantity !== undefined) {
+      formData.append('maxOrderQuantity', productData.maxOrderQuantity.toString());
+    }
     
     if (image) {
       formData.append('image', image);
     }
 
-    return this.http.put<ApiResponse<product>>(
+    return this.http.put<ApiResponse<ProductDTO>>(
       `${this.baseUrl}/AdminProducts/${id}`,
       formData,
       { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(response => ({
+        ...response,
+        data: response.data ? this.mapProductDTOToProduct(response.data) : null as any
+      }))
     );
   }
 

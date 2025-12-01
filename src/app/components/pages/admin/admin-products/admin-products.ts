@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AdminService, CreateProductDTO, UpdateProductDTO } from '../../../../services/admin-serv';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 interface Category {
   id: number;
   name: string;
+  rank?: number;
 }
 
 @Component({
@@ -21,6 +22,7 @@ export class AdminProductsComponent implements OnInit {
   adminService = inject(AdminService);
   homeService = inject(HomeServ);
   router = inject(Router);
+  cdr = inject(ChangeDetectorRef);
 
   products: any[] = [];
   categories: Category[] = [];
@@ -56,6 +58,8 @@ export class AdminProductsComponent implements OnInit {
     this.checkAuth();
     this.loadCategories();
     this.loadProducts();
+    // Ensure filteredProducts is initialized
+    this.filteredProducts = [];
   }
 
   checkAuth() {
@@ -80,25 +84,73 @@ export class AdminProductsComponent implements OnInit {
 
   loadProducts() {
     this.isLoading = true;
+    this.errorMessage = '';
+    console.log('Starting to load products...'); // Debug log
+    
+    // Timeout fallback - ensure loading doesn't stay forever
+    const timeoutId = setTimeout(() => {
+      if (this.isLoading) {
+        console.warn('Products load timeout - forcing stop'); // Debug log
+        this.isLoading = false;
+        this.errorMessage = 'Request timeout. Please check your connection and try again.';
+        this.products = [];
+        this.filteredProducts = [];
+      }
+    }, 30000); // 30 second timeout
+    
     this.adminService.getProducts().subscribe({
       next: (res) => {
+        clearTimeout(timeoutId);
+        console.log('Products response received:', res); // Debug log
         this.isLoading = false;
-        if (res.success && res.data) {
-          this.products = res.data;
-          this.filteredProducts = [...this.products];
+        
+        if (res && res.success !== undefined) {
+          if (res.success && res.data) {
+            this.products = Array.isArray(res.data) ? res.data : [];
+            // Reset search term and filter products to show all
+            this.searchTerm = '';
+            this.filteredProducts = [...this.products];
+            console.log('Products loaded successfully:', this.products.length); // Debug log
+            console.log('Filtered products:', this.filteredProducts.length); // Debug log
+            // Manually trigger change detection immediately
+            this.cdr.detectChanges();
+          } else {
+            this.products = [];
+            this.filteredProducts = [];
+            this.errorMessage = res.message || 'Failed to load products';
+            console.warn('Products load failed:', res.message); // Debug log
+            this.cdr.detectChanges();
+          }
         } else {
-          this.errorMessage = res.message || 'Failed to load products';
+          // Handle unexpected response structure
+          console.error('Unexpected response structure:', res);
+          this.isLoading = false;
+          this.products = [];
+          this.filteredProducts = [];
+          this.errorMessage = 'Unexpected response format from server';
+          this.cdr.detectChanges();
         }
       },
       error: (err) => {
+        clearTimeout(timeoutId);
+        console.error('Error loading products:', err); // Debug log
         this.isLoading = false;
-        console.error('Error loading products:', err);
-        this.errorMessage = err.error?.message || 'Failed to load products. Please check if you are logged in as admin.';
+        this.products = [];
+        this.filteredProducts = [];
+        this.errorMessage = err.error?.message || err.message || 'Failed to load products. Please check if you are logged in as admin.';
         if (err.status === 401 || err.status === 403) {
           alert('Unauthorized. Please login as admin.');
           this.router.navigate(['/login']);
         }
+        this.cdr.detectChanges();
       },
+      complete: () => {
+        clearTimeout(timeoutId);
+        console.log('Products subscription completed'); // Debug log
+        // Ensure isLoading is false even if something goes wrong
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -274,16 +326,16 @@ export class AdminProductsComponent implements OnInit {
 
   filterProducts() {
     if (!this.searchTerm.trim()) {
-      this.filteredProducts = [...this.products];
+      this.filteredProducts = Array.isArray(this.products) ? [...this.products] : [];
       return;
     }
 
-    const search = this.searchTerm.toLowerCase();
-    this.filteredProducts = this.products.filter(
+    const search = this.searchTerm.toLowerCase().trim();
+    this.filteredProducts = (Array.isArray(this.products) ? this.products : []).filter(
       (p) =>
-        p.name.toLowerCase().includes(search) ||
-        p.description.toLowerCase().includes(search) ||
-        p.categoryName?.toLowerCase().includes(search)
+        p?.name?.toLowerCase().includes(search) ||
+        p?.description?.toLowerCase().includes(search) ||
+        p?.categoryName?.toLowerCase().includes(search)
     );
   }
 

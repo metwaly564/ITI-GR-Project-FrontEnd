@@ -25,4 +25,5 @@ export interface Category {
   imageUrl: string;
   isActive: boolean;
   productCount: number;
+  rank?: number;
 }

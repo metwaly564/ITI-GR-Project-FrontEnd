@@ -11,6 +11,8 @@ export interface ProductDTO {
   categoryId: number;
   categoryName: string;
   createdAt: string;
+  rank?: number;
+  maxOrderQuantity?: number;
   stock: StockDTO[];
 }
 
@@ -41,6 +43,8 @@ export interface product {
   categoryId: number;
   categoryName: string;
   createdAt: string;
+  rank?: number;
+  maxOrderQuantity?: number;
   stock: Stock[] | [];
   isFav: boolean;
 }

@@ -37,9 +37,17 @@ export class Login implements OnInit {
         this.isLoading = false;
         console.log(' Login success:', res);
 
-        if (res.token) {
-          localStorage.setItem('token', res.token);
+        // Backend returns 'Token' (capital T) in AuthResponseDTO
+        const token = res.token || res.Token;
+        if (token) {
+          localStorage.setItem('token', token);
           alert('Logged in successfully!');
+          // Redirect to home or admin dashboard if admin
+          if (res.user?.roles?.includes('Admin')) {
+            window.location.href = '/admin/products';
+          } else {
+            window.location.href = '/home';
+          }
         } else {
           alert('Login successful but no token received');
         }
@@ -53,7 +61,10 @@ export class Login implements OnInit {
           error: err.error,
           message: err.message,
         });
-        alert(' Login failed. Check console for details.');
+        
+        // Show user-friendly error message
+        const errorMessage = err.error?.message || err.message || 'Login failed. Please check your credentials.';
+        alert(`Login failed: ${errorMessage}\n\nAdmin credentials:\nEmail: admin@pharmacy.com\nPassword: Admin123!`);
       },
     });
   }
