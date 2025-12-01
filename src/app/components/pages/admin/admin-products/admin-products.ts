@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { AdminService, CreateProductDTO, UpdateProductDTO } from '../../../../services/admin-serv';
 import { HomeServ } from '../../../../services/home-serv';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ interface Category {
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule],
   templateUrl: './admin-products.html',
   styleUrls: ['./admin-products.css'],
 })

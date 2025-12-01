@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { RecommendationServ, SkinType, RecommendationRequest, RecommendationResponse, ProductRecommendation } from '../../../services/recommendation-serv';
 import { Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-recommendation',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './recommendation.html',
   styleUrl: './recommendation.css'
 })

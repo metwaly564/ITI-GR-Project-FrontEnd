@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ProductServ } from '../../../services/product-serv';
 import { HomeServ } from '../../../services/home-serv';
@@ -12,7 +12,7 @@ import { BranchesTs } from '../../../types/branches';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProductCard],
+  imports: [FormsModule, ProductCard],
   templateUrl: './products.html',
   styleUrls: ['./products.css'],
 })
