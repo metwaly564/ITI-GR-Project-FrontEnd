@@ -1,0 +1,153 @@
+<div class="products-page">
+  <div class="container">
+    <h1 class="page-title">Products</h1>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+      <!-- Search -->
+      <div class="filter-group">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+          placeholder="Search products..."
+          class="search-input"
+        />
+        <button (click)="onSearch()" class="search-btn">Search</button>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="filter-group">
+        <label>Category:</label>
+        <select
+          [ngModel]="selectedCategoryId()"
+          (ngModelChange)="onCategoryChange($event)"
+          class="filter-select"
+        >
+          <option [value]="undefined">All Categories</option>
+          <option *ngFor="let category of categories()" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Branch Filter -->
+      <div class="filter-group">
+        <label>Branch:</label>
+        <select
+          [ngModel]="selectedBranchId()"
+          (ngModelChange)="onBranchChange($event)"
+          class="filter-select"
+        >
+          <option [value]="undefined">All Branches</option>
+          <option *ngFor="let branch of branches()" [value]="branch.id">
+            {{ branch.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Sort -->
+      <div class="filter-group">
+        <label>Sort By:</label>
+        <select
+          [ngModel]="sortBy()"
+          (ngModelChange)="onSortChange($event)"
+          class="filter-select"
+        >
+          <option *ngFor="let option of sortOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Price Range -->
+      <div class="filter-group price-filter">
+        <label>Price Range:</label>
+        <div class="price-inputs">
+          <input
+            type="number"
+            [(ngModel)]="minPrice"
+            (change)="onPriceFilterChange()"
+            placeholder="Min"
+            class="price-input"
+          />
+          <span>-</span>
+          <input
+            type="number"
+            [(ngModel)]="maxPrice"
+            (change)="onPriceFilterChange()"
+            placeholder="Max"
+            class="price-input"
+          />
+        </div>
+      </div>
+
+      <!-- Stock Filter -->
+      <div class="filter-group">
+        <label>
+          <input
+            type="checkbox"
+            [(ngModel)]="inStockOnly"
+            (change)="onStockFilterChange()"
+          />
+          In Stock Only
+        </label>
+      </div>
+
+      <!-- Clear Filters -->
+      <button (click)="clearFilters()" class="clear-btn">Clear Filters</button>
+    </div>
+
+    <!-- Results Info -->
+    <div class="results-info" *ngIf="pagination()">
+      <p>
+        Showing {{ products().length }} of {{ totalCount }} products
+        (Page {{ currentPage() }} of {{ totalPages }})
+      </p>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading()" class="loading">
+      <p>Loading products...</p>
+    </div>
+
+    <!-- Products Grid -->
+    <div *ngIf="!isLoading()" class="products-grid">
+      <app-product-card
+        *ngFor="let product of products()"
+        [productdata]="product"
+      />
+    </div>
+
+    <!-- No Products -->
+    <div *ngIf="!isLoading() && products().length === 0" class="no-products">
+      <p>No products found. Try adjusting your filters.</p>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="pagination() && totalPages > 1" class="pagination">
+      <button
+        (click)="previousPage()"
+        [disabled]="!hasPrevious"
+        class="page-btn"
+      >
+        Previous
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          (click)="goToPage(i + 1)"
+          [class.active]="currentPage() === i + 1"
+          class="page-number"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
+
+      <button (click)="nextPage()" [disabled]="!hasNext" class="page-btn">
+        Next
+      </button>
+    </div>
+  </div>
+</div>

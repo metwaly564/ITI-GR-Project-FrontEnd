@@ -34,21 +34,38 @@ export class SingleProduct implements OnInit {
   ngOnInit(): void {
     this.activeRoute.paramMap.subscribe((params) => {
       this.productId = Number(params.get('id'));
-      this.productServ.getProductById(this.productId).subscribe((res) => {
-        this.productServ.getProductByCategory(res.categoryId).subscribe((res) => {
-          this.productsByCategory = res.filter((item) => item.id != this.productId).splice(0, 8);
-          this.relatedProducts.set(this.productsByCategory);
-        });
-      });
-      this.productServ.getProductById(this.productId).subscribe((res) => {
-        this.ProductById.set(res);
-        if (this.ProductById()?.discountPrice) {
-          this.discount.set(this.ProductById()!.price - this.ProductById()!.discountPrice!);
-          this.perdiscount.set(
-            ((this.ProductById()!.price - this.ProductById()!.discountPrice!) * 100) / 100
-          );
+      
+      // Get product details
+      this.productServ.getProductById(this.productId).subscribe({
+        next: (product: product | null) => {
+          if (product) {
+            this.ProductById.set(product);
+            
+            // Calculate discount
+            if (product.discountPrice) {
+              this.discount.set(product.price - product.discountPrice);
+              this.perdiscount.set(
+                ((product.price - product.discountPrice) * 100) / product.price
+              );
+            }
+            
+            // Get related products by category
+            this.productServ.getProductByCategory(product.categoryId).subscribe({
+              next: (categoryProducts: product[]) => {
+                this.productsByCategory = categoryProducts
+                  .filter((item) => item.id !== this.productId)
+                  .slice(0, 8);
+                this.relatedProducts.set(this.productsByCategory);
+              },
+              error: (err) => {
+                console.error('Error loading related products:', err);
+              }
+            });
+          }
+        },
+        error: (err) => {
+          console.error('Error loading product:', err);
         }
-        this.relatedProducts();
       });
     });
 
