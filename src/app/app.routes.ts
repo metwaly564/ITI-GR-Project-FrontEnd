@@ -44,6 +44,11 @@ export const routes: Routes = [
       import('./components/pages/recommendation/recommendation').then((m) => m.RecommendationComponent),
   },
   {
+    path: 'admin/products',
+    loadComponent: () =>
+      import('./components/pages/admin/admin-products/admin-products').then((m) => m.AdminProductsComponent),
+  },
+  {
     path: '**',
     redirectTo: 'home',
     pathMatch: 'full',
