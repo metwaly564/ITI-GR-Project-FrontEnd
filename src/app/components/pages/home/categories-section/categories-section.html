@@ -6,11 +6,11 @@
   <div class=" grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 justify-between items-center gap-2">
 
     @for (category of categories(); track $index) {
-    <div class="text-center">
-      <div class=" bg-rock-blue w-40 h-40 rounded-full overflow-hidden mx-auto">
+    <div class="text-center ">
+      <div class=" bg-rock-blue w-40 h-40 rounded-full overflow-hidden mx-auto ">
         <img src="{{category.imageUrl}}" class="w-full h-full max-w-full max-h-full object-cover bg-rock-blue">
       </div>
-      <h2>{{category.name}}</h2>
+      <h2 class="mt-3">{{category.name}}</h2>
     </div>
 
     }

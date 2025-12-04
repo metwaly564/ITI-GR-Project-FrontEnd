@@ -34,21 +34,21 @@ export class SingleProduct implements OnInit {
   ngOnInit(): void {
     this.activeRoute.paramMap.subscribe((params) => {
       this.productId = Number(params.get('id'));
-      
+
       // Get product details
       this.productServ.getProductById(this.productId).subscribe({
         next: (product: product | null) => {
           if (product) {
             this.ProductById.set(product);
-            
+
             // Calculate discount
             if (product.discountPrice) {
               this.discount.set(product.price - product.discountPrice);
               this.perdiscount.set(
-                ((product.price - product.discountPrice) * 100) / product.price
+                Math.round(((product.price - product.discountPrice) / product.price) * 100)
               );
             }
-            
+
             // Get related products by category
             this.productServ.getProductByCategory(product.categoryId).subscribe({
               next: (categoryProducts: product[]) => {
@@ -59,13 +59,13 @@ export class SingleProduct implements OnInit {
               },
               error: (err) => {
                 console.error('Error loading related products:', err);
-              }
+              },
             });
           }
         },
         error: (err) => {
           console.error('Error loading product:', err);
-        }
+        },
       });
     });
 
