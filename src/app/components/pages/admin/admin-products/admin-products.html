@@ -22,16 +22,31 @@
     }
   </div>
 
-  <!-- Search Bar -->
+  <!-- Search Bar and Page Size -->
   <div class="search-bar">
     <input
       type="text"
-      [(ngModel)]="searchTerm"
-      (input)="filterProducts()"
+      [value]="searchTerm"
+      (input)="onSearchInput($event)"
       placeholder="Search products by name, description, or category..."
       class="search-input"
       />
+    <div class="page-size-selector">
+      <label for="pageSize">Items per page:</label>
+      <select
+        id="pageSize"
+        [(ngModel)]="pageSize"
+        (change)="onPageSizeChange()"
+        class="page-size-select"
+        >
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+        <option [value]="100">100</option>
+      </select>
     </div>
+  </div>
 
     <!-- Loading Indicator -->
     @if (isLoading) {
@@ -128,6 +143,43 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Pagination Controls -->
+        @if (totalPages > 0) {
+          <div class="pagination-container">
+            <div class="pagination-info">
+              Showing {{ (currentPage - 1) * pageSize + 1 }} - {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} products
+            </div>
+            <div class="pagination-controls">
+              <button
+                class="btn btn-pagination"
+                (click)="previousPage()"
+                [disabled]="!hasPrevious || isLoading"
+                >
+                Previous
+              </button>
+              
+              @for (pageNum of getPageNumbers(); track pageNum) {
+                <button
+                  class="btn btn-pagination"
+                  [class.active]="pageNum === currentPage"
+                  (click)="goToPage(pageNum)"
+                  [disabled]="isLoading"
+                  >
+                  {{ pageNum }}
+                </button>
+              }
+              
+              <button
+                class="btn btn-pagination"
+                (click)="nextPage()"
+                [disabled]="!hasNext || isLoading"
+                >
+                Next
+              </button>
+            </div>
+          </div>
+        }
       }
 
       <!-- Product Form Modal -->

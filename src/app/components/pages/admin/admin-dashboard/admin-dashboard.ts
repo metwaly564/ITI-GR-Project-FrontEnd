@@ -68,7 +68,7 @@ export class AdminDashboardComponent {
     },
     {
       label: 'Edit Banners',
-      route: '/AdminEditBanners',
+      route: '/admin/banners',
       iconName: 'heroPhoto',
       iconColor: 'text-purple-500'
     },

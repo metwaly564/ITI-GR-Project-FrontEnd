@@ -1,18 +1,24 @@
 <div class=" container px-3 mx-auto py-10 mb-3 ">
   <div class=" flex items-center mb-10 text-2xl gap-1  justify-center ">
     <i class="fa-solid fa-seedling text-green-600 font-bold text-3xl"></i>
-    <h2 class="text-3xl font-bold ">Our categories</h2>
+    <h2 class="text-3xl font-bold ">Our Categories</h2>
   </div>
   <div class=" grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 justify-between items-center gap-2">
 
     @for (category of categories(); track $index) {
-    <div class="text-center ">
-      <div class=" bg-rock-blue w-40 h-40 rounded-full overflow-hidden mx-auto ">
-        <img src="{{category.imageUrl}}" class="w-full h-full max-w-full max-h-full object-cover bg-rock-blue">
+      @if (category.imageUrl && category.imageUrl.trim() !== '') {
+        <div class="text-center ">
+          <div class=" bg-rock-blue w-40 h-40 rounded-full overflow-hidden mx-auto ">
+            <img [src]="category.imageUrl" [alt]="category.name" class="w-full h-full max-w-full max-h-full object-cover bg-rock-blue">
+          </div>
+          <h2 class="mt-3">{{category.name}}</h2>
+        </div>
+      }
+    }
+    @if (categories().length === 0) {
+      <div class="col-span-full text-center py-8 text-gray-500">
+        No categories available
       </div>
-      <h2 class="mt-3">{{category.name}}</h2>
-    </div>
-
     }
   </div>
 </div>

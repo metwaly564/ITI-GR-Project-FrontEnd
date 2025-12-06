@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, catchError, of } from 'rxjs';
-import { product, ProductDTO } from '../types/product';
+import { product, ProductDTO, PaginatedResponse } from '../types/product';
 
 export interface CreateProductDTO {
   name: string;
@@ -35,6 +35,34 @@ export interface ApiResponse<T> {
   data: T;
   errors?: string[];
   timestamp: string;
+}
+
+export interface Banner {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  link: string;
+  isActive: boolean;
+  displayOrder: number;
+  createdAt: string;
+}
+
+export interface CreateBannerDTO {
+  title: string;
+  description: string;
+  link: string;
+  displayOrder: number;
+  imageUrl?: string;
+}
+
+export interface UpdateBannerDTO {
+  title?: string;
+  description?: string;
+  link?: string;
+  displayOrder?: number;
+  isActive?: boolean;
+  imageUrl?: string;
 }
 
 @Injectable({
@@ -201,12 +229,54 @@ export class AdminService {
   }
 
   // Get paginated products
-  getProductsPaginated(page: number = 1, pageSize: number = 10, search?: string): Observable<ApiResponse<any>> {
+  getProductsPaginated(page: number = 1, pageSize: number = 10, search?: string): Observable<ApiResponse<PaginatedResponse<product>>> {
     let url = `${this.baseUrl}/AdminProducts/paginated?page=${page}&pageSize=${pageSize}`;
     if (search) {
       url += `&search=${encodeURIComponent(search)}`;
     }
-    return this.http.get<ApiResponse<any>>(url, { headers: this.getAuthHeaders() });
+    return this.http.get<ApiResponse<PaginatedResponse<ProductDTO>>>(url, { headers: this.getAuthHeaders() }).pipe(
+      map(response => {
+        if (response && response.data) {
+          return {
+            ...response,
+            data: {
+              ...response.data,
+              items: response.data.items?.map(dto => this.mapProductDTOToProduct(dto)) || []
+            }
+          };
+        }
+        return {
+          ...response,
+          data: {
+            currentPage: 1,
+            pageSize: pageSize,
+            totalCount: 0,
+            totalPages: 0,
+            hasPrevious: false,
+            hasNext: false,
+            items: []
+          }
+        };
+      }),
+      catchError(error => {
+        console.error('Error in getProductsPaginated:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to load products',
+          data: {
+            currentPage: 1,
+            pageSize: pageSize,
+            totalCount: 0,
+            totalPages: 0,
+            hasPrevious: false,
+            hasNext: false,
+            items: []
+          },
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<PaginatedResponse<product>>);
+      })
+    );
   }
 
   // Toggle featured status
@@ -223,6 +293,168 @@ export class AdminService {
     return this.http.get<ApiResponse<any>>(
       `${this.baseUrl}/AdminProducts/stats`,
       { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // ========== BANNER METHODS ==========
+  
+  // Get all banners
+  getBanners(): Observable<ApiResponse<Banner[]>> {
+    return this.http.get<Banner[]>(
+      `${this.baseUrl}/AdminBanners`,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(banners => ({
+        success: true,
+        message: 'Banners retrieved successfully',
+        data: banners,
+        timestamp: new Date().toISOString()
+      })),
+      catchError(error => {
+        console.error('Error in getBanners:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to load banners',
+          data: [],
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<Banner[]>);
+      })
+    );
+  }
+
+  // Get banner by ID
+  getBannerById(id: number): Observable<ApiResponse<Banner>> {
+    return this.http.get<Banner>(
+      `${this.baseUrl}/AdminBanners/${id}`,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(banner => ({
+        success: true,
+        message: 'Banner retrieved successfully',
+        data: banner,
+        timestamp: new Date().toISOString()
+      })),
+      catchError(error => {
+        console.error('Error in getBannerById:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to load banner',
+          data: null as any,
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<Banner>);
+      })
+    );
+  }
+
+  // Create banner with image
+  createBanner(bannerData: CreateBannerDTO, image?: File): Observable<ApiResponse<Banner>> {
+    const formData = new FormData();
+    
+    formData.append('title', bannerData.title);
+    formData.append('description', bannerData.description);
+    formData.append('link', bannerData.link);
+    formData.append('displayOrder', bannerData.displayOrder.toString());
+    if (bannerData.imageUrl) {
+      formData.append('imageUrl', bannerData.imageUrl);
+    }
+    
+    if (image) {
+      formData.append('image', image);
+    }
+
+    return this.http.post<Banner>(
+      `${this.baseUrl}/AdminBanners`,
+      formData,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(banner => ({
+        success: true,
+        message: 'Banner created successfully',
+        data: banner,
+        timestamp: new Date().toISOString()
+      })),
+      catchError(error => {
+        console.error('Error in createBanner:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to create banner',
+          data: null as any,
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<Banner>);
+      })
+    );
+  }
+
+  // Update banner with image
+  updateBanner(id: number, bannerData: UpdateBannerDTO, image?: File): Observable<ApiResponse<Banner>> {
+    const formData = new FormData();
+    
+    if (bannerData.title) formData.append('title', bannerData.title);
+    if (bannerData.description) formData.append('description', bannerData.description);
+    if (bannerData.link) formData.append('link', bannerData.link);
+    if (bannerData.displayOrder !== undefined) {
+      formData.append('displayOrder', bannerData.displayOrder.toString());
+    }
+    if (bannerData.isActive !== undefined) {
+      formData.append('isActive', bannerData.isActive.toString());
+    }
+    if (bannerData.imageUrl) {
+      formData.append('imageUrl', bannerData.imageUrl);
+    }
+    
+    if (image) {
+      formData.append('image', image);
+    }
+
+    return this.http.put<Banner>(
+      `${this.baseUrl}/AdminBanners/${id}`,
+      formData,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(banner => ({
+        success: true,
+        message: 'Banner updated successfully',
+        data: banner,
+        timestamp: new Date().toISOString()
+      })),
+      catchError(error => {
+        console.error('Error in updateBanner:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to update banner',
+          data: null as any,
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<Banner>);
+      })
+    );
+  }
+
+  // Delete banner
+  deleteBanner(id: number): Observable<ApiResponse<boolean>> {
+    return this.http.delete(
+      `${this.baseUrl}/AdminBanners/${id}`,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(() => ({
+        success: true,
+        message: 'Banner deleted successfully',
+        data: true,
+        timestamp: new Date().toISOString()
+      })),
+      catchError(error => {
+        console.error('Error in deleteBanner:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to delete banner',
+          data: false,
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<boolean>);
+      })
     );
   }
 }

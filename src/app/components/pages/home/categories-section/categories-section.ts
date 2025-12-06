@@ -16,8 +16,12 @@ export class CategoriesSection implements OnInit {
   categories = signal<Category[]>([]);
   getCategories() {
     this.homeServ.getHomeData().subscribe((res) => {
-      this.categories.set(res.categories);
-      console.log(this.categories());
+      // Filter out categories without imageUrl
+      const categoriesWithImages = (res.categories || []).filter(
+        (category) => category.imageUrl && category.imageUrl.trim() !== ''
+      );
+      this.categories.set(categoriesWithImages);
+      console.log('Categories with images:', this.categories());
     });
   }
 }

@@ -1,5 +1,6 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 
 import { AdminService, CreateProductDTO, UpdateProductDTO } from '../../../../services/admin-serv';
 import { HomeServ } from '../../../../services/home-serv';
@@ -18,15 +19,27 @@ interface Category {
   templateUrl: './admin-products.html',
   styleUrls: ['./admin-products.css'],
 })
-export class AdminProductsComponent implements OnInit {
+export class AdminProductsComponent implements OnInit, OnDestroy {
   adminService = inject(AdminService);
   homeService = inject(HomeServ);
   router = inject(Router);
   cdr = inject(ChangeDetectorRef);
 
+  // Debounce for search input
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
   products: any[] = [];
   categories: Category[] = [];
   filteredProducts: any[] = [];
+  
+  // Pagination state
+  currentPage: number = 1;
+  pageSize: number = 10;
+  totalCount: number = 0;
+  totalPages: number = 0;
+  hasPrevious: boolean = false;
+  hasNext: boolean = false;
   
   // Form state
   showForm: boolean = false;
@@ -60,6 +73,21 @@ export class AdminProductsComponent implements OnInit {
     this.loadProducts();
     // Ensure filteredProducts is initialized
     this.filteredProducts = [];
+
+    // Setup debounced search
+    this.searchSubject.pipe(
+      debounceTime(500), // Wait 500ms after user stops typing
+      distinctUntilChanged(), // Only trigger if search term actually changed
+      takeUntil(this.destroy$)
+    ).subscribe(searchTerm => {
+      this.searchTerm = searchTerm;
+      this.filterProducts();
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   checkAuth() {
@@ -85,44 +113,55 @@ export class AdminProductsComponent implements OnInit {
   loadProducts() {
     this.isLoading = true;
     this.errorMessage = '';
-    console.log('Starting to load products...'); // Debug log
+    console.log('Starting to load products...', { page: this.currentPage, pageSize: this.pageSize, search: this.searchTerm });
     
     // Timeout fallback - ensure loading doesn't stay forever
     const timeoutId = setTimeout(() => {
       if (this.isLoading) {
-        console.warn('Products load timeout - forcing stop'); // Debug log
+        console.warn('Products load timeout - forcing stop');
         this.isLoading = false;
         this.errorMessage = 'Request timeout. Please check your connection and try again.';
         this.products = [];
         this.filteredProducts = [];
+        this.cdr.detectChanges();
       }
     }, 30000); // 30 second timeout
     
-    this.adminService.getProducts().subscribe({
+    this.adminService.getProductsPaginated(this.currentPage, this.pageSize, this.searchTerm || undefined).subscribe({
       next: (res) => {
         clearTimeout(timeoutId);
-        console.log('Products response received:', res); // Debug log
+        console.log('Products response received:', res);
         this.isLoading = false;
         
         if (res && res.success !== undefined) {
           if (res.success && res.data) {
-            this.products = Array.isArray(res.data) ? res.data : [];
-            // Reset search term and filter products to show all
-            this.searchTerm = '';
+            const paginatedData = res.data;
+            this.products = Array.isArray(paginatedData.items) ? paginatedData.items : [];
             this.filteredProducts = [...this.products];
-            console.log('Products loaded successfully:', this.products.length); // Debug log
-            console.log('Filtered products:', this.filteredProducts.length); // Debug log
-            // Manually trigger change detection immediately
+            
+            // Update pagination state
+            this.currentPage = paginatedData.currentPage || 1;
+            this.pageSize = paginatedData.pageSize || 10;
+            this.totalCount = paginatedData.totalCount || 0;
+            this.totalPages = paginatedData.totalPages || 0;
+            this.hasPrevious = paginatedData.hasPrevious || false;
+            this.hasNext = paginatedData.hasNext || false;
+            
+            console.log('Products loaded successfully:', {
+              count: this.products.length,
+              currentPage: this.currentPage,
+              totalPages: this.totalPages,
+              totalCount: this.totalCount
+            });
             this.cdr.detectChanges();
           } else {
             this.products = [];
             this.filteredProducts = [];
             this.errorMessage = res.message || 'Failed to load products';
-            console.warn('Products load failed:', res.message); // Debug log
+            console.warn('Products load failed:', res.message);
             this.cdr.detectChanges();
           }
         } else {
-          // Handle unexpected response structure
           console.error('Unexpected response structure:', res);
           this.isLoading = false;
           this.products = [];
@@ -133,7 +172,7 @@ export class AdminProductsComponent implements OnInit {
       },
       error: (err) => {
         clearTimeout(timeoutId);
-        console.error('Error loading products:', err); // Debug log
+        console.error('Error loading products:', err);
         this.isLoading = false;
         this.products = [];
         this.filteredProducts = [];
@@ -146,8 +185,7 @@ export class AdminProductsComponent implements OnInit {
       },
       complete: () => {
         clearTimeout(timeoutId);
-        console.log('Products subscription completed'); // Debug log
-        // Ensure isLoading is false even if something goes wrong
+        console.log('Products subscription completed');
         this.isLoading = false;
         this.cdr.detectChanges();
       }
@@ -304,6 +342,10 @@ export class AdminProductsComponent implements OnInit {
         this.isLoading = false;
         if (res.success) {
           this.successMessage = 'Product deleted successfully!';
+          // If we're on the last page and it becomes empty after deletion, go to previous page
+          if (this.currentPage > 1 && this.filteredProducts.length === 1) {
+            this.currentPage--;
+          }
           this.loadProducts();
           setTimeout(() => (this.successMessage = ''), 3000);
         } else {
@@ -324,19 +366,58 @@ export class AdminProductsComponent implements OnInit {
     this.errorMessage = '';
   }
 
-  filterProducts() {
-    if (!this.searchTerm.trim()) {
-      this.filteredProducts = Array.isArray(this.products) ? [...this.products] : [];
-      return;
-    }
+  onSearchInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(value);
+  }
 
-    const search = this.searchTerm.toLowerCase().trim();
-    this.filteredProducts = (Array.isArray(this.products) ? this.products : []).filter(
-      (p) =>
-        p?.name?.toLowerCase().includes(search) ||
-        p?.description?.toLowerCase().includes(search) ||
-        p?.categoryName?.toLowerCase().includes(search)
-    );
+  filterProducts() {
+    // Reset to page 1 when searching
+    this.currentPage = 1;
+    this.loadProducts();
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadProducts();
+      // Scroll to top of table
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  previousPage() {
+    if (this.hasPrevious) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+
+  nextPage() {
+    if (this.hasNext) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
+
+  onPageSizeChange() {
+    this.currentPage = 1; // Reset to first page when changing page size
+    this.loadProducts();
+  }
+
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxPagesToShow = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+    
+    // Adjust start if we're near the end
+    if (endPage - startPage < maxPagesToShow - 1) {
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   toggleProductStatus(product: any) {
@@ -358,4 +439,7 @@ export class AdminProductsComponent implements OnInit {
       },
     });
   }
+
+  // Expose Math to template
+  Math = Math;
 }

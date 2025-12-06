@@ -16,8 +16,11 @@ export class Branches {
   brances = signal<BranchesTs[]>([]);
   categories = signal<Category[]>([]);
   getCategories = this.homeServ.getHomeData().subscribe((res) => {
-    let category = res.categories;
-    this.categories.set(category);
+    // Filter out categories without imageUrl
+    const categoriesWithImages = (res.categories || []).filter(
+      (category) => category.imageUrl && category.imageUrl.trim() !== ''
+    );
+    this.categories.set(categoriesWithImages);
   });
   getBranches = this.branchServ.getBranches().subscribe((res) => {
     this.brances.set(res);
