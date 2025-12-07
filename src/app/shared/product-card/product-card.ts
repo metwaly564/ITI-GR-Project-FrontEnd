@@ -20,7 +20,7 @@ export class ProductCard implements OnInit {
   router = inject(Router);
 
   goToSingleProductPage(id: number) {
-    this.router.navigateByUrl(`/singleproduct/${id}`);
+    this.router.navigateByUrl(`/product-details/${id}`);
   }
 
   addTocart(id: number) {

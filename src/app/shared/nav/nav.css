@@ -2,16 +2,18 @@
   .side-menu {
     position: fixed;
     top: 0;
-    background-color: #a5b2d2;
-    opacity: 0.95;
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px);
+    opacity: 0.98;
     height: 100vh;
     left: -100%;
-    transition: left 0.5s ease;
+    transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 20px;
     z-index: 100;
     min-width: 60vw;
     max-width: 100%;
-    box-shadow: 3px 5px 6px 0px #adadad;
+    box-shadow: 4px 0 20px var(--shadow-xl);
+    border-right: 1px solid var(--border-color);
   }
   .side-menu.open {
     left: 0%;
@@ -21,6 +23,8 @@
     overflow: scroll;
   }
   .close-btn:hover {
-    color: rgba(0, 0, 0, 0.606);
+    color: var(--accent);
+    transform: scale(1.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }

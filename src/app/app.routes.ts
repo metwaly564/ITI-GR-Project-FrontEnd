@@ -12,6 +12,8 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   { path: 'home', component: Home },
+  { path: 'product-details/:id', component: SingleProduct },
+  // Legacy route - keep for backward compatibility
   { path: 'singleproduct/:id', component: SingleProduct },
 
   {

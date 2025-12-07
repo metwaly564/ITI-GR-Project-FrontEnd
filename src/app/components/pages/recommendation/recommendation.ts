@@ -71,7 +71,7 @@ export class RecommendationComponent {
   }
 
   viewProduct(productId: number) {
-    this.router.navigate(['/singleproduct', productId]);
+    this.router.navigate(['/product-details', productId]);
   }
 
   getSkinTypeName(type: SkinType): string {

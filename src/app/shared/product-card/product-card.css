@@ -2,14 +2,20 @@
   display: flex;
   justify-content: center;
   border-radius: 50%;
-  border: 1px solid #d1daf1;
-  background-color: #d1daf1;
+  border: 2px solid var(--secondary);
+  background-color: var(--secondary);
   width: 38px;
   height: 38px;
   align-items: center;
   cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  color: var(--text-primary);
 }
 
 .card-button:hover {
-  background-color: #a5b2d2;
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  transform: scale(1.15) rotate(10deg);
+  box-shadow: 0 6px 20px rgba(209, 165, 87, 0.5);
 }

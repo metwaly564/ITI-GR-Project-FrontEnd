@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { FormsModule } from '@angular/forms';
 import { ProductServ } from '../../../services/product-serv';
@@ -20,6 +21,8 @@ export class ProductsComponent implements OnInit {
   productServ = inject(ProductServ);
   homeServ = inject(HomeServ);
   branchServ = inject(BranchServ);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   // Products data
   products = signal<product[]>([]);
@@ -52,6 +55,13 @@ export class ProductsComponent implements OnInit {
   pageSize = signal(12);
 
   ngOnInit() {
+    // Check for search query parameter
+    this.route.queryParams.subscribe(params => {
+      if (params['search']) {
+        this.searchTerm.set(params['search']);
+      }
+    });
+    
     this.loadCategories();
     this.loadBranches();
     this.loadProducts();
