@@ -88,6 +88,13 @@ export const routes: Routes = [
       import('./components/pages/products/products').then((m) => m.ProductsComponent),
   },
   {
+    path: 'category/:id',
+    loadComponent: () =>
+      import('./components/pages/category-details/category-details').then(
+        (m) => m.CategoryDetailsComponent
+      ),
+  },
+  {
     path: '**',
     component: NotFound,
   },
