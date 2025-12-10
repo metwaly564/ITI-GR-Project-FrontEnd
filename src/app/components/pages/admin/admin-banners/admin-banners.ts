@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AdminService, CreateBannerDTO, UpdateBannerDTO, Banner } from '../../../../services/admin-serv';
 import { Router } from '@angular/router';
@@ -15,6 +15,8 @@ export class AdminBannersComponent implements OnInit {
   router = inject(Router);
   cdr = inject(ChangeDetectorRef);
 
+  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
+
   banners: Banner[] = [];
   filteredBanners: Banner[] = [];
 
@@ -22,6 +24,11 @@ export class AdminBannersComponent implements OnInit {
   showForm: boolean = false;
   isEditMode: boolean = false;
   editingBannerId: number | null = null;
+  
+  // Delete confirmation modal state
+  showDeleteModal: boolean = false;
+  bannerToDelete: number | null = null;
+  bannerToDeleteTitle: string = '';
 
   // Form fields
   bannerForm: CreateBannerDTO = {
@@ -29,6 +36,7 @@ export class AdminBannersComponent implements OnInit {
     description: '',
     link: '',
     displayOrder: 0,
+    type: 'Main',
   };
 
   selectedImage: File | null = null;
@@ -136,10 +144,17 @@ export class AdminBannersComponent implements OnInit {
       description: banner.description,
       link: banner.link,
       displayOrder: banner.displayOrder,
+      type: banner.type,
     };
-    this.imagePreview = banner.imageUrl || null;
+    this.imagePreview = this.getBannerImageUrl(banner.imageUrl) || null;
     this.selectedImage = null;
     this.showForm = true;
+    // Reset file input
+    setTimeout(() => {
+      if (this.fileInput) {
+        this.fileInput.nativeElement.value = '';
+      }
+    }, 0);
   }
 
   resetForm() {
@@ -148,9 +163,14 @@ export class AdminBannersComponent implements OnInit {
       description: '',
       link: '',
       displayOrder: 0,
+      type: 'Main',
     };
     this.selectedImage = null;
     this.imagePreview = null;
+    // Reset file input
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 
   onImageSelected(event: any) {
@@ -161,7 +181,21 @@ export class AdminBannersComponent implements OnInit {
       reader.onload = (e: any) => {
         this.imagePreview = e.target.result;
       };
+      reader.onerror = () => {
+        console.error('Error reading file');
+        this.selectedImage = null;
+      };
       reader.readAsDataURL(file);
+    } else {
+      // If no file selected, keep the existing preview in edit mode
+      if (!this.isEditMode) {
+        this.selectedImage = null;
+        this.imagePreview = null;
+      } else {
+        // In edit mode, if user clears the file input, keep existing image
+        // Don't clear selectedImage to null - let it stay null so backend knows not to update image
+        this.selectedImage = null;
+      }
     }
   }
 
@@ -181,12 +215,21 @@ export class AdminBannersComponent implements OnInit {
         description: this.bannerForm.description,
         link: this.bannerForm.link,
         displayOrder: this.bannerForm.displayOrder,
+        type: this.bannerForm.type,
       };
 
+      // Only pass image if a new one was selected
+      const imageToUpload = this.selectedImage || undefined;
+      
+      console.log('Submitting update for banner:', this.editingBannerId);
+      console.log('Update data:', updateData);
+      console.log('Has new image:', !!imageToUpload);
+      
       this.adminService
-        .updateBanner(this.editingBannerId, updateData, this.selectedImage || undefined)
+        .updateBanner(this.editingBannerId, updateData, imageToUpload)
         .subscribe({
           next: (res) => {
+            console.log('Update response received:', res);
             this.isLoading = false;
             if (res.success) {
               this.successMessage = 'Banner updated successfully!';
@@ -195,12 +238,15 @@ export class AdminBannersComponent implements OnInit {
               setTimeout(() => (this.successMessage = ''), 3000);
             } else {
               this.errorMessage = res.message || 'Failed to update banner';
+              console.error('Update failed:', res);
             }
           },
           error: (err) => {
             this.isLoading = false;
-            this.errorMessage = err.error?.message || 'Failed to update banner';
+            this.errorMessage = err.error?.message || err.message || 'Failed to update banner';
             console.error('Update error:', err);
+            console.error('Error status:', err.status);
+            console.error('Error body:', err.error);
           },
         });
     } else {
@@ -221,8 +267,21 @@ export class AdminBannersComponent implements OnInit {
           },
           error: (err) => {
             this.isLoading = false;
-            this.errorMessage = err.error?.message || 'Failed to create banner';
             console.error('Create error:', err);
+            console.error('Error status:', err.status);
+            console.error('Error body:', err.error);
+            console.error('Full error response:', JSON.stringify(err.error, null, 2));
+            
+            if (err.error?.errors && Array.isArray(err.error.errors)) {
+              console.error('Validation errors:', err.error.errors);
+              this.errorMessage = `Validation failed: ${err.error.errors.join(', ')}`;
+            } else if (err.error?.modelState) {
+              const modelErrors = Object.values(err.error.modelState).flat() as string[];
+              console.error('ModelState errors:', modelErrors);
+              this.errorMessage = `Validation failed: ${modelErrors.join(', ')}`;
+            } else {
+              this.errorMessage = err.error?.message || err.message || 'Failed to create banner';
+            }
           },
         });
     }
@@ -244,14 +303,45 @@ export class AdminBannersComponent implements OnInit {
     return true;
   }
 
-  deleteBanner(id: number) {
-    if (!confirm('Are you sure you want to delete this banner?')) {
+  openDeleteModal(banner: Banner) {
+    if (!banner || !banner.id) {
+      console.error('Invalid banner provided to delete modal');
+      return;
+    }
+    this.bannerToDelete = banner.id;
+    this.bannerToDeleteTitle = banner.title || 'this banner';
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.bannerToDelete = null;
+    this.bannerToDeleteTitle = '';
+  }
+
+  confirmDelete() {
+    if (!this.bannerToDelete || typeof this.bannerToDelete !== 'number') {
+      console.error('Invalid banner ID for deletion:', this.bannerToDelete);
+      this.errorMessage = 'Invalid banner ID';
+      this.closeDeleteModal();
       return;
     }
 
     this.isLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.showDeleteModal = false;
+    
+    const id = this.bannerToDelete;
+    this.bannerToDelete = null;
+    this.bannerToDeleteTitle = '';
+    
+    console.log('Deleting banner with ID:', id);
+    console.log('ID type:', typeof id);
+    
     this.adminService.deleteBanner(id).subscribe({
       next: (res) => {
+        console.log('Delete response:', res);
         this.isLoading = false;
         if (res.success) {
           this.successMessage = 'Banner deleted successfully!';
@@ -259,12 +349,15 @@ export class AdminBannersComponent implements OnInit {
           setTimeout(() => (this.successMessage = ''), 3000);
         } else {
           this.errorMessage = res.message || 'Failed to delete banner';
+          console.error('Delete failed:', res);
         }
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || 'Failed to delete banner';
+        this.errorMessage = err.error?.message || err.message || 'Failed to delete banner';
         console.error('Delete error:', err);
+        console.error('Error status:', err.status);
+        console.error('Error body:', err.error);
       },
     });
   }
@@ -273,6 +366,24 @@ export class AdminBannersComponent implements OnInit {
     this.showForm = false;
     this.resetForm();
     this.errorMessage = '';
+  }
+
+  getBannerImageUrl(imageUrl: string | undefined): string {
+    if (!imageUrl) return '';
+    // If already a full URL, return as is
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+      return imageUrl;
+    }
+    // If it's a relative path starting with /, return as is
+    if (imageUrl.startsWith('/')) {
+      return `http://localhost:5062${imageUrl}`;
+    }
+    // If it's just a filename or relative path, construct the full URL
+    if (imageUrl.startsWith('images/')) {
+      return `http://localhost:5062/${imageUrl}`;
+    }
+    // If it's just a filename, add the path
+    return `http://localhost:5062/images/banners/${imageUrl}`;
   }
 
   filterBanners() {

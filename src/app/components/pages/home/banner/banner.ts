@@ -19,7 +19,8 @@ export class Banner {
 
   ngOnInit() {
     this.homeServ.getHomeData().subscribe((res) => {
-      const resbanners = res.banners;
+      // Filter banners to only show "Main" type (backend should already filter, but double-check)
+      const resbanners = res.banners.filter((banner: BannerTs) => !banner.type || banner.type === 'Main');
       this.banners.set(resbanners);
       this.bannerlength.set(this.banners().length);
     });
@@ -45,5 +46,23 @@ export class Banner {
 
   stopAutoplay() {
     clearInterval(this.autoplayInterval);
+  }
+
+  getBannerImageUrl(imageUrl: string | undefined): string {
+    if (!imageUrl) return '';
+    // If already a full URL, return as is
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+      return imageUrl;
+    }
+    // If it's a relative path starting with /, return as is
+    if (imageUrl.startsWith('/')) {
+      return `http://localhost:5062${imageUrl}`;
+    }
+    // If it's just a filename or relative path, construct the full URL
+    if (imageUrl.startsWith('images/')) {
+      return `http://localhost:5062/${imageUrl}`;
+    }
+    // If it's just a filename, add the path
+    return `http://localhost:5062/images/banners/${imageUrl}`;
   }
 }

@@ -21,10 +21,11 @@
             }
 
             <img 
-              src="—Pngtree—3d illustration of lip gloss_15428395.png" 
-              alt="{{ProductById()?.name}}"
+              [src]="getProductImage(ProductById())" 
+              [alt]="ProductById()?.name || 'Product image'"
               class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110" 
-              style="transition-timing-function: var(--ease-smooth);" />
+              style="transition-timing-function: var(--ease-smooth);"
+              (error)="$event.target.src='assets/images/placeholder.png'" />
           </div>
         </div>
       </div>

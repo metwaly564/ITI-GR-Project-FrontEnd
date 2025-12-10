@@ -93,4 +93,25 @@ export class SingleProduct implements OnInit {
   addToFav(id: number) {
     this.favServ.addToFav(id);
   }
+
+  getProductImage(product: product | null): string {
+    if (!product) return '';
+    
+    // Use imageUrl from the product
+    if (product.imageUrl) {
+      // If it's already a full URL, return as is
+      if (product.imageUrl.startsWith('http://') || product.imageUrl.startsWith('https://')) {
+        return product.imageUrl;
+      }
+      // If it's a relative path, construct the full URL
+      if (product.imageUrl.startsWith('/')) {
+        return `http://localhost:5062${product.imageUrl}`;
+      }
+      // If it's just a filename or relative path, construct the full URL
+      return `http://localhost:5062/${product.imageUrl}`;
+    }
+    
+    // Fallback to a placeholder if no image
+    return 'assets/images/placeholder.png';
+  }
 }

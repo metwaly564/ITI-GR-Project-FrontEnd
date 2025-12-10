@@ -50,6 +50,7 @@
             <th>Title</th>
             <th>Description</th>
             <th>Link</th>
+            <th>Type</th>
             <th>Display Order</th>
             <th>Status</th>
             <th>Actions</th>
@@ -60,7 +61,7 @@
             <tr class="banner-row">
               <td>
                 <img
-                  [src]="banner.imageUrl || 'https://via.placeholder.com/100x50'"
+                  [src]="getBannerImageUrl(banner.imageUrl) || 'https://via.placeholder.com/100x50'"
                   [alt]="banner.title"
                   class="banner-image"
                   />
@@ -72,6 +73,7 @@
                   {{ banner.link }}
                 </a>
               </td>
+              <td>{{ banner.type }}</td>
               <td>{{ banner.displayOrder }}</td>
               <td>
                 <span
@@ -97,7 +99,7 @@
                 </button>
                 <button
                   class="btn btn-sm btn-delete"
-                  (click)="deleteBanner(banner.id)"
+                  (click)="openDeleteModal(banner)"
                   [disabled]="isLoading"
                   >
                   Delete
@@ -107,7 +109,7 @@
           }
           @if (filteredBanners.length === 0) {
             <tr>
-              <td colspan="7" class="no-banners">
+              <td colspan="8" class="no-banners">
                 No banners found. {{ searchTerm ? 'Try a different search term.' : 'Click "Add New Banner" to get started.' }}
               </td>
             </tr>
@@ -171,10 +173,24 @@
                 class="form-control"
                 />
             </div>
+            <div class="form-group">
+              <label for="type">Banner Type *</label>
+              <select
+                id="type"
+                [(ngModel)]="bannerForm.type"
+                name="type"
+                required
+                class="form-control"
+                >
+                <option value="Main">Main</option>
+                <option value="Middle">Middle</option>
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <label for="image">Banner Image {{ isEditMode ? '(optional)' : '*' }}</label>
             <input
+              #fileInput
               type="file"
               id="image"
               (change)="onImageSelected($event)"
@@ -206,6 +222,41 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  }
+
+  <!-- Delete Confirmation Modal -->
+  @if (showDeleteModal) {
+    <div class="modal-overlay" (click)="closeDeleteModal()">
+      <div class="modal-content delete-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Delete Banner</h2>
+          <button class="close-btn" (click)="closeDeleteModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this banner?</p>
+          <p class="banner-title"><strong>{{ bannerToDeleteTitle }}</strong></p>
+          <p class="warning-text">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeDeleteModal()"
+            [disabled]="isLoading"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="confirmDelete()"
+            [disabled]="isLoading"
+          >
+            {{ isLoading ? 'Deleting...' : 'Delete' }}
+          </button>
+        </div>
       </div>
     </div>
   }

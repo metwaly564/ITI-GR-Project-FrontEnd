@@ -37,12 +37,15 @@ export interface ApiResponse<T> {
   timestamp: string;
 }
 
+export type BannerType = 'Main' | 'Middle';
+
 export interface Banner {
   id: number;
   title: string;
   description: string;
   imageUrl: string;
   link: string;
+  type: BannerType;
   isActive: boolean;
   displayOrder: number;
   createdAt: string;
@@ -53,6 +56,7 @@ export interface CreateBannerDTO {
   description: string;
   link: string;
   displayOrder: number;
+  type: BannerType;
   imageUrl?: string;
 }
 
@@ -60,6 +64,7 @@ export interface UpdateBannerDTO {
   title?: string;
   description?: string;
   link?: string;
+  type?: BannerType;
   displayOrder?: number;
   isActive?: boolean;
   imageUrl?: string;
@@ -74,7 +79,10 @@ export class AdminService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token') || localStorage.getItem('userToken');
+    if (!token) {
+      console.warn('No authentication token found');
+    }
     return new HttpHeaders({
       'Authorization': `Bearer ${token || ''}`
     });
@@ -353,21 +361,44 @@ export class AdminService {
     const formData = new FormData();
     
     formData.append('title', bannerData.title);
-    formData.append('description', bannerData.description);
-    formData.append('link', bannerData.link);
+    formData.append('description', bannerData.description || '');
+    formData.append('link', bannerData.link || '');
     formData.append('displayOrder', bannerData.displayOrder.toString());
-    if (bannerData.imageUrl) {
+    // Send type as enum integer value: 'Main' = 0, 'Middle' = 1
+    // ASP.NET Core binds enums from FormData better as integers
+    const typeValue = bannerData.type === 'Main' ? '0' : '1';
+    formData.append('type', typeValue);
+    // Don't append imageUrl when creating - it will be set by the backend from the uploaded file
+    // Only append if it's explicitly provided (for edge cases)
+    if (bannerData.imageUrl && !image) {
       formData.append('imageUrl', bannerData.imageUrl);
     }
     
     if (image) {
-      formData.append('image', image);
+      formData.append('image', image, image.name);
     }
+
+    // Debug: Log what we're sending
+    console.log('Creating banner with data:', {
+      title: bannerData.title,
+      description: bannerData.description,
+      link: bannerData.link,
+      displayOrder: bannerData.displayOrder,
+      type: bannerData.type,
+      typeValue: typeValue,
+      hasImage: !!image,
+      imageName: image?.name
+    });
+
+    // Don't set Content-Type header - let browser set it with boundary for FormData
+    const headers = this.getAuthHeaders();
 
     return this.http.post<Banner>(
       `${this.baseUrl}/AdminBanners`,
       formData,
-      { headers: this.getAuthHeaders() }
+      { 
+        headers: headers
+      }
     ).pipe(
       map(banner => ({
         success: true,
@@ -390,41 +421,60 @@ export class AdminService {
 
   // Update banner with image
   updateBanner(id: number, bannerData: UpdateBannerDTO, image?: File): Observable<ApiResponse<Banner>> {
+    console.log('Updating banner:', id, bannerData, image ? 'with image' : 'without image');
+    
     const formData = new FormData();
     
-    if (bannerData.title) formData.append('title', bannerData.title);
-    if (bannerData.description) formData.append('description', bannerData.description);
-    if (bannerData.link) formData.append('link', bannerData.link);
+    // Always send these fields
+    formData.append('title', bannerData.title || '');
+    formData.append('description', bannerData.description || '');
+    formData.append('link', bannerData.link || '');
+    
+    // Send type as enum integer value: 'Main' = 0, 'Middle' = 1
+    if (bannerData.type) {
+      const typeValue = bannerData.type === 'Main' ? '0' : '1';
+      formData.append('type', typeValue);
+    }
+    
     if (bannerData.displayOrder !== undefined) {
       formData.append('displayOrder', bannerData.displayOrder.toString());
     }
     if (bannerData.isActive !== undefined) {
       formData.append('isActive', bannerData.isActive.toString());
     }
-    if (bannerData.imageUrl) {
-      formData.append('imageUrl', bannerData.imageUrl);
-    }
     
+    // Only append image if a new one is provided
     if (image) {
-      formData.append('image', image);
+      formData.append('image', image, image.name);
+      console.log('Adding image to FormData:', image.name);
     }
 
+    // Don't set Content-Type header - let browser set it with boundary for FormData
+    const headers = this.getAuthHeaders();
+    
     return this.http.put<Banner>(
       `${this.baseUrl}/AdminBanners/${id}`,
       formData,
-      { headers: this.getAuthHeaders() }
+      { 
+        headers: headers
+      }
     ).pipe(
-      map(banner => ({
-        success: true,
-        message: 'Banner updated successfully',
-        data: banner,
-        timestamp: new Date().toISOString()
-      })),
+      map(banner => {
+        console.log('Banner updated successfully:', banner);
+        return {
+          success: true,
+          message: 'Banner updated successfully',
+          data: banner,
+          timestamp: new Date().toISOString()
+        };
+      }),
       catchError(error => {
         console.error('Error in updateBanner:', error);
+        console.error('Error status:', error.status);
+        console.error('Error body:', error.error);
         return of({
           success: false,
-          message: error.error?.message || 'Failed to update banner',
+          message: error.error?.message || error.message || 'Failed to update banner',
           data: null as any,
           errors: error.error?.errors || [error.message],
           timestamp: new Date().toISOString()
@@ -435,21 +485,51 @@ export class AdminService {
 
   // Delete banner
   deleteBanner(id: number): Observable<ApiResponse<boolean>> {
-    return this.http.delete(
-      `${this.baseUrl}/AdminBanners/${id}`,
-      { headers: this.getAuthHeaders() }
-    ).pipe(
-      map(() => ({
-        success: true,
-        message: 'Banner deleted successfully',
-        data: true,
+    // Ensure ID is a number
+    const bannerId = Number(id);
+    if (isNaN(bannerId)) {
+      console.error('Invalid banner ID:', id);
+      return of({
+        success: false,
+        message: 'Invalid banner ID',
+        data: false,
         timestamp: new Date().toISOString()
-      })),
+      } as ApiResponse<boolean>);
+    }
+    
+    console.log('Deleting banner with ID:', bannerId);
+    
+    return this.http.delete<any>(
+      `${this.baseUrl}/AdminBanners/${bannerId}`,
+      { 
+        headers: this.getAuthHeaders(),
+        observe: 'response'
+      }
+    ).pipe(
+      map((response) => {
+        console.log('Delete response status:', response.status);
+        console.log('Delete response body:', response.body);
+        
+        // Any 2xx status code means success
+        if (response.status >= 200 && response.status < 300) {
+          const message = response.body?.message || 'Banner deleted successfully';
+          return {
+            success: true,
+            message: message,
+            data: true,
+            timestamp: new Date().toISOString()
+          } as ApiResponse<boolean>;
+        }
+        throw new Error(`Unexpected status code: ${response.status}`);
+      }),
       catchError(error => {
         console.error('Error in deleteBanner:', error);
+        console.error('Error status:', error.status);
+        console.error('Error body:', error.error);
+        console.error('Full error:', JSON.stringify(error, null, 2));
         return of({
           success: false,
-          message: error.error?.message || 'Failed to delete banner',
+          message: error.error?.message || error.message || 'Failed to delete banner',
           data: false,
           errors: error.error?.errors || [error.message],
           timestamp: new Date().toISOString()

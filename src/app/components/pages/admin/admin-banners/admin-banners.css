@@ -83,12 +83,14 @@
   background-color: #138496;
 }
 
-.btn-delete {
+.btn-delete,
+.btn-danger {
   background-color: #dc3545;
   color: white;
 }
 
-.btn-delete:hover:not(:disabled) {
+.btn-delete:hover:not(:disabled),
+.btn-danger:hover:not(:disabled) {
   background-color: #c82333;
 }
 
@@ -450,4 +452,43 @@ textarea.form-control {
   .search-input {
     min-width: 100%;
   }
+}
+
+/* Delete Modal Styles */
+.delete-modal {
+  max-width: 500px;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-body p {
+  margin: 0.75rem 0;
+  color: #333;
+  line-height: 1.6;
+}
+
+.modal-body .banner-title {
+  font-size: 1.1rem;
+  color: #007bff;
+  margin: 1rem 0;
+}
+
+.modal-body .warning-text {
+  color: #dc3545;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.modal-footer .btn {
+  min-width: 100px;
 }

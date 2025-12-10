@@ -13,6 +13,7 @@ export interface BannerTs {
   description: string;
   imageUrl: string;
   link: string;
+  type?: string;
   isActive: boolean;
   displayOrder: number;
   createdAt: string;
