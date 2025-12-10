@@ -83,6 +83,19 @@ export const routes: Routes = [
     canActivate: [adminGuard],
   },
   {
+    path: 'admin/orders',
+    loadComponent: () =>
+      import('./components/pages/admin/admin-orders/admin-orders').then(
+        (m) => m.AdminOrdersComponent
+      ),
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'OperationTeamDashboard',
+    redirectTo: '/admin/orders',
+    pathMatch: 'full',
+  },
+  {
     path: 'products',
     loadComponent: () =>
       import('./components/pages/products/products').then((m) => m.ProductsComponent),

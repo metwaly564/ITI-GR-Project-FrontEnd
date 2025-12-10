@@ -72,6 +72,12 @@ export class AdminDashboardComponent {
       iconName: 'heroPhoto',
       iconColor: 'text-purple-500'
     },
+    {
+      label: 'Orders',
+      route: '/admin/orders',
+      iconName: 'heroClipboardDocumentList',
+      iconColor: 'text-emerald-600'
+    },
     // {
     //   label: 'Edit Tags',
     //   route: '/AdminEditTags',
@@ -104,7 +110,7 @@ export class AdminDashboardComponent {
     // },
     {
       label: 'Operation Team',
-      route: '/OperationTeamDashboard',
+      route: '/admin/orders',
       iconName: 'heroChartBarSquare',
       iconColor: 'text-blue-400'
     },

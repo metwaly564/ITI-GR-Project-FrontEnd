@@ -70,6 +70,22 @@ export interface UpdateBannerDTO {
   imageUrl?: string;
 }
 
+export interface Order {
+  id: number;
+  orderNumber: string;
+  status: string;
+  userId: string;
+  totalAmount: number;
+  createdAt: string;
+  shippingAddress: string;
+  customerNotes: string;
+  prescriptionImageUrl: string;
+  paymentStatus: string;
+  paymentMethod: string;
+  branchName: string;
+  userName?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -530,6 +546,84 @@ export class AdminService {
         return of({
           success: false,
           message: error.error?.message || error.message || 'Failed to delete banner',
+          data: false,
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<boolean>);
+      })
+    );
+  }
+
+  // ========== ORDER METHODS ==========
+  
+  // Get all orders
+  getOrders(): Observable<ApiResponse<Order[]>> {
+    return this.http.get<Order[]>(
+      `${this.baseUrl}/AdminOrders`,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(orders => ({
+        success: true,
+        message: 'Orders retrieved successfully',
+        data: orders,
+        timestamp: new Date().toISOString()
+      })),
+      catchError(error => {
+        console.error('Error in getOrders:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to load orders',
+          data: [],
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<Order[]>);
+      })
+    );
+  }
+
+  // Get order by ID
+  getOrderById(id: number): Observable<ApiResponse<Order>> {
+    return this.http.get<Order>(
+      `${this.baseUrl}/AdminOrders/${id}`,
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(order => ({
+        success: true,
+        message: 'Order retrieved successfully',
+        data: order,
+        timestamp: new Date().toISOString()
+      })),
+      catchError(error => {
+        console.error('Error in getOrderById:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to load order',
+          data: null as any,
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<Order>);
+      })
+    );
+  }
+
+  // Cancel order
+  cancelOrder(id: number): Observable<ApiResponse<boolean>> {
+    return this.http.put<{ message: string }>(
+      `${this.baseUrl}/AdminOrders/${id}/cancel`,
+      {},
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(() => ({
+        success: true,
+        message: 'Order cancelled successfully',
+        data: true,
+        timestamp: new Date().toISOString()
+      })),
+      catchError(error => {
+        console.error('Error in cancelOrder:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to cancel order',
           data: false,
           errors: error.error?.errors || [error.message],
           timestamp: new Date().toISOString()
