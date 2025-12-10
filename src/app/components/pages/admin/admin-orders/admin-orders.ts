@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService, Order } from '../../../../services/admin-serv';
@@ -12,6 +12,7 @@ import { AdminService, Order } from '../../../../services/admin-serv';
 })
 export class AdminOrdersComponent implements OnInit {
   adminService = inject(AdminService);
+  private cdr = inject(ChangeDetectorRef);
 
   orders: Order[] = [];
   filteredOrders: Order[] = [];
@@ -31,17 +32,42 @@ export class AdminOrdersComponent implements OnInit {
     this.adminService.getOrders().subscribe({
       next: (response) => {
         this.isLoading = false;
+        console.log('Orders response:', response);
+        console.log('Response success:', response.success);
+        console.log('Response data:', response.data);
+        console.log('Data length:', response.data?.length);
+        
         if (response.success) {
-          this.orders = response.data;
-          this.filteredOrders = this.orders;
+          this.orders = Array.isArray(response.data) ? response.data : [];
+          this.filteredOrders = [...this.orders];
+          console.log('Orders set:', this.orders);
+          console.log('First order sample:', this.orders[0]);
+          console.log('Orders count:', this.orders.length);
+          console.log('Filtered orders set:', this.filteredOrders);
+          console.log('Filtered orders count:', this.filteredOrders.length);
+          console.log('isLoading before CDR:', this.isLoading);
+          
+          if (this.orders.length === 0) {
+            console.warn('No orders found in response');
+          }
+          
+          // Force change detection
+          this.cdr.detectChanges();
+          console.log('isLoading after CDR:', this.isLoading);
+          console.log('Template should show orders now. isLoading:', this.isLoading, 'filteredOrders.length:', this.filteredOrders.length);
         } else {
           this.errorMessage = response.message || 'Failed to load orders';
+          console.error('Response was not successful:', response);
+          this.cdr.detectChanges();
         }
       },
       error: (err) => {
         this.isLoading = false;
         this.errorMessage = err.error?.message || err.message || 'Failed to load orders';
         console.error('Error loading orders:', err);
+        console.error('Error status:', err.status);
+        console.error('Error body:', err.error);
+        this.cdr.detectChanges();
       },
     });
   }

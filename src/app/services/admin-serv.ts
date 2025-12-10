@@ -558,18 +558,33 @@ export class AdminService {
   
   // Get all orders
   getOrders(): Observable<ApiResponse<Order[]>> {
+    console.log('Fetching orders from:', `${this.baseUrl}/AdminOrders`);
+    console.log('Auth headers:', this.getAuthHeaders());
+    
     return this.http.get<Order[]>(
       `${this.baseUrl}/AdminOrders`,
       { headers: this.getAuthHeaders() }
     ).pipe(
-      map(orders => ({
-        success: true,
-        message: 'Orders retrieved successfully',
-        data: orders,
-        timestamp: new Date().toISOString()
-      })),
+      map(orders => {
+        console.log('Raw orders response from backend:', orders);
+        console.log('Orders type:', typeof orders);
+        console.log('Is array:', Array.isArray(orders));
+        console.log('Orders length:', Array.isArray(orders) ? orders.length : 'Not an array');
+        
+        const response = {
+          success: true,
+          message: 'Orders retrieved successfully',
+          data: Array.isArray(orders) ? orders : [],
+          timestamp: new Date().toISOString()
+        };
+        
+        console.log('Mapped response:', response);
+        return response;
+      }),
       catchError(error => {
         console.error('Error in getOrders:', error);
+        console.error('Error status:', error.status);
+        console.error('Error body:', error.error);
         return of({
           success: false,
           message: error.error?.message || 'Failed to load orders',
