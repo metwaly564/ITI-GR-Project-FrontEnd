@@ -32,13 +32,17 @@
           <div class="bg-white shadow-md rounded-xl p-6 flex items-center justify-between">
 
             <div class="flex items-center gap-4 flex-1">
-              <div class="w-16 h-16 bg-gray-200 flex items-center justify-center rounded-lg">
-                <i class="fas fa-pills text-gray-600 text-xl"></i>
+              <div class="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+                @if (getProductImage(item)) {
+                  <img [src]="getProductImage(item)" [alt]="item.name" class="w-full h-full object-cover" (error)="$event.target.src='assets/images/placeholder.png'" />
+                } @else {
+                  <i class="fas fa-pills text-gray-600 text-xl"></i>
+                }
               </div>
 
               <div>
                 <h3 class="text-lg font-semibold text-gray-800">{{ item.name }}</h3>
-                <p class="text-sm text-gray-600">{{ item.price | currency:'EGP' }}</p>
+                <p class="text-sm text-gray-600">{{ formatPrice(item.price) }}</p>
               </div>
             </div>
 
@@ -82,17 +86,17 @@
 
         <div class="flex justify-between mb-3">
           <span class="text-gray-600">Subtotal</span>
-          <span class="font-semibold">{{ getSubtotal() | currency:'EGP' }}</span>
+          <span class="font-semibold">{{ formatPrice(getSubtotal()) }}</span>
         </div>
 
         <div class="flex justify-between mb-3">
           <span class="text-gray-600">Shipping</span>
-          <span class="font-semibold">{{ getShipping() | currency:'EGP' }}</span>
+          <span class="font-semibold">{{ formatPrice(getShipping()) }}</span>
         </div>
 
         <div class="flex justify-between mt-4 pt-4 border-t">
           <span class="text-gray-800 font-bold text-lg">Total</span>
-          <span class="font-bold text-lg text-[#a5b2d2]">{{ getTotal() | currency:'EGP' }}</span>
+          <span class="font-bold text-lg text-[#a5b2d2]">{{ formatPrice(getTotal()) }}</span>
         </div>
 
         <button

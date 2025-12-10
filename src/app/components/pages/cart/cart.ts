@@ -90,4 +90,31 @@ export class CartComponent {
   getTotal() {
     return this.getSubtotal() + this.getShipping();
   }
+
+  getProductImage(item: any): string {
+    if (!item) return '';
+    
+    // Use imageUrl from the product
+    if (item.imageUrl) {
+      // If it's already a full URL, return as is
+      if (item.imageUrl.startsWith('http://') || item.imageUrl.startsWith('https://')) {
+        return item.imageUrl;
+      }
+      // If it's a relative path, construct the full URL
+      if (item.imageUrl.startsWith('/')) {
+        return `http://localhost:5062${item.imageUrl}`;
+      }
+      // If it's just a filename or relative path, construct the full URL
+      return `http://localhost:5062/${item.imageUrl}`;
+    }
+    
+    // Fallback to empty string (will show placeholder icon)
+    return '';
+  }
+
+  formatPrice(price: number): string {
+    // Format price without .00 and put currency after: "100 EGP" instead of "EGP 100"
+    const formattedPrice = price.toFixed(2).replace(/\.00$/, '');
+    return `${formattedPrice} EGP`;
+  }
 }
