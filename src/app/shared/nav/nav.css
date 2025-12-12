@@ -14,6 +14,8 @@
     max-width: 100%;
     box-shadow: 4px 0 20px var(--shadow-xl);
     border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
   }
   .side-menu.open {
     left: 0%;
@@ -26,5 +28,21 @@
     color: var(--accent);
     transform: scale(1.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Ensure bottom buttons are in a row */
+  .side-menu > div:last-child {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  
+  .side-menu > div:last-child > * {
+    flex: 0 0 auto;
+    min-width: fit-content;
   }
 }

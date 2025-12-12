@@ -114,9 +114,16 @@
 /* Products Grid */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
   margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
 }
 
 /* No Products */
@@ -184,6 +191,17 @@
 .page-number.active {
   background-color: #007bff;
   color: white;
+  font-weight: 600;
+}
+
+.page-ellipsis {
+  padding: 0.5rem 0.25rem;
+  color: #666;
+  font-size: 1rem;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Responsive */

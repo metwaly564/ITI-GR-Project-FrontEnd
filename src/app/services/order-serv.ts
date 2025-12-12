@@ -9,6 +9,8 @@ export interface OrderItemDTO {
 
 export interface CreateOrderDTO {
   shippingAddress: string;
+  phoneNumber: string;
+  cityId: number;
   customerNotes: string;
   prescriptionImageUrl: string;
   paymentMethod: string;
@@ -24,6 +26,9 @@ export interface OrderDTO {
   totalAmount: number;
   createdAt: string;
   shippingAddress: string;
+  phoneNumber: string;
+  cityId?: number;
+  cityName?: string;
   customerNotes: string;
   prescriptionImageUrl: string;
   paymentStatus: string;

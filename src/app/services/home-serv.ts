@@ -42,4 +42,59 @@ export class HomeServ {
       })
     );
   }
+
+  getTopRankedCategories() {
+    return this.http.get<TopRankedCategory[]>('http://localhost:5062/api/Categories/top-ranked').pipe(
+      catchError((err) => {
+        console.error('Error fetching top-ranked categories:', err);
+        return of([]);
+      })
+    );
+  }
+
+  getMiddleBanners() {
+    return this.http.get<Banner[]>('http://localhost:5062/api/Banners/middle').pipe(
+      catchError((err) => {
+        console.error('Error fetching middle banners:', err);
+        return of([]);
+      })
+    );
+  }
+}
+
+export interface TopRankedCategory {
+  category_id: number;
+  category_name_en: string;
+  category_name_ar: string;
+  category_rank: number | null;
+  products: TopRankedProduct[];
+}
+
+export interface TopRankedProduct {
+  sku_id: number;
+  product_name_en: string;
+  product_name_ar: string;
+  price_after: number;
+  price_before: number | null;
+  available_stock: number;
+  item_rank: number | null;
+  images: ProductImage[];
+  description: string;
+  category_id: number;
+}
+
+export interface ProductImage {
+  image_url: string;
+  image_rank: number;
+}
+
+export interface Banner {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  link: string;
+  displayOrder: number;
+  type: number;
+  isActive: boolean;
 }

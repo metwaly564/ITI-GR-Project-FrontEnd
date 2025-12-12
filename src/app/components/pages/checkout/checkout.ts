@@ -4,11 +4,13 @@ import { inject } from '@angular/core';
 import { CartServ } from '../../../services/cart-serv';
 import { OrderService, CreateOrderDTO } from '../../../services/order-serv';
 import { ProductServ } from '../../../services/product-serv';
+import { CityService, CityDTO } from '../../../services/city-serv';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-checkout',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './checkout.html',
   styleUrl: './checkout.css',
 })
@@ -17,13 +19,62 @@ export class CheckoutComponent implements OnInit {
   private router = inject(Router);
   private orderService = inject(OrderService);
   private productServ = inject(ProductServ);
+  private cityService = inject(CityService);
 
   orderNumber = signal<string>('');
   isLoading = signal<boolean>(false);
   errorMessage = signal<string>('');
+  showForm = signal<boolean>(true);
+  cities = signal<CityDTO[]>([]);
+
+  // Form fields (using regular properties for ngModel two-way binding)
+  phoneNumber: string = '';
+  shippingAddress: string = '';
+  cityId: number = 0;
+  customerNotes: string = '';
+
+  // Helper method to ensure proper type checking
+  private validateForm(): boolean {
+    const phone = this.phoneNumber?.trim() || '';
+    const address = this.shippingAddress?.trim() || '';
+    
+    if (!phone) {
+      this.errorMessage.set('Phone number is required');
+      return false;
+    }
+    if (phone.length < 8) {
+      this.errorMessage.set('Phone number must be at least 8 characters long');
+      return false;
+    }
+    if (!address) {
+      this.errorMessage.set('Detailed shipping address is required');
+      return false;
+    }
+    if (address.length < 10) {
+      this.errorMessage.set('Shipping address must be at least 10 characters long. Please provide more details.');
+      return false;
+    }
+    if (!this.cityId || this.cityId === 0) {
+      this.errorMessage.set('Please select a city');
+      return false;
+    }
+    return true;
+  }
 
   ngOnInit(): void {
-    this.createOrder();
+    this.loadCities();
+  }
+
+  loadCities(): void {
+    this.cityService.getCities().subscribe({
+      next: (cities) => {
+        this.cities.set(cities.filter(c => c.isActive));
+      },
+      error: (err) => {
+        console.error('Error loading cities:', err);
+        this.errorMessage.set('Failed to load cities. Please refresh the page.');
+      }
+    });
   }
 
   createOrder(): void {
@@ -74,11 +125,19 @@ export class CheckoutComponent implements OnInit {
           quantity: item.quantity
         }));
 
-        // Create order DTO with default/placeholder values
-        // In a real app, these would come from a form or user profile
+        // Validate form fields
+        if (!this.validateForm()) {
+          this.isLoading.set(false);
+          this.showForm.set(true);
+          return;
+        }
+
+        // Create order DTO with form values
         const orderDTO: CreateOrderDTO = {
-          shippingAddress: localStorage.getItem('shippingAddress') || 'Default Address',
-          customerNotes: localStorage.getItem('customerNotes') || '',
+          shippingAddress: this.shippingAddress,
+          phoneNumber: this.phoneNumber,
+          cityId: this.cityId,
+          customerNotes: this.customerNotes || '',
           prescriptionImageUrl: localStorage.getItem('prescriptionImageUrl') || '',
           paymentMethod: localStorage.getItem('paymentMethod') || 'Cash',
           branchId: parseInt(localStorage.getItem('branchId') || '1', 10), // Default to branch 1
@@ -86,6 +145,9 @@ export class CheckoutComponent implements OnInit {
         };
 
         console.log('Creating order with DTO:', orderDTO);
+
+        // Hide form and show loading
+        this.showForm.set(false);
 
         // Create order via API
         this.orderService.createOrder(orderDTO).subscribe({
@@ -100,6 +162,7 @@ export class CheckoutComponent implements OnInit {
             this.isLoading.set(false);
             const errorMsg = err.error?.message || err.message || 'Failed to create order. Please try again.';
             this.errorMessage.set(errorMsg);
+            this.showForm.set(true); // Show form again on error
             console.error('Error creating order:', err);
             console.error('Error status:', err.status);
             console.error('Error body:', err.error);

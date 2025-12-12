@@ -205,4 +205,34 @@ export class ProductsComponent implements OnInit {
   get hasPrevious(): boolean {
     return this.pagination()?.hasPrevious || false;
   }
+
+  // Get pagination pages to display (smart pagination with ellipsis)
+  // Format: "1 2 3 4 ... Last" - Always show first 4 pages, then ellipsis, then last page
+  getPaginationPages(): (number | string)[] {
+    const total = this.totalPages;
+    const current = this.currentPage();
+    const pages: (number | string)[] = [];
+
+    if (total <= 5) {
+      // If 5 or fewer pages, show all
+      for (let i = 1; i <= total; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Always show first 4 pages
+      for (let i = 1; i <= 4; i++) {
+        pages.push(i);
+      }
+      
+      // Show ellipsis if there's a gap
+      if (total > 5) {
+        pages.push('...');
+      }
+      
+      // Always show last page
+      pages.push(total);
+    }
+
+    return pages;
+  }
 }

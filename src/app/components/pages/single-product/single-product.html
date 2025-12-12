@@ -37,18 +37,18 @@
           
           <div class="mt-6 flex items-end gap-4 flex-wrap">
             <div class="flex-1">
-              @if(ProductById()?.discountPrice ){
+              @if(ProductById()?.discountPrice && ProductById()?.discountPrice < ProductById()?.price && discount() > 0){
               <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--accent)] mb-2" style="text-shadow: 0 2px 4px var(--shadow-sm);">
-                {{ProductById()?.discountPrice | currency:'EGP':'symbol'}}
+                {{ProductById()?.discountPrice | number:'1.0-0'}} EGP
               </div>
-              <div class="text-base text-[var(--text-muted)] line-through mb-1">{{ProductById()?.price | currency:'EGP':'symbol'}}</div>
+              <div class="text-base text-[var(--text-muted)] line-through mb-1">{{ProductById()?.price | number:'1.0-0'}} EGP</div>
               <div class="text-sm text-[var(--accent)] font-semibold bg-[var(--accent)]/10 px-3 py-1 rounded-lg inline-block">
-                <i class="fas fa-tag mr-1"></i>You save {{discount() | currency:'EGP':'symbol'}}
+                <i class="fas fa-tag mr-1"></i>You save {{discount() | number:'1.0-0'}} EGP
               </div>
               }
               @else {
               <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)]" style="text-shadow: 0 2px 4px var(--shadow-sm);">
-                {{ProductById()?.price | currency:'EGP':'symbol'}}
+                {{ProductById()?.price | number:'1.0-0'}} EGP
               </div>
               }
             </div>

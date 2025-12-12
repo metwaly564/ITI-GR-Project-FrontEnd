@@ -147,21 +147,25 @@
                   [disabled]="!hasPrevious"
                   class="page-btn"
                   >
-                  Previous
+                  <i class="fas fa-chevron-left"></i> Previous
                 </button>
                 <div class="page-numbers">
-                  @for (page of [].constructor(totalPages); track page; let i = $index) {
+                  @for (page of getPaginationPages(); track $index) {
+                    @if (page === '...') {
+                      <span class="page-ellipsis">...</span>
+                    } @else {
                     <button
-                      (click)="goToPage(i + 1)"
-                      [class.active]="currentPage() === i + 1"
+                        (click)="goToPage(typeof page === 'number' ? page : 1)"
+                        [class.active]="currentPage() === page"
                       class="page-number"
                       >
-                      {{ i + 1 }}
+                        {{ page }}
                     </button>
+                    }
                   }
                 </div>
                 <button (click)="nextPage()" [disabled]="!hasNext" class="page-btn">
-                  Next
+                  Next <i class="fas fa-chevron-right"></i>
                 </button>
               </div>
             }

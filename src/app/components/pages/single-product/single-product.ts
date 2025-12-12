@@ -32,8 +32,14 @@ export class SingleProduct implements OnInit {
   isFav!: Signal<boolean>;
 
   ngOnInit(): void {
+    // Scroll to top when component initializes
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     this.activeRoute.paramMap.subscribe((params) => {
       this.productId = Number(params.get('id'));
+
+      // Scroll to top when route parameter changes (navigating to different product)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
       // Get product details
       this.productServ.getProductById(this.productId).subscribe({
@@ -41,12 +47,40 @@ export class SingleProduct implements OnInit {
           if (product) {
             this.ProductById.set(product);
 
-            // Calculate discount
+            // Calculate discount - handle reversed data entry
             if (product.discountPrice) {
-              this.discount.set(product.price - product.discountPrice);
-              this.perdiscount.set(
-                Math.round(((product.price - product.discountPrice) / product.price) * 100)
-              );
+              // Check if data is reversed (price < discountPrice means data entry error)
+              if (product.price < product.discountPrice) {
+                // Data is reversed: swap them for display
+                // discountPrice is actually the higher price (original)
+                // price is actually the lower price (discounted)
+                const originalPrice = product.discountPrice;
+                const discountedPrice = product.price;
+                const discountAmount = originalPrice - discountedPrice;
+                this.discount.set(Math.max(0, discountAmount));
+                this.perdiscount.set(
+                  Math.round(((originalPrice - discountedPrice) / originalPrice) * 100)
+                );
+                // Swap the values in the product object for display
+                const tempPrice = product.price;
+                product.price = product.discountPrice;
+                product.discountPrice = tempPrice;
+              } else if (product.discountPrice < product.price) {
+                // Normal case: discountPrice < price
+                const discountAmount = product.price - product.discountPrice;
+                this.discount.set(Math.max(0, discountAmount));
+                this.perdiscount.set(
+                  Math.round(((product.price - product.discountPrice) / product.price) * 100)
+                );
+              } else {
+                // No discount (prices are equal)
+                this.discount.set(0);
+                this.perdiscount.set(0);
+              }
+            } else {
+              // Reset discount if no valid discount
+              this.discount.set(0);
+              this.perdiscount.set(0);
             }
 
             // Get related products by category

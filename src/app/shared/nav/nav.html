@@ -15,7 +15,9 @@
       <ul class="lg:flex lg:gap-3 mt-5 lg:mt-0">
         <li>
           <a class="text-[var(--text-primary)] py-2 px-3 inline-block cursor-pointer hover:bg-[var(--bg-secondary)] hover:text-[var(--accent)] w-full max-w-52 rounded-lg lg:hover:bg-transparent lg:hover:text-[var(--accent)] transition-all duration-300 font-medium"
-            routerLink="/" style="transition-timing-function: var(--ease-smooth);">Home</a>
+            routerLink="/" 
+            (click)="openToggle()"
+            style="transition-timing-function: var(--ease-smooth);">Home</a>
         </li>
         <li>
           <a class="text-[var(--text-secondary)] py-2 px-3 inline-block cursor-pointer hover:bg-[var(--bg-secondary)] hover:text-[var(--accent)] w-full max-w-52 rounded-lg lg:hover:bg-transparent lg:hover:text-[var(--accent)] transition-all duration-300"
@@ -28,7 +30,9 @@
             @for (item of categories(); track $index) {
             <li><a
                 class="text-[var(--text-secondary)] py-2 px-3 inline-block lg:hover:bg-[var(--bg-secondary)] lg:hover:text-[var(--accent)] w-full hover:bg-[var(--bg-secondary)] hover:text-[var(--accent)] max-w-52 rounded-lg transition-all duration-300"
-                href="#" style="transition-timing-function: var(--ease-smooth);">{{item.name}}</a>
+                [routerLink]="['/category-details', item.id]" 
+                (click)="openToggle()"
+                style="transition-timing-function: var(--ease-smooth);">{{item.name}}</a>
             </li>
             }
 
@@ -38,26 +42,42 @@
 
         <li>
           <a class="text-[var(--text-secondary)] py-2 px-3 inline-block cursor-pointer hover:bg-[var(--bg-secondary)] hover:text-[var(--accent)] w-full max-w-52 rounded-lg lg:hover:bg-transparent lg:hover:text-[var(--accent)] transition-all duration-300"
-            [routerLink]="['/about']" style="transition-timing-function: var(--ease-smooth);">About</a>
+            [routerLink]="['/about']" 
+            (click)="openToggle()"
+            style="transition-timing-function: var(--ease-smooth);">About</a>
         </li>
         <li>
           <a class="text-[var(--text-secondary)] py-2 px-3 inline-block cursor-pointer hover:bg-[var(--bg-secondary)] hover:text-[var(--accent)] w-full max-w-52 rounded-lg lg:hover:bg-transparent lg:hover:text-[var(--accent)] transition-all duration-300"
-            [routerLink]="['/contact']" style="transition-timing-function: var(--ease-smooth);">Contact Us</a>
+            [routerLink]="['/contact']" 
+            (click)="openToggle()"
+            style="transition-timing-function: var(--ease-smooth);">Contact Us</a>
         </li>
         <li>
           <a class="text-[var(--text-secondary)] py-2 px-3 inline-block cursor-pointer hover:bg-[var(--bg-secondary)] hover:text-[var(--accent)] w-full max-w-52 rounded-lg lg:hover:bg-transparent lg:hover:text-[var(--accent)] transition-all duration-300"
-            [routerLink]="['/recommendation']" style="transition-timing-function: var(--ease-smooth);">Get Recommendations</a>
+            [routerLink]="['/recommendation']" 
+            (click)="openToggle()"
+            style="transition-timing-function: var(--ease-smooth);">Get Recommendations</a>
         </li>
       </ul>
-      <div class="w-full flex justify-between gap-3 lg:hidden absolute bottom-5 px-5 left-0 text-lg">
+      <div class="w-full flex flex-row justify-between items-center gap-2 lg:hidden absolute bottom-5 px-5 left-0 text-lg">
         <button 
           (click)="toggleTheme()" 
-          class="px-3 py-2 cursor-pointer text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 rounded-lg hover:bg-white/10"
+          class="flex-shrink-0 px-3 py-2 cursor-pointer text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 rounded-lg hover:bg-white/10"
           [attr.aria-label]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
           <i class="fa-solid" [ngClass]="themeService.isDarkMode() ? 'fa-sun' : 'fa-moon'"></i>
         </button>
-        <a class="px-3 cursor-pointer text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 hover:scale-110" (click)="openSearch()"><i class="fa-solid fa-magnifying-glass"></i></a>
-        <a class="px-3 cursor-pointer relative text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 hover:scale-110"><i class="fa-solid fa-cart-shopping">
+        <a 
+          class="flex-shrink-0 px-3 py-2 cursor-pointer text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 hover:scale-110" 
+          (click)="openSearch()"
+          title="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+        <a 
+          class="flex-shrink-0 px-3 py-2 cursor-pointer relative text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 hover:scale-110" 
+          [routerLink]="['/cart']"
+          (click)="openToggle()"
+          title="Cart">
+          <i class="fa-solid fa-cart-shopping">
             @if(cartserv.cartcount() != 0){
             <span
               class="absolute -top-2 -right-2 bg-[var(--accent)] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-md animate-pulse">
@@ -65,13 +85,23 @@
             </span>}
           </i>
         </a>
-        <a class="px-3 cursor-pointer relative text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 hover:scale-110"> <i class="fa-solid fa-heart "></i>
-          @if(favserv.favCount() != 0){<span
-            class="absolute -top-2 -right-2  bg-[var(--accent)] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-md animate-pulse">
-              {{favserv.favCount()}}
-            </span>}
+        <a 
+          class="flex-shrink-0 px-3 py-2 cursor-pointer relative text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 hover:scale-110" 
+          [routerLink]="['/favorite']"
+          (click)="openToggle()"
+          title="Favorites">
+          <i class="fa-solid fa-heart"></i>
+          @if(favserv.favCount() != 0){
+          <span
+            class="absolute -top-2 -right-2 bg-[var(--accent)] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-md animate-pulse">
+            {{favserv.favCount()}}
+          </span>}
         </a>
-        <a class="px-2 cursor-pointer text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 hover:scale-110" [routerLink]="['/profile']">
+        <a 
+          class="flex-shrink-0 px-2 py-2 cursor-pointer text-[var(--neutral)] hover:text-[var(--accent)] transition-all duration-300 hover:scale-110" 
+          [routerLink]="['/profile']"
+          (click)="openToggle()"
+          title="Profile">
           <i class="fa-solid fa-user"></i>
         </a> 
       </div>
