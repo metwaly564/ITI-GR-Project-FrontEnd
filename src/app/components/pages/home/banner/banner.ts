@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { HomeServ } from '../../../../services/home-serv';
 import { BannerTs } from '../../../../types/Homets';
 import { NgClass } from '@angular/common';
@@ -9,12 +9,13 @@ import { NgClass } from '@angular/common';
   templateUrl: './banner.html',
   styleUrl: './banner.css',
 })
-export class Banner {
+export class Banner implements AfterViewInit {
   homeServ = inject(HomeServ);
+  private cdr = inject(ChangeDetectorRef);
   banners = signal<BannerTs[]>([]);
   bannerlength = signal<number>(0);
 
-  currentSlide = 0;
+  currentSlide = signal<number>(0);
   autoplayInterval: any;
 
   ngOnInit() {
@@ -27,8 +28,8 @@ export class Banner {
         this.bannerlength.set(length);
         
         // Reset currentSlide if it's out of bounds
-        if (this.currentSlide >= length && length > 0) {
-          this.currentSlide = 0;
+        if (this.currentSlide() >= length && length > 0) {
+          this.currentSlide.set(0);
         }
         
         // Preload next image(s) to ensure smooth transitions
@@ -39,8 +40,14 @@ export class Banner {
         // Only start autoplay if we have banners
         if (length > 0) {
           this.stopAutoplay(); // Stop any existing autoplay
-          this.startAutoplay();
+          // Use setTimeout to avoid change detection issues
+          setTimeout(() => {
+            this.startAutoplay();
+          }, 0);
         }
+        
+        // Trigger change detection after setting values
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching banners:', err);
@@ -69,22 +76,27 @@ export class Banner {
     }, 100);
   }
 
+  ngAfterViewInit() {
+    // Ensure initial state is set after view init
+    this.cdr.detectChanges();
+  }
+
   nextSlide() {
     const length = this.banners().length;
     if (length === 0) return;
-    this.currentSlide = (this.currentSlide + 1) % length;
+    this.currentSlide.set((this.currentSlide() + 1) % length);
   }
 
   prevSlide() {
     const length = this.banners().length;
     if (length === 0) return;
-    this.currentSlide = (this.currentSlide - 1 + length) % length;
+    this.currentSlide.set((this.currentSlide() - 1 + length) % length);
   }
 
   goToSlide(index: number) {
     const length = this.banners().length;
     if (length === 0 || index < 0 || index >= length) return;
-    this.currentSlide = index;
+    this.currentSlide.set(index);
   }
 
   startAutoplay() {
