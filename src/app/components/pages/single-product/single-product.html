@@ -37,7 +37,7 @@
           
           <div class="mt-6 flex items-end gap-4 flex-wrap">
             <div class="flex-1">
-              @if(ProductById()?.discountPrice && ProductById()?.discountPrice < ProductById()?.price && discount() > 0){
+              @if(showDiscount()){
               <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--accent)] mb-2" style="text-shadow: 0 2px 4px var(--shadow-sm);">
                 {{ProductById()?.discountPrice | number:'1.0-0'}} EGP
               </div>

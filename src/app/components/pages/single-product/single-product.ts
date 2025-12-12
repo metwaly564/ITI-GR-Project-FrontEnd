@@ -30,6 +30,15 @@ export class SingleProduct implements OnInit {
   productsByCategory: product[] = [];
   relatedProducts = signal<product[]>([]);
   isFav!: Signal<boolean>;
+  
+  showDiscount = computed(() => {
+    const product = this.ProductById();
+    return product !== null && 
+           product.discountPrice !== undefined && 
+           product.price !== undefined && 
+           product.discountPrice < product.price && 
+           this.discount() > 0;
+  });
 
   ngOnInit(): void {
     // Scroll to top when component initializes
