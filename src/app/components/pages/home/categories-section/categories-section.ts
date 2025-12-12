@@ -16,14 +16,24 @@ export class CategoriesSection implements OnInit {
   homeServ = inject(HomeServ);
   router = inject(Router);
   categories = signal<Category[]>([]);
+  isLoading = signal<boolean>(true);
+  
   getCategories() {
-    this.homeServ.getHomeData().subscribe((res) => {
-      // Filter out categories without imageUrl
-      const categoriesWithImages = (res.categories || []).filter(
-        (category) => category.imageUrl && category.imageUrl.trim() !== ''
-      );
-      this.categories.set(categoriesWithImages);
-      console.log('Categories with images:', this.categories());
+    this.isLoading.set(true);
+    this.homeServ.getHomeData().subscribe({
+      next: (res) => {
+        // Filter out categories without imageUrl
+        const categoriesWithImages = (res.categories || []).filter(
+          (category) => category.imageUrl && category.imageUrl.trim() !== ''
+        );
+        this.categories.set(categoriesWithImages);
+        this.isLoading.set(false);
+        console.log('Categories with images:', this.categories());
+      },
+      error: (err) => {
+        console.error('Error loading categories:', err);
+        this.isLoading.set(false);
+      }
     });
   }
 

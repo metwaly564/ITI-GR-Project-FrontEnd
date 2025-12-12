@@ -1,3 +1,26 @@
+/* Product card hover effects - similar to main slider */
+.product-card-container {
+  transition: all 0.3s ease;
+}
+
+.product-card-container:hover {
+  transform: translateY(-2px);
+}
+
+.product-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image {
+  transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.product-card-container:hover .product-image {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
 .card-button {
   display: flex;
   justify-content: center;
