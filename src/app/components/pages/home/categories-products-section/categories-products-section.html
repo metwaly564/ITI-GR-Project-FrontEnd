@@ -64,35 +64,26 @@
         }
       </div>
 
-      <!-- Show banners after every 2 categories (one at a time, scrollable) -->
-      @if ((i + 1) % 2 === 0 && i < categories().length - 1) {
-        @let bannerList = getBannersForIndex(i);
-        @if (bannerList.length > 0) {
+      <!-- Show one banner after each category -->
+      @if (i < categories().length - 1) {
+        @let banner = getBannerForIndex(i);
+        @if (banner) {
           <div class="py-5 mb-8 w-full">
             <div class="w-full">
-              <div 
-                id="banner-carousel-{{ i }}"
-                class="flex gap-0 overflow-x-auto scroll-smooth scrollbar-hide"
-                style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
-                @for (banner of bannerList; track banner.id) {
-                  <div class="flex-shrink-0 w-full" style="scroll-snap-align: start; min-width: 100%;">
-                    <a 
-                      [href]="banner.link || '#'" 
-                      [target]="banner.link?.startsWith('http') ? '_blank' : '_self'"
-                      class="banner-link block w-full overflow-hidden rounded-xl shadow-md px-3 group">
-                      <div class="banner-image-wrapper relative overflow-hidden rounded-xl">
-                        <img 
-                          [src]="getBannerImageUrl(banner.imageUrl)" 
-                          [alt]="banner.title"
-                          class="banner-image w-full h-auto object-cover transition-transform duration-500"
-                          loading="lazy"
-                          (error)="$event.target.src='assets/images/placeholder.jpg'" />
-                        <div class="banner-overlay absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500"></div>
-                      </div>
-                    </a>
-                  </div>
-                }
-              </div>
+              <a 
+                [href]="banner.link || '#'" 
+                [target]="banner.link?.startsWith('http') ? '_blank' : '_self'"
+                class="banner-link block w-full overflow-hidden rounded-xl shadow-md px-4 md:px-8 lg:px-12 group">
+                <div class="banner-image-wrapper relative overflow-hidden rounded-xl">
+                  <img 
+                    [src]="getBannerImageUrl(banner.imageUrl)" 
+                    [alt]="banner.title"
+                    class="banner-image w-full h-auto object-contain transition-transform duration-500"
+                    loading="lazy"
+                    (error)="$event.target.src='assets/images/placeholder.jpg'" />
+                  <div class="banner-overlay absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500"></div>
+                </div>
+              </a>
             </div>
           </div>
         }

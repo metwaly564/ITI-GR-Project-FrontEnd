@@ -5,16 +5,18 @@
     <!-- Filters Section -->
     <div class="filters-section">
       <!-- Search -->
-      <div class="filter-group">
-        <input
-          type="text"
-          [(ngModel)]="searchTerm"
-          (keyup.enter)="onSearch()"
-          placeholder="Search products..."
-          class="search-input"
-          />
+      <div class="filter-group search-group">
+        <div class="search-container">
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+            placeholder="Search products..."
+            class="search-input"
+            />
           <button (click)="onSearch()" class="search-btn">Search</button>
         </div>
+      </div>
 
         <!-- Category Filter -->
         <div class="filter-group">
@@ -73,16 +75,20 @@
             <input
               type="number"
               [(ngModel)]="minPrice"
+              (input)="onPriceInput()"
               (change)="onPriceFilterChange()"
               placeholder="Min"
+              [class.price-input-error]="hasPriceValidationError()"
               class="price-input"
               />
               <span>-</span>
               <input
                 type="number"
                 [(ngModel)]="maxPrice"
+                (input)="onPriceInput()"
                 (change)="onPriceFilterChange()"
                 placeholder="Max"
+                [class.price-input-error]="hasPriceValidationError()"
                 class="price-input"
                 />
               </div>

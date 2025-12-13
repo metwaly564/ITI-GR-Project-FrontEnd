@@ -62,12 +62,12 @@ export class CategoriesProductsSection implements OnInit {
     });
   }
 
-  // Get banners for a specific category index (after every 2 categories)
-  // Returns all banners in a scrollable carousel (one visible at a time)
-  getBannersForIndex(index: number): Banner[] {
-    // Return all banners - they'll be displayed in a scrollable carousel
-    // showing one at a time
-    return this.banners();
+  // Get a single banner for a specific category index (cycling through available banners)
+  getBannerForIndex(index: number): Banner | null {
+    const banners = this.banners();
+    if (banners.length === 0) return null;
+    // Cycle through banners based on category index
+    return banners[index % banners.length];
   }
 
   // Scroll carousel left - use native scroll on mobile, transform on desktop

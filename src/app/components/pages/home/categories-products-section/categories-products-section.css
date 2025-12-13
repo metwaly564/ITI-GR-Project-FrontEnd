@@ -97,9 +97,32 @@
   min-width: 100%;
 }
 
-/* Banner hover effects */
+/* Banner hover effects and sizing */
 .banner-link {
   transition: all 0.3s ease;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .banner-link {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .banner-link {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+/* Banner image - show full height without cropping */
+.banner-image-wrapper .banner-image {
+  height: auto;
+  width: 100%;
+  object-fit: contain;
 }
 
 .banner-link:hover {

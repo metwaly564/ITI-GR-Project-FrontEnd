@@ -65,3 +65,32 @@
   overflow: hidden;
 }
 
+/* Pagination button styles using palette colors */
+.pagination-btn {
+  transition: background-color 0.3s ease;
+}
+
+.pagination-btn-active {
+  background-color: #D1A557 !important;
+}
+
+.pagination-btn-active:hover:not(:disabled) {
+  background-color: #B89A4A !important;
+}
+
+.pagination-btn-disabled {
+  background-color: #d1d5db !important;
+}
+
+.pagination-page-btn {
+  transition: background-color 0.3s ease;
+}
+
+.pagination-page-btn-active {
+  background-color: #D1A557 !important;
+}
+
+.pagination-page-btn-active:hover {
+  background-color: #B89A4A !important;
+}
+

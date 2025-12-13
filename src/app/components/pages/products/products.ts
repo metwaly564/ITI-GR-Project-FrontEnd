@@ -142,9 +142,26 @@ export class ProductsComponent implements OnInit {
     this.loadProducts();
   }
 
+  onPriceInput() {
+    // Trigger change detection for validation display (no API call on input)
+  }
+
   onPriceFilterChange() {
-    this.currentPage.set(1);
-    this.loadProducts();
+    // Only load products if validation passes
+    if (!this.hasPriceValidationError()) {
+      this.currentPage.set(1);
+      this.loadProducts();
+    }
+  }
+
+  // Check if min price is greater than max price (validation error)
+  hasPriceValidationError(): boolean {
+    const min = this.minPrice();
+    const max = this.maxPrice();
+    if (min !== undefined && max !== undefined && min > max) {
+      return true;
+    }
+    return false;
   }
 
   onStockFilterChange() {

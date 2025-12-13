@@ -18,7 +18,8 @@
     style="z-index: 47"
   >
     <button
-      class="bg-red-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2"
+      class="text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2"
+      style="background-color: #D1A557;"
       (click)="showSort.set(true)"
     >
       <span
@@ -42,7 +43,8 @@
       </svg>
     </button>
     <button
-      class="bg-red-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2"
+      class="text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2"
+      style="background-color: #D1A557;"
       (click)="showFilters.set(true)"
     >
       <span class="font-alexandria font-light">{{ isArabic ? 'تصفية' : 'Filter' }}</span>
@@ -119,7 +121,7 @@
           class="w-full px-4 py-3 rounded transition-colors duration-150"
           [class.text-right]="isArabic"
           [class.text-left]="!isArabic"
-          [class.bg-red-500]="currentSort() === 'newest'"
+          [style.background-color]="currentSort() === 'newest' ? '#D1A557' : ''"
           [class.text-white]="currentSort() === 'newest'"
           [class.hover:bg-gray-50]="currentSort() !== 'newest'"
         >
@@ -130,7 +132,7 @@
           class="w-full px-4 py-3 rounded transition-colors duration-150"
           [class.text-right]="isArabic"
           [class.text-left]="!isArabic"
-          [class.bg-red-500]="currentSort() === 'oldest'"
+          [style.background-color]="currentSort() === 'oldest' ? '#D1A557' : ''"
           [class.text-white]="currentSort() === 'oldest'"
           [class.hover:bg-gray-50]="currentSort() !== 'oldest'"
         >
@@ -141,7 +143,7 @@
           class="w-full px-4 py-3 rounded transition-colors duration-150"
           [class.text-right]="isArabic"
           [class.text-left]="!isArabic"
-          [class.bg-red-500]="currentSort() === 'price_asc'"
+          [style.background-color]="currentSort() === 'price_asc' ? '#D1A557' : ''"
           [class.text-white]="currentSort() === 'price_asc'"
           [class.hover:bg-gray-50]="currentSort() !== 'price_asc'"
         >
@@ -152,7 +154,7 @@
           class="w-full px-4 py-3 rounded transition-colors duration-150"
           [class.text-right]="isArabic"
           [class.text-left]="!isArabic"
-          [class.bg-red-500]="currentSort() === 'price_desc'"
+          [style.background-color]="currentSort() === 'price_desc' ? '#D1A557' : ''"
           [class.text-white]="currentSort() === 'price_desc'"
           [class.hover:bg-gray-50]="currentSort() !== 'price_desc'"
         >
@@ -163,7 +165,7 @@
           class="w-full px-4 py-3 rounded transition-colors duration-150"
           [class.text-right]="isArabic"
           [class.text-left]="!isArabic"
-          [class.bg-red-500]="currentSort() === 'name_asc'"
+          [style.background-color]="currentSort() === 'name_asc' ? '#D1A557' : ''"
           [class.text-white]="currentSort() === 'name_asc'"
           [class.hover:bg-gray-50]="currentSort() !== 'name_asc'"
         >
@@ -174,7 +176,7 @@
           class="w-full px-4 py-3 rounded transition-colors duration-150"
           [class.text-right]="isArabic"
           [class.text-left]="!isArabic"
-          [class.bg-red-500]="currentSort() === 'name_desc'"
+          [style.background-color]="currentSort() === 'name_desc' ? '#D1A557' : ''"
           [class.text-white]="currentSort() === 'name_desc'"
           [class.hover:bg-gray-50]="currentSort() !== 'name_desc'"
         >
@@ -223,7 +225,7 @@
         <div class="">
           @if (isLoading()) {
             <div class="flex justify-center items-center h-32">
-              <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+              <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style="border-color: #D1A557;"></div>
             </div>
           } @else if (category()) {
             <h1 class="text-xl font-bold text-gray-800 text-center"></h1>
@@ -284,7 +286,7 @@
                   class="block w-full px-4 py-2 rounded transition-colors duration-150 font-medium"
                   [class.text-right]="isArabic"
                   [class.text-left]="!isArabic"
-                  [class.bg-red-500]="!selectedBrand()"
+                  [style.background-color]="!selectedBrand() ? '#D1A557' : ''"
                   [class.text-white]="!selectedBrand()"
                   [class.hover:bg-gray-50]="selectedBrand()"
                 >
@@ -296,7 +298,7 @@
                     class="block w-full px-4 py-2 rounded transition-colors duration-150 font-medium"
                     [class.text-right]="isArabic"
                     [class.text-left]="!isArabic"
-                    [class.bg-red-500]="selectedBrand()?.id === brand.id"
+                    [style.background-color]="selectedBrand()?.id === brand.id ? '#D1A557' : ''"
                     [class.text-white]="selectedBrand()?.id === brand.id"
                     [class.hover:bg-gray-50]="selectedBrand()?.id !== brand.id"
                   >
@@ -351,7 +353,7 @@
                 class="block w-full px-4 py-2 rounded transition-colors duration-150 font-medium"
                 [class.text-right]="isArabic"
                 [class.text-left]="!isArabic"
-                [class.bg-red-500]="!selectedTag()"
+                [style.background-color]="!selectedTag() ? '#D1A557' : ''"
                 [class.text-white]="!selectedTag()"
                 [class.hover:bg-gray-50]="selectedTag()"
               >
@@ -363,7 +365,7 @@
                   class="block w-full px-4 py-2 rounded transition-colors duration-150 font-medium"
                   [class.text-right]="isArabic"
                   [class.text-left]="!isArabic"
-                  [class.bg-red-500]="selectedTag()?.id === tag.id"
+                  [style.background-color]="selectedTag()?.id === tag.id ? '#D1A557' : ''"
                   [class.text-white]="selectedTag()?.id === tag.id"
                   [class.hover:bg-gray-50]="selectedTag()?.id !== tag.id"
                 >
@@ -416,7 +418,7 @@
               class="block w-full px-4 py-1.5 rounded transition-colors duration-150 font-medium text-[13px]"
               [class.text-right]="isArabic"
               [class.text-left]="!isArabic"
-              [class.bg-red-500]="currentSort() === 'newest'"
+              [style.background-color]="currentSort() === 'newest' ? '#D1A557' : ''"
               [class.text-white]="currentSort() === 'newest'"
               [class.hover:bg-gray-50]="currentSort() !== 'newest'"
             >
@@ -427,7 +429,7 @@
               class="block w-full px-4 py-1.5 rounded transition-colors duration-150 font-medium text-[13px]"
               [class.text-right]="isArabic"
               [class.text-left]="!isArabic"
-              [class.bg-red-500]="currentSort() === 'oldest'"
+              [style.background-color]="currentSort() === 'oldest' ? '#D1A557' : ''"
               [class.text-white]="currentSort() === 'oldest'"
               [class.hover:bg-gray-50]="currentSort() !== 'oldest'"
             >
@@ -438,7 +440,7 @@
               class="block w-full px-4 py-1.5 rounded transition-colors duration-150 font-medium text-[13px]"
               [class.text-right]="isArabic"
               [class.text-left]="!isArabic"
-              [class.bg-red-500]="currentSort() === 'price_asc'"
+              [style.background-color]="currentSort() === 'price_asc' ? '#D1A557' : ''"
               [class.text-white]="currentSort() === 'price_asc'"
               [class.hover:bg-gray-50]="currentSort() !== 'price_asc'"
             >
@@ -449,7 +451,7 @@
               class="block w-full px-4 py-1.5 rounded transition-colors duration-150 font-medium text-[13px]"
               [class.text-right]="isArabic"
               [class.text-left]="!isArabic"
-              [class.bg-red-500]="currentSort() === 'price_desc'"
+              [style.background-color]="currentSort() === 'price_desc' ? '#D1A557' : ''"
               [class.text-white]="currentSort() === 'price_desc'"
               [class.hover:bg-gray-50]="currentSort() !== 'price_desc'"
             >
@@ -460,7 +462,7 @@
               class="block w-full px-4 py-1.5 rounded transition-colors duration-150 font-medium text-[13px]"
               [class.text-right]="isArabic"
               [class.text-left]="!isArabic"
-              [class.bg-red-500]="currentSort() === 'name_asc'"
+              [style.background-color]="currentSort() === 'name_asc' ? '#D1A557' : ''"
               [class.text-white]="currentSort() === 'name_asc'"
               [class.hover:bg-gray-50]="currentSort() !== 'name_asc'"
             >
@@ -471,7 +473,7 @@
               class="block w-full px-4 py-1.5 rounded transition-colors duration-150 font-medium text-[13px]"
               [class.text-right]="isArabic"
               [class.text-left]="!isArabic"
-              [class.bg-red-500]="currentSort() === 'name_desc'"
+              [style.background-color]="currentSort() === 'name_desc' ? '#D1A557' : ''"
               [class.text-white]="currentSort() === 'name_desc'"
               [class.hover:bg-gray-50]="currentSort() !== 'name_desc'"
             >
@@ -489,7 +491,8 @@
             <div class="relative py-5">
               <div class="h-2 bg-gray-200 rounded-full">
                 <div
-                  class="absolute h-2 bg-red-500 rounded-full"
+                  class="absolute h-2 rounded-full"
+                  style="background-color: #D1A557;"
                   [style.left.%]="(tempMin() / 5000) * 100"
                   [style.right.%]="100 - (tempMax() / 5000) * 100"
                 ></div>
@@ -497,7 +500,8 @@
 
               <!-- Min Handle -->
               <div
-                class="absolute w-6 h-6 bg-red-500 rounded-full shadow-md border border-red-300 cursor-pointer transform -translate-y-1/2 -translate-x-1/2 top-1/2 hover:scale-110 transition-transform z-10 ml-3"
+                class="absolute w-6 h-6 rounded-full shadow-md cursor-pointer transform -translate-y-1/2 -translate-x-1/2 top-1/2 hover:scale-110 transition-transform z-10 ml-3"
+                style="background-color: #D1A557; border-color: #F3D986;"
                 [style.left.%]="(tempMin() / 5000) * 100"
                 (mousedown)="onSliderMouseDown($event, true)"
                 (touchstart)="onSliderTouchStart($event, true)"
@@ -505,7 +509,8 @@
 
               <!-- Max Handle -->
               <div
-                class="absolute w-6 h-6 bg-red-500 rounded-full shadow-md border border-red-300 cursor-pointer transform -translate-y-1/2 -translate-x-1/2 top-1/2 hover:scale-110 transition-transform z-10 -ml-3"
+                class="absolute w-6 h-6 rounded-full shadow-md cursor-pointer transform -translate-y-1/2 -translate-x-1/2 top-1/2 hover:scale-110 transition-transform z-10 -ml-3"
+                style="background-color: #D1A557; border-color: #F3D986;"
                 [style.left.%]="(tempMax() / 5000) * 100"
                 (mousedown)="onSliderMouseDown($event, false)"
                 (touchstart)="onSliderTouchStart($event, false)"
@@ -540,7 +545,10 @@
               </button>
               <button
                 (click)="applyPriceFilter()"
-                class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors flex-1 font-['Alexandria'] font-medium text-[10px] sm:text-[11px]"
+                class="px-4 py-2 text-white rounded-md transition-colors flex-1 font-['Alexandria'] font-medium text-[10px] sm:text-[11px]"
+                style="background-color: #D1A557;"
+                onmouseover="this.style.backgroundColor='#B89A4A'"
+                onmouseout="this.style.backgroundColor='#D1A557'"
               >
                 {{ isArabic ? 'تطبيق' : 'Apply' }}
               </button>
@@ -579,7 +587,7 @@
                   {{ counterService.minSearch() }}-{{ counterService.maxSearch() }}
                   {{ isArabic ? 'جنية' : 'EGP' }}
                 </span>
-                <button (click)="resetPriceFilter()" class="ml-1 text-gray-500 hover:text-red-500">
+                <button (click)="resetPriceFilter()" class="ml-1 text-gray-500" style="--hover-color: #D1A557;" onmouseover="this.style.color='#D1A557'" onmouseout="this.style.color='#6b7280'">
                   &times;
                 </button>
               </div>
@@ -599,7 +607,8 @@
                   (click)="resetTagFilter()"
                   [class.mr-1]="isArabic"
                   [class.ml-1]="!isArabic"
-                  class="text-gray-500 hover:text-red-500"
+                  class="text-gray-500"
+                  onmouseover="this.style.color='#D1A557'" onmouseout="this.style.color='#6b7280'"
                 >
                   &times;
                 </button>
@@ -623,7 +632,8 @@
                   (click)="resetBrandFilter()"
                   [class.mr-1]="isArabic"
                   [class.ml-1]="!isArabic"
-                  class="text-gray-500 hover:text-red-500"
+                  class="text-gray-500"
+                  onmouseover="this.style.color='#D1A557'" onmouseout="this.style.color='#6b7280'"
                 >
                   &times;
                 </button>
@@ -673,11 +683,12 @@
                       addToWishlist(product.skuId || product.id)
                     "
                     class="absolute top-2 left-2 z-20 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110"
-                    [class.bg-red-100]="favServ.isFav(product.id)()"
+                    [style.background-color]="favServ.isFav(product.id)() ? '#F3D986' : ''"
                   >
                     <i
-                      class="fa-heart text-red-500 text-sm"
+                      class="fa-heart text-sm"
                       [ngClass]="favServ.isFav(product.id)() ? 'fa-solid' : 'fa-regular'"
+                      style="color: #D1A557;"
                     ></i>
                   </button>
 
@@ -689,7 +700,8 @@
                     product.priceBefore > product.priceAfter
                   ) {
                     <span
-                      class="absolute right-4 top-4 inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-red-500 text-white shadow-lg z-10"
+                      class="absolute right-4 top-4 inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-lg z-10"
+                      style="background-color: #D1A557;"
                     >
                       {{ calculateDiscountPercentage(product.priceBefore, product.priceAfter) }}%
                       {{ isArabic ? 'خصم' : 'Off' }}
@@ -708,7 +720,8 @@
                 </div>
                 <div class="mt-3 mx-3">
                   <button
-                    class="text-lg font-bold text-left text-gray-800 hover:text-red-500 transition-all duration-300 w-full"
+                    class="text-lg font-bold text-left text-gray-800 transition-all duration-300 w-full"
+                    onmouseover="this.style.color='#D1A557'" onmouseout="this.style.color='#1f2937'"
                     (click)="
                       $event.stopPropagation();
                       router.navigate(['/product-details', product.id])
@@ -747,7 +760,7 @@
                       [disabled]="getAvailableStock(product) <= 0 || loadingCartItems().has(product.skuId || product.id)"
                       class="disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
-                      <i class="fa-solid fa-cart-arrow-down text-red-500 hover:text-red-600 text-xl"></i>
+                      <i class="fa-solid fa-cart-arrow-down text-xl" style="color: #D1A557;" onmouseover="this.style.color='#B89A4A'" onmouseout="this.style.color='#D1A557'"></i>
                     </button>
                   </div>
                 </div>
@@ -768,7 +781,10 @@
               @if (priceFilterApplied() || selectedTag() || selectedBrand()) {
                 <button
                   (click)="resetPriceFilter(); resetTagFilter(); resetBrandFilter()"
-                  class="mt-3 bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition font-medium text-xs sm:text-sm md:text-base"
+                  class="mt-3 text-white px-6 py-2 rounded-md transition font-medium text-xs sm:text-sm md:text-base"
+                  style="background-color: #D1A557;"
+                  onmouseover="this.style.backgroundColor='#B89A4A'"
+                  onmouseout="this.style.backgroundColor='#D1A557'"
                 >
                   {{ isArabic ? 'إعادة تعيين' : 'Reset Filters' }}
                 </button>
@@ -788,11 +804,10 @@
           <button
             (click)="previousPage()"
             [disabled]="!hasPrevious()"
-            class="px-4 py-2 rounded-md transition-colors font-medium text-sm"
-            [class.bg-red-500]="hasPrevious()"
+            class="px-4 py-2 rounded-md transition-colors font-medium text-sm pagination-btn"
+            [class.pagination-btn-active]="hasPrevious()"
+            [class.pagination-btn-disabled]="!hasPrevious()"
             [class.text-white]="hasPrevious()"
-            [class.hover:bg-red-600]="hasPrevious()"
-            [class.bg-gray-300]="!hasPrevious()"
             [class.text-gray-500]="!hasPrevious()"
             [class.cursor-not-allowed]="!hasPrevious()"
             style="font-family: 'Alexandria', sans-serif"
@@ -807,10 +822,9 @@
             } @else {
               <button
                 (click)="goToPage(page)"
-                class="px-4 py-2 rounded-md transition-colors font-medium text-sm min-w-[40px]"
-                [class.bg-red-500]="currentPage() === page"
+                class="px-4 py-2 rounded-md transition-colors font-medium text-sm min-w-[40px] pagination-page-btn"
+                [class.pagination-page-btn-active]="currentPage() === page"
                 [class.text-white]="currentPage() === page"
-                [class.hover:bg-red-600]="currentPage() === page"
                 [class.bg-gray-100]="currentPage() !== page"
                 [class.text-gray-700]="currentPage() !== page"
                 [class.hover:bg-gray-200]="currentPage() !== page"
@@ -825,11 +839,10 @@
           <button
             (click)="nextPage()"
             [disabled]="!hasNext()"
-            class="px-4 py-2 rounded-md transition-colors font-medium text-sm"
-            [class.bg-red-500]="hasNext()"
+            class="px-4 py-2 rounded-md transition-colors font-medium text-sm pagination-btn"
+            [class.pagination-btn-active]="hasNext()"
+            [class.pagination-btn-disabled]="!hasNext()"
             [class.text-white]="hasNext()"
-            [class.hover:bg-red-600]="hasNext()"
-            [class.bg-gray-300]="!hasNext()"
             [class.text-gray-500]="!hasNext()"
             [class.cursor-not-allowed]="!hasNext()"
             style="font-family: 'Alexandria', sans-serif"
@@ -850,7 +863,7 @@
       @if (isLoading()) {
         <div class="text-center w-full py-10">
           <div class="flex justify-center items-center h-64">
-            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#D1A557]"></div>
           </div>
         </div>
       }
@@ -877,7 +890,8 @@
 
         @if (hasDiscount(selectedProduct())) {
           <div
-            class="absolute m-4 text-center top-0 left-0 bg-red-500 text-white text-[16px] font-normal px-1 py-0 rounded-md z-10 font-alexandria font-medium"
+            class="absolute m-4 text-center top-0 left-0 text-white text-[16px] font-normal px-1 py-0 rounded-md z-10 font-alexandria font-medium"
+            style="background-color: #D1A557;"
             style="font-family: Alexandria; font-weight: 300"
           >
             @if (selectedProduct()) {
@@ -886,7 +900,7 @@
             {{ isArabic ? 'خصم' : 'Off' }}
           </div>
           <button
-            class="absolute top-12 left-4 text-gray-600 hover:text-red-500 bg-gray-100 w-7 h-7 rounded-full flex items-center justify-center z-10 p-1.5"
+            class="absolute top-12 left-4 text-gray-600 hover:text-[#D1A557] bg-gray-100 w-7 h-7 rounded-full flex items-center justify-center z-10 p-1.5"
             (click)="addToWishlist(selectedProduct()!.skuId || selectedProduct()!.id)"
           >
             <i class="fa-solid fa-heart h-4 w-4"></i>
@@ -932,7 +946,7 @@
                   {{ formatPrice(getProductPrice(selectedProduct())) }}
                 </span>
                 @if (shouldShowPriceBefore(selectedProduct())) {
-                  <span [class.mr-1]="isArabic" [class.ml-1]="!isArabic" class="text-red-400 line-through text-[11px]">
+                  <span [class.mr-1]="isArabic" [class.ml-1]="!isArabic" class="line-through text-[11px]" style="color: #637089;">
                     {{ formatPrice(selectedProduct()!.priceBefore) }}
                   </span>
                 }
@@ -980,13 +994,20 @@
                   getAvailableStock(selectedProduct()!) <= 0 ||
                   loadingCartItems().has(selectedProduct()!.skuId || selectedProduct()!.id)
                 "
-                [class.bg-red-500]="
+                [style.background-color]="
                   getAvailableStock(selectedProduct()!) > 0 &&
                   !loadingCartItems().has(selectedProduct()!.skuId || selectedProduct()!.id)
+                  ? '#D1A557' : ''
                 "
-                [class.hover:bg-red-600]="
+                [attr.onmouseover]="
                   getAvailableStock(selectedProduct()!) > 0 &&
                   !loadingCartItems().has(selectedProduct()!.skuId || selectedProduct()!.id)
+                  ? 'this.style.backgroundColor=\'#B89A4A\'' : null
+                "
+                [attr.onmouseout]="
+                  getAvailableStock(selectedProduct()!) > 0 &&
+                  !loadingCartItems().has(selectedProduct()!.skuId || selectedProduct()!.id)
+                  ? 'this.style.backgroundColor=\'#D1A557\'' : null
                 "
                 [class.text-white]="true"
                 (click)="
