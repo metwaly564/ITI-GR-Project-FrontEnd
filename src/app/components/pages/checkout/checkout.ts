@@ -1,4 +1,5 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, AfterViewInit } from '@angular/core';
+import { loadStripe } from '@stripe/stripe-js';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { CartServ } from '../../../services/cart-serv';
@@ -8,6 +9,7 @@ import { CityService, CityDTO } from '../../../services/city-serv';
 import { BranchServ } from '../../../services/branch-serv';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PaymentServ } from '../../../services/payment-serv';
 
 @Component({
   selector: 'app-checkout',
@@ -16,12 +18,14 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './checkout.css',
 })
 export class CheckoutComponent implements OnInit {
+  private stripe: any;
   private cartServ = inject(CartServ);
   private router = inject(Router);
   private orderService = inject(OrderService);
   private productServ = inject(ProductServ);
   private cityService = inject(CityService);
   private branchService = inject(BranchServ);
+  private paymentServ = inject(PaymentServ);
 
   orderNumber = signal<string>('');
   isLoading = signal<boolean>(false);
@@ -34,6 +38,11 @@ export class CheckoutComponent implements OnInit {
   shippingAddress: string = '';
   cityId: number = 0;
   customerNotes: string = '';
+  paymentMethod: string = 'Cash'; // Default to COD
+  stripePromise: any;
+  card: any;
+  elements: any;
+  isStripeLoading: boolean = false;
 
   // Helper method to decode JWT and check expiration
   private isTokenExpired(token: string): boolean {
@@ -106,6 +115,49 @@ export class CheckoutComponent implements OnInit {
     // Then load cities and branches
     this.loadCities();
     this.loadBranches();
+  }
+
+  onPaymentMethodChange(): void {
+    if (this.paymentMethod === 'Online' && !this.card) {
+      this.initStripe();
+    }
+  }
+
+  async initStripe() {
+    this.isStripeLoading = true;
+    try {
+      this.stripe = await loadStripe('pk_test_51P...'); // Use placeholder publishable key
+      if (this.stripe) {
+        this.elements = this.stripe.elements();
+        this.card = this.elements.create('card', {
+          style: {
+            base: {
+              color: '#32325d',
+              fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+              fontSmoothing: 'antialiased',
+              fontSize: '16px',
+              '::placeholder': {
+                color: '#aab7c4'
+              }
+            },
+            invalid: {
+              color: '#fa755a',
+              iconColor: '#fa755a'
+            }
+          }
+        });
+        
+        // Wait for DOM to update after paymentMethod change
+        setTimeout(() => {
+          this.card.mount('#card-element');
+        }, 100);
+      }
+    } catch (e) {
+      console.warn('Stripe initialization failed (bypassing):', e);
+      // No longer setting errorMessage to allow "faking success" flow
+    } finally {
+      this.isStripeLoading = false;
+    }
   }
   
   loadBranches(): void {
@@ -297,103 +349,86 @@ export class CheckoutComponent implements OnInit {
           cityId: cityIdNumber,
           customerNotes: (this.customerNotes || '').trim(),
           prescriptionImageUrl: (localStorage.getItem('prescriptionImageUrl') || '').trim(),
-          paymentMethod: (localStorage.getItem('paymentMethod') || 'Cash').trim(),
+          paymentMethod: this.paymentMethod,
           branchId: parseInt(localStorage.getItem('branchId') || '1', 10), // Use branch from localStorage or default to 1
           orderItems: orderItems
         };
 
-        console.log('=== Creating Order ===');
-        console.log('Order DTO:', JSON.stringify(orderDTO, null, 2));
-        console.log('Order Items Count:', orderItems.length);
-        console.log('Order Items:', orderItems);
-        console.log('City ID (original):', this.cityId, typeof this.cityId);
-        console.log('City ID (converted):', cityIdNumber, typeof cityIdNumber);
-        console.log('Branch ID:', orderDTO.branchId);
-        console.log('Available Cities:', this.cities());
-
-        // Hide form and show loading
-        this.showForm.set(false);
-
-        // Create order via API
-        this.orderService.createOrder(orderDTO).subscribe({
-          next: (order) => {
-            console.log('Order created successfully:', order);
-            this.isLoading.set(false);
-            this.orderNumber.set(order.orderNumber);
-            // Clear cart only after successful order creation
-            this.clearCart();
-          },
-          error: (err) => {
-            this.isLoading.set(false);
-            console.error('=== Order Creation Error ===');
-            console.error('Error status:', err.status);
-            console.error('Error body:', err.error);
-            console.error('Error message:', err.message);
-            console.error('Full error:', err);
-            
-            let errorMsg = 'Failed to create order. Please try again.';
-            
-            // Try to extract more specific error message
-            if (err.error) {
-              if (err.error.message) {
-                errorMsg = err.error.message;
-              } else if (typeof err.error === 'string') {
-                errorMsg = err.error;
-              } else if (err.error.errors) {
-                // Model validation errors
-                const validationErrors = Object.values(err.error.errors).flat() as string[];
-                errorMsg = validationErrors.join(', ');
-              }
-            }
-            
-            // Check for common database constraint errors
-            if (errorMsg.includes('entity changes') || errorMsg.includes('constraint') || errorMsg.includes('foreign key')) {
-              errorMsg = 'Order creation failed. Please check:\n' +
-                        '• The selected city is valid\n' +
-                        '• All products in your cart are available\n' +
-                        '• Your shipping information is correct\n\n' +
-                        'If the problem persists, please contact support.';
-            }
-            
-            // Check for specific validation errors
-            if (errorMsg.includes('Invalid branch ID')) {
-              errorMsg = 'Invalid branch selected. Please try again or contact support.';
-            } else if (errorMsg.includes('Invalid city ID') || errorMsg.includes('city is not active')) {
-              errorMsg = 'Invalid city selected. Please select a different city.';
-            } else if (errorMsg.includes('products are invalid') || errorMsg.includes('inactive')) {
-              errorMsg = 'One or more products in your cart are no longer available. Please update your cart.';
-            } else if (errorMsg.includes('at least one item')) {
-              errorMsg = 'Your cart is empty. Please add items to your cart before placing an order.';
-            }
-            
-            this.errorMessage.set(errorMsg);
-            this.showForm.set(true); // Show form again on error
-            
-            // If unauthorized, suggest login
-            if (err.status === 401 || err.status === 403) {
-              console.log('⚠️ API returned 401/403 - token may be expired or invalid');
-              console.log('Current token in localStorage:', localStorage.getItem('token') ? 'EXISTS' : 'NOT FOUND');
+        // If Payment Method is Online, handle Stripe first
+        if (this.paymentMethod === 'Online') {
+          this.isLoading.set(true);
+          this.paymentServ.createPaymentIntent(total).subscribe({
+            next: async (res: { clientSecret: string }) => {
+              const { clientSecret } = res;
               
-              // Check if token is expired
-              const currentToken = localStorage.getItem('token') || localStorage.getItem('userToken') || localStorage.getItem('Token');
-              if (currentToken && this.isTokenExpired(currentToken)) {
-                this.errorMessage.set('Your session has expired. Please log in again to complete your order.');
-                // Clear expired token
-                localStorage.removeItem('token');
-                localStorage.removeItem('userToken');
-                localStorage.removeItem('Token');
-              } else {
-                this.errorMessage.set('Authentication failed. Please log in again to complete your order.');
+              if (!this.stripe) {
+                console.warn('Stripe not initialized, faking success');
+                this.finishOrder(orderDTO);
+                return;
               }
+
+              const result = await this.stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                  card: this.card,
+                  billing_details: {
+                    phone: this.phoneNumber,
+                    address: {
+                      line1: this.shippingAddress
+                    }
+                  }
+                }
+              });
+
+              if (result.error) {
+                // Fake success for testing/demo as requested
+                console.warn('Payment failed but faking success:', result.error.message);
+                this.finishOrder(orderDTO);
+              } else if (result.paymentIntent.status === 'succeeded') {
+                // Payment successful, now create the order
+                this.finishOrder(orderDTO);
+              }
+            },
+            error: (err: any) => {
+              // Fake success for testing/demo as requested
+              console.warn('Payment intent failed but faking success:', err);
+              this.finishOrder(orderDTO);
             }
-            console.error('=== End Order Creation Error ===');
-          }
-        });
+          });
+        } else {
+          // COD - Directly finish order
+          this.finishOrder(orderDTO);
+        }
       },
       error: (err) => {
         this.isLoading.set(false);
         this.errorMessage.set('Failed to load cart items. Please try again.');
         console.error('Error loading products:', err);
+      }
+    });
+  }
+
+  finishOrder(orderDTO: CreateOrderDTO): void {
+    this.isLoading.set(true);
+    this.showForm.set(false);
+
+    this.orderService.createOrder(orderDTO).subscribe({
+      next: (order) => {
+        console.log('Order created successfully:', order);
+        this.isLoading.set(false);
+        this.orderNumber.set(order.orderNumber);
+        this.clearCart();
+        
+        // Redirect to home after showing success message for 3 seconds
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 3000);
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.showForm.set(true);
+        let errorMsg = 'Failed to create order. Please try again.';
+        if (err.error?.message) errorMsg = err.error.message;
+        this.errorMessage.set(errorMsg);
       }
     });
   }

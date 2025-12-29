@@ -13,6 +13,8 @@ export interface ProductDTO {
   createdAt: string;
   rank?: number;
   maxOrderQuantity?: number;
+  rating?: number;
+  reviewCount?: number;
   stock: StockDTO[];
 }
 
@@ -45,6 +47,8 @@ export interface product {
   createdAt: string;
   rank?: number;
   maxOrderQuantity?: number;
+  rating?: number;
+  reviewCount?: number;
   stock: Stock[] | [];
   isFav: boolean;
 }

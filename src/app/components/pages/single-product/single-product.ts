@@ -7,12 +7,15 @@ import { CartServ } from '../../../services/cart-serv';
 import { FavServ } from '../../../services/fav-serv';
 import { HomeServ } from '../../../services/home-serv';
 import { ProductCard } from '../../../shared/product-card/product-card';
+import { ReviewServ, Review, ReviewStatus } from '../../../services/review-serv';
+import { FormsModule } from '@angular/forms';
+import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-single-product',
   templateUrl: './single-product.html',
   styleUrls: ['./single-product.css'],
-  imports: [CommonModule, ProductCard],
+  imports: [CommonModule, ProductCard, FormsModule],
 })
 export class SingleProduct implements OnInit {
   productId!: number;
@@ -22,8 +25,16 @@ export class SingleProduct implements OnInit {
   homeServ = inject(HomeServ);
   activeRoute = inject(ActivatedRoute);
   location = inject(Location);
+  reviewServ = inject(ReviewServ);
+  auth = inject(Auth);
 
   ProductById = signal<product | null>(null);
+  reviews = signal<Review[]>([]);
+  reviewStatus = signal<ReviewStatus>({ canReview: false, message: '', isVerifiedPurchase: false });
+  newReview = signal({ rating: 5, comment: '' });
+  isSubmittingReview = signal(false);
+
+  isLoggedIn = signal(false);
   discount = signal<number>(0);
   perdiscount = signal<number>(0);
   quantityNum = signal<number>(1);
@@ -41,6 +52,12 @@ export class SingleProduct implements OnInit {
   });
 
   ngOnInit(): void {
+    // Check login status - look for common token keys
+    const token = localStorage.getItem('token') || 
+                  localStorage.getItem('userToken') || 
+                  localStorage.getItem('Token');
+    this.isLoggedIn.set(!!token);
+
     // Scroll to top when component initializes
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
@@ -55,6 +72,8 @@ export class SingleProduct implements OnInit {
         next: (product: product | null) => {
           if (product) {
             this.ProductById.set(product);
+            this.loadReviews();
+            this.checkReviewStatus();
 
             // Calculate discount - handle reversed data entry
             if (product.discountPrice) {
@@ -156,5 +175,54 @@ export class SingleProduct implements OnInit {
     
     // Fallback to a placeholder if no image
     return 'assets/images/placeholder.png';
+  }
+
+  loadReviews() {
+    this.reviewServ.getProductReviews(this.productId).subscribe(res => {
+      this.reviews.set(res);
+    });
+  }
+
+  checkReviewStatus() {
+    if (this.isLoggedIn()) {
+      this.reviewServ.getReviewStatus(this.productId).subscribe(res => {
+        this.reviewStatus.set(res);
+      });
+    }
+  }
+
+  submitReview() {
+    if (this.newReview().rating < 1 || this.newReview().rating > 5) {
+      alert('Please select a rating between 1 and 5');
+      return;
+    }
+
+    if (!this.newReview().comment.trim()) {
+      alert('Please enter a comment');
+      return;
+    }
+
+    this.isSubmittingReview.set(true);
+    this.reviewServ.addReview({
+      productId: this.productId,
+      rating: this.newReview().rating,
+      comment: this.newReview().comment
+    }).subscribe(res => {
+      this.isSubmittingReview.set(false);
+      if (res) {
+        this.loadReviews();
+        this.checkReviewStatus();
+        this.newReview.set({ rating: 5, comment: '' });
+        alert('Review submitted successfully!');
+      }
+    });
+  }
+
+  setRating(rating: number) {
+    this.newReview.update(r => ({ ...r, rating }));
+  }
+
+  getStars(rating: number): number[] {
+    return Array(5).fill(0).map((_, i) => i + 1);
   }
 }

@@ -121,6 +121,22 @@ export class AdminOrdersComponent implements OnInit {
     }
   }
 
+  updateStatus(orderId: number, status: string) {
+    this.adminService.updateOrderStatus(orderId, status).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.loadOrders();
+        } else {
+          alert(response.message || 'Failed to update order status');
+        }
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Failed to update order status');
+        console.error('Error updating order status:', err);
+      },
+    });
+  }
+
   getStatusColor(status: string): string {
     const statusLower = status.toLowerCase();
     if (statusLower === 'pending') return 'bg-yellow-100 text-yellow-800';

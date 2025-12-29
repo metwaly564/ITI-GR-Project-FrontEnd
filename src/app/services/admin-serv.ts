@@ -663,6 +663,32 @@ export class AdminService {
     );
   }
 
+  // Update order status
+  updateOrderStatus(id: number, status: string): Observable<ApiResponse<any>> {
+    return this.http.put<any>(
+      `${this.baseUrl}/AdminOrders/${id}/status`,
+      { status },
+      { headers: this.getAuthHeaders() }
+    ).pipe(
+      map(response => ({
+        success: true,
+        message: 'Order status updated successfully',
+        data: response,
+        timestamp: new Date().toISOString()
+      })),
+      catchError(error => {
+        console.error('Error in updateOrderStatus:', error);
+        return of({
+          success: false,
+          message: error.error?.message || 'Failed to update order status',
+          data: null,
+          errors: error.error?.errors || [error.message],
+          timestamp: new Date().toISOString()
+        } as ApiResponse<any>);
+      })
+    );
+  }
+
   // ========== NOTIFICATION METHODS ==========
 
   broadcastNotification(message: string, title?: string, type?: string): Observable<any> {

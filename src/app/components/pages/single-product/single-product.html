@@ -1,9 +1,10 @@
-<div class="product-details-page bg-gradient-to-br from-[var(--bg-primary)] to-[var(--bg-secondary)] min-h-screen pb-16 transition-all duration-500" style="transition-timing-function: var(--ease-smooth);">
+<div
+  class="product-details-page bg-gradient-to-br from-[var(--bg-primary)] to-[var(--bg-secondary)] min-h-screen pb-16 transition-all duration-500"
+  style="transition-timing-function: var(--ease-smooth);">
   <main class="max-w-7xl mx-auto p-4 md:p-6 lg:p-10">
-    <button 
-      class="back-btn flex gap-2 items-center mb-6 cursor-pointer text-[var(--text-secondary)] hover:text-[var(--accent)] transition-all duration-300 group" 
-      (click)="goBack()"
-      style="transition-timing-function: var(--ease-smooth);">
+    <button
+      class="back-btn flex gap-2 items-center mb-6 cursor-pointer text-[var(--text-secondary)] hover:text-[var(--accent)] transition-all duration-300 group"
+      (click)="goBack()" style="transition-timing-function: var(--ease-smooth);">
       <i class="fa-solid fa-angles-left transform group-hover:-translate-x-1 transition-transform duration-300"></i>
       <p class="font-medium">Back to Products</p>
     </button>
@@ -11,8 +12,11 @@
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-start">
       <!-- Product Image -->
       <div class="space-y-4">
-        <div class="rounded-2xl overflow-hidden bg-[var(--bg-card)] p-4 md:p-6 shadow-xl border-2 border-[var(--border-color)] transition-all duration-400 hover:shadow-2xl" style="transition-timing-function: var(--ease-smooth); box-shadow: 0 10px 30px var(--shadow-md);">
-          <div class="relative bg-gradient-to-br from-[var(--secondary)] to-[var(--background)] rounded-xl shadow-lg overflow-hidden group">
+        <div
+          class="rounded-2xl overflow-hidden bg-[var(--bg-card)] p-4 md:p-6 shadow-xl border-2 border-[var(--border-color)] transition-all duration-400 hover:shadow-2xl"
+          style="transition-timing-function: var(--ease-smooth); box-shadow: 0 10px 30px var(--shadow-md);">
+          <div
+            class="relative bg-gradient-to-br from-[var(--secondary)] to-[var(--background)] rounded-xl shadow-lg overflow-hidden group">
             @if(perdiscount() > 0 ) {
             <span
               class="absolute left-4 top-4 z-10 inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-[var(--accent)] text-white shadow-2xl border-2 border-white animate-pulse">
@@ -20,10 +24,8 @@
             </span>
             }
 
-            <img 
-              [src]="getProductImage(ProductById())" 
-              [alt]="ProductById()?.name || 'Product image'"
-              class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110" 
+            <img [src]="getProductImage(ProductById())" [alt]="ProductById()?.name || 'Product image'"
+              class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
               style="transition-timing-function: var(--ease-smooth);"
               (error)="$event.target.src='assets/images/placeholder.png'" />
           </div>
@@ -31,42 +33,50 @@
       </div>
 
       <!-- Product Info -->
-      <div class="bg-[var(--bg-card)] rounded-2xl shadow-xl lg:p-8 flex justify-between flex-col p-6 border-2 border-[var(--border-color)] transition-all duration-400 hover:shadow-2xl" style="transition-timing-function: var(--ease-smooth); box-shadow: 0 10px 30px var(--shadow-md);">
+      <div
+        class="bg-[var(--bg-card)] rounded-2xl shadow-xl lg:p-8 flex justify-between flex-col p-6 border-2 border-[var(--border-color)] transition-all duration-400 hover:shadow-2xl"
+        style="transition-timing-function: var(--ease-smooth); box-shadow: 0 10px 30px var(--shadow-md);">
         <div class="top">
-          <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-[var(--text-primary)] mb-4">{{ProductById()?.name}}</h1>
-          
+          <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-[var(--text-primary)] mb-4">
+            {{ProductById()?.name}}</h1>
+
           <div class="mt-6 flex items-end gap-4 flex-wrap">
             <div class="flex-1">
               @if(showDiscount()){
-              <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--accent)] mb-2" style="text-shadow: 0 2px 4px var(--shadow-sm);">
+              <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--accent)] mb-2"
+                style="text-shadow: 0 2px 4px var(--shadow-sm);">
                 {{ProductById()?.discountPrice | number:'1.0-0'}} EGP
               </div>
-              <div class="text-base text-[var(--text-muted)] line-through mb-1">{{ProductById()?.price | number:'1.0-0'}} EGP</div>
-              <div class="text-sm text-[var(--accent)] font-semibold bg-[var(--accent)]/10 px-3 py-1 rounded-lg inline-block">
+              <div class="text-base text-[var(--text-muted)] line-through mb-1">{{ProductById()?.price |
+                number:'1.0-0'}} EGP</div>
+              <div
+                class="text-sm text-[var(--accent)] font-semibold bg-[var(--accent)]/10 px-3 py-1 rounded-lg inline-block">
                 <i class="fas fa-tag mr-1"></i>You save {{discount() | number:'1.0-0'}} EGP
               </div>
               }
               @else {
-              <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)]" style="text-shadow: 0 2px 4px var(--shadow-sm);">
+              <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)]"
+                style="text-shadow: 0 2px 4px var(--shadow-sm);">
                 {{ProductById()?.price | number:'1.0-0'}} EGP
               </div>
               }
             </div>
 
             <div class="ml-auto">
-              <button 
-                (click)="addToFav(ProductById()!.id)"
+              <button (click)="addToFav(ProductById()!.id)"
                 class="w-12 h-12 rounded-full border-2 border-[var(--border-color)] bg-[var(--bg-primary)] flex items-center justify-center transition-all duration-400 hover:bg-[var(--accent)] hover:border-[var(--accent)] hover:scale-110"
                 style="transition-timing-function: var(--ease-bounce);"
                 [attr.aria-label]="isFav() ? 'Remove from favorites' : 'Add to favorites'">
-                <i class="fa-heart text-xl" 
-                   [ngClass]="isFav() ? 'fa-solid text-[var(--accent)]' : 'fa-regular text-[var(--text-secondary)]'"></i>
+                <i class="fa-heart text-xl"
+                  [ngClass]="isFav() ? 'fa-solid text-[var(--accent)]' : 'fa-regular text-[var(--text-secondary)]'"></i>
               </button>
             </div>
           </div>
         </div>
         <!-- Stock & Delivery Info -->
-        <div class="mt-6 border-2 border-[var(--border-color)] rounded-xl p-4 md:p-5 bg-[var(--bg-primary)] flex items-center gap-4 transition-all duration-300 hover:border-[var(--accent)]" style="transition-timing-function: var(--ease-smooth);">
+        <div
+          class="mt-6 border-2 border-[var(--border-color)] rounded-xl p-4 md:p-5 bg-[var(--bg-primary)] flex items-center gap-4 transition-all duration-300 hover:border-[var(--accent)]"
+          style="transition-timing-function: var(--ease-smooth);">
           <div class="flex-1">
             <div class="font-semibold text-[var(--text-primary)] flex items-center gap-2">
               <i class="fas fa-truck text-[var(--accent)]"></i>
@@ -76,12 +86,14 @@
           </div>
 
           @if(ProductById()?.stock?.[0] && ProductById()?.stock?.[0]!.quantity >0){
-          <div class="text-sm font-bold text-[var(--accent)] bg-[var(--accent)]/10 px-4 py-2 rounded-lg border-2 border-[var(--accent)]/30">
+          <div
+            class="text-sm font-bold text-[var(--accent)] bg-[var(--accent)]/10 px-4 py-2 rounded-lg border-2 border-[var(--accent)]/30">
             <i class="fas fa-check-circle mr-1"></i>In Stock
           </div>
           }
           @else{
-          <div class="text-sm font-bold text-red-500 bg-red-50 dark:bg-red-900/20 px-4 py-2 rounded-lg border-2 border-red-300 dark:border-red-700">
+          <div
+            class="text-sm font-bold text-red-500 bg-red-50 dark:bg-red-900/20 px-4 py-2 rounded-lg border-2 border-red-300 dark:border-red-700">
             <i class="fas fa-times-circle mr-1"></i>Out of Stock
           </div>
           }
@@ -90,41 +102,31 @@
         <div class="mt-6">
           @if(ProductById()?.stock?.[0]){
           <label for="qty" class="block text-sm font-semibold text-[var(--text-primary)] mb-3">
-            Quantity 
+            Quantity
             <span class="text-xs text-[var(--text-muted)] font-normal">
               (Available: {{ProductById()?.stock?.[0]?.quantity}})
             </span>
           </label>
           }
           <div class="flex items-center gap-4 flex-wrap">
-            <div class="flex items-center rounded-xl border-2 border-[var(--border-color)] overflow-hidden bg-[var(--bg-primary)]">
-              <button 
-                id="dec" 
+            <div
+              class="flex items-center rounded-xl border-2 border-[var(--border-color)] overflow-hidden bg-[var(--bg-primary)]">
+              <button id="dec"
                 class="px-4 py-2 text-xl text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--accent)] transition-all duration-300"
-                (click)="decQuantity(inputQuantity.value)"
-                style="transition-timing-function: var(--ease-smooth);">
+                (click)="decQuantity(inputQuantity.value)" style="transition-timing-function: var(--ease-smooth);">
                 −
               </button>
-              <input 
-                id="qty" 
-                type="number" 
-                [value]="quantityNum()" 
-                min="1" 
+              <input id="qty" type="number" [value]="quantityNum()" min="1"
                 [max]="ProductById()?.stock?.[0]?.quantity || 10"
                 class="w-20 text-center outline-none p-2 bg-[var(--bg-primary)] text-[var(--text-primary)] border-x-2 border-[var(--border-color)]"
-                aria-label="Quantity" 
-                #inputQuantity 
-                readonly />
-              <button 
-                id="inc" 
+                aria-label="Quantity" #inputQuantity readonly />
+              <button id="inc"
                 class="px-4 py-2 text-xl text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--accent)] transition-all duration-300"
-                (click)="incQuantity(inputQuantity.value)"
-                style="transition-timing-function: var(--ease-smooth);">
+                (click)="incQuantity(inputQuantity.value)" style="transition-timing-function: var(--ease-smooth);">
                 +
               </button>
             </div>
-            <button 
-              id="addToCart"
+            <button id="addToCart"
               class="flex-1 lg:flex-none bg-[var(--accent)] hover:bg-[var(--accent)]/90 text-white font-bold rounded-xl px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-400 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               (click)="addTocart(ProductById()?.id!, inputQuantity.value)"
               [disabled]="!ProductById()?.stock?.[0] || ProductById()?.stock?.[0]!.quantity <=0"
@@ -134,12 +136,137 @@
           </div>
         </div>
         <!-- Product Description -->
-        <div class="bg-[var(--bg-primary)] rounded-xl p-5 md:p-6 shadow-lg w-full block mt-6 border-2 border-[var(--border-color)] transition-all duration-300 hover:shadow-xl" style="transition-timing-function: var(--ease-smooth);">
+        <div
+          class="bg-[var(--bg-primary)] rounded-xl p-5 md:p-6 shadow-lg w-full block mt-6 border-2 border-[var(--border-color)] transition-all duration-300 hover:shadow-xl"
+          style="transition-timing-function: var(--ease-smooth);">
           <h3 class="text-lg font-bold text-[var(--text-primary)] mb-3 flex items-center gap-2">
             <i class="fas fa-info-circle text-[var(--accent)]"></i>
             Product Description
           </h3>
-          <p class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed">{{ProductById()?.description || 'No description available for this product.'}}</p>
+          <p class="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed">{{ProductById()?.description ||
+            'No description available for this product.'}}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section
+      class="mt-12 bg-[var(--bg-primary)] rounded-2xl p-6 md:p-8 shadow-lg border-2 border-[var(--border-color)]">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] flex items-center gap-3">
+            <i class="fa-solid fa-star text-[var(--star-color, #ffc107)]"></i>
+            Customer Reviews
+          </h2>
+          <div class="flex items-center gap-2 mt-2">
+            <div class="flex text-[var(--star-color, #ffc107)]">
+              @for (star of getStars(ProductById()?.rating || 0); track star) {
+              <i class="fa-solid fa-star"></i>
+              }
+            </div>
+            <span class="text-[var(--text-secondary)] font-medium">
+              ({{ ProductById()?.rating || 0 | number:'1.1-1' }} / 5.0 based on {{ reviews().length }} reviews)
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Review Form -->
+        <div class="lg:col-span-1 border-b lg:border-b-0 lg:border-r border-[var(--border-color)] pb-8 lg:pb-0 lg:pr-8">
+          <h3 class="text-xl font-bold text-[var(--text-primary)] mb-4">Leave a Review</h3>
+
+          @if (!isLoggedIn()) {
+          <div class="bg-[var(--bg-secondary)] rounded-xl p-5 text-center">
+            <p class="text-[var(--text-secondary)] mb-4">Only verified buyers can review this product.</p>
+            <a href="/login"
+              class="inline-block bg-[var(--accent)] text-white px-6 py-2 rounded-lg font-bold hover:opacity-90 transition-all">Login
+              to Review</a>
+          </div>
+          } @else if (!reviewStatus().canReview) {
+          <div class="bg-[var(--bg-secondary)] rounded-xl p-5 text-center border-l-4 border-[var(--accent)]">
+            <p class="text-[var(--text-secondary)] font-medium">{{ reviewStatus().message }}</p>
+          </div>
+          } @else {
+          <form (submit)="submitReview()" class="space-y-4">
+            <div>
+              <label class="block text-sm font-bold text-[var(--text-secondary)] mb-2">Your Rating</label>
+              <div class="flex gap-2 text-2xl">
+                @for (star of [1,2,3,4,5]; track star) {
+                <button type="button" (click)="setRating(star)" class="hover:scale-110 transition-transform">
+                  <i
+                    [class]="star <= newReview().rating ? 'fa-solid fa-star text-[var(--star-color, #ffc107)]' : 'fa-regular fa-star text-gray-300'"></i>
+                </button>
+                }
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-[var(--text-secondary)] mb-2">Comment</label>
+              <textarea [(ngModel)]="newReview().comment" name="comment" rows="4"
+                placeholder="Share your experience with this product..."
+                class="w-full bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] rounded-xl p-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition-all resize-none"
+                required></textarea>
+            </div>
+
+            <button type="submit" [disabled]="isSubmittingReview()"
+              class="w-full bg-[var(--accent)] text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl hover:opacity-90 transition-all transform active:scale-95 disabled:opacity-50">
+              @if (isSubmittingReview()) {
+              <i class="fas fa-spinner fa-spin mr-2"></i>Submitting...
+              } @else {
+              Submit Review
+              }
+            </button>
+          </form>
+          }
+        </div>
+
+        <!-- Reviews List -->
+        <div class="lg:col-span-2 space-y-6">
+          @if (reviews().length === 0) {
+          <div class="text-center py-12 text-[var(--text-secondary)]">
+            <i class="fa-solid fa-comments text-5xl mb-4 opacity-20"></i>
+            <p class="text-lg">No reviews yet. Be the first to share your thoughts!</p>
+          </div>
+          } @else {
+          @for (review of reviews(); track review.id) {
+          <div
+            class="bg-[var(--bg-secondary)]/50 rounded-2xl p-5 border border-[var(--border-color)] transition-all hover:shadow-md">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-full bg-[var(--accent)] text-white flex items-center justify-center font-bold">
+                  {{ review.userName.charAt(0).toUpperCase() }}
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-[var(--text-primary)]">{{ review.userName }}</span>
+                    @if (review.isVerifiedPurchase) {
+                    <span
+                      class="bg-green-100 text-green-700 text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <i class="fa-solid fa-circle-check"></i>
+                      Verified Purchase
+                    </span>
+                    }
+                  </div>
+                  <div class="flex text-[var(--star-color, #ffc107)] text-sm">
+                    @for (star of [1,2,3,4,5]; track star) {
+                    <i [class]="star <= review.rating ? 'fa-solid fa-star' : 'fa-regular fa-star opacity-30'"></i>
+                    }
+                  </div>
+                </div>
+              </div>
+              <span
+                class="text-xs text-[var(--text-secondary)] font-medium bg-[var(--bg-primary)] px-2 py-1 rounded-lg">
+                {{ review.createdAt | date:'MMM dd, yyyy' }}
+              </span>
+            </div>
+            <p class="text-[var(--text-secondary)] leading-relaxed pl-1">
+              "{{ review.comment }}"
+            </p>
+          </div>
+          }
+          }
         </div>
       </div>
     </section>
@@ -148,9 +275,10 @@
   <div class="container px-3 mx-auto flex flex-col mt-12 md:mt-16">
     @if(relatedProducts().length >= 1){
     <div class="border-t-2 border-[var(--border-color)] pt-8">
-      <div class="flex justify-start items-center gap-2 mb-8"> 
+      <div class="flex justify-start items-center gap-2 mb-8">
         <i class="fa-solid fa-heart-circle-plus text-2xl md:text-3xl font-extrabold text-[var(--accent)]"></i>
-        <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight text-[var(--text-primary)]">Related Products</h2>
+        <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight text-[var(--text-primary)]">Related
+          Products</h2>
       </div>
     </div>
     }
