@@ -46,14 +46,34 @@ export class OrderService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || localStorage.getItem('userToken');
-    if (!token) {
-      console.warn('No authentication token found');
+    // Check multiple possible token keys
+    const token = localStorage.getItem('token') || 
+                  localStorage.getItem('userToken') || 
+                  localStorage.getItem('Token');
+    
+    console.log('=== OrderService getAuthHeaders ===');
+    console.log('Token from localStorage.getItem("token"):', localStorage.getItem('token') ? 'EXISTS' : 'NOT FOUND');
+    console.log('Final token value:', token ? `EXISTS (length: ${token.length})` : 'NOT FOUND');
+    
+    // Validate token is not empty or invalid
+    if (!token || token.trim() === '' || token === 'null' || token === 'undefined') {
+      console.warn('❌ No valid authentication token found in OrderService');
+      console.log('Available localStorage keys:', Object.keys(localStorage));
+      // Don't send empty Bearer token - let the backend handle the 401
+      return new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
     }
-    return new HttpHeaders({
+    
+    console.log('✅ Token found, adding to Authorization header');
+    console.log('Token preview:', token.substring(0, 50) + '...');
+    const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token || ''}`
+      'Authorization': `Bearer ${token}`
     });
+    console.log('Authorization header set:', headers.get('Authorization') ? 'YES' : 'NO');
+    console.log('=== End OrderService getAuthHeaders ===');
+    return headers;
   }
 
   createOrder(dto: CreateOrderDTO): Observable<OrderDTO> {

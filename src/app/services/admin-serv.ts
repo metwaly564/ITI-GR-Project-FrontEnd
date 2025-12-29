@@ -95,12 +95,28 @@ export class AdminService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || localStorage.getItem('userToken');
+    // Check multiple possible token keys to ensure compatibility
+    const token = localStorage.getItem('token') || 
+                  localStorage.getItem('userToken') || 
+                  localStorage.getItem('Token');
+    
     if (!token) {
-      console.warn('No authentication token found');
+      console.warn('⚠️ AdminService: No authentication token found in localStorage');
+      console.log('Available keys:', Object.keys(localStorage));
+    } else {
+      console.log('✅ AdminService: Token found, length:', token.length);
     }
+
+    // Clean token if it contains quotes or is "null"/"undefined"
+    let cleanToken = token;
+    if (cleanToken === 'null' || cleanToken === 'undefined') cleanToken = null;
+    if (cleanToken && cleanToken.startsWith('"') && cleanToken.endsWith('"')) {
+      cleanToken = cleanToken.slice(1, -1);
+    }
+
     return new HttpHeaders({
-      'Authorization': `Bearer ${token || ''}`
+      'Authorization': `Bearer ${cleanToken || ''}`,
+      'Accept': 'application/json'
     });
   }
 
@@ -645,5 +661,39 @@ export class AdminService {
         } as ApiResponse<boolean>);
       })
     );
+  }
+
+  // ========== NOTIFICATION METHODS ==========
+
+  broadcastNotification(message: string, title?: string, type?: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/AdminNotifications/broadcast`, 
+      { message, title, type }, 
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  sendManualNotification(userId: string, message: string, title?: string, type?: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/AdminNotifications`, 
+      { userId, message, title, type }, 
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // ========== INVENTORY METHODS ==========
+
+  getLowStockProducts(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/AdminInventory/low-stock`, { headers: this.getAuthHeaders() });
+  }
+
+  getExpiredProducts(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/AdminInventory/expired`, { headers: this.getAuthHeaders() });
+  }
+
+  initiateTransfer(transferData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/AdminInventory/transfer`, transferData, { headers: this.getAuthHeaders() });
+  }
+
+  triggerStockAlerts(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/AdminInventory/trigger-alerts`, {}, { headers: this.getAuthHeaders() });
   }
 }

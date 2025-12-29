@@ -5,6 +5,8 @@ import { CartServ } from '../../services/cart-serv';
 import { FavServ } from '../../services/fav-serv';
 import { HomeServ } from '../../services/home-serv';
 import { ThemeService } from '../../services/theme.service';
+import { Auth } from '../../services/auth';
+import { NotificationService } from '../../services/notification.service';
 import { SearchModal } from '../search-modal/search-modal';
 import { Category, Homets } from '../../types/Homets';
 
@@ -23,6 +25,8 @@ export class Nav {
   favserv = inject(FavServ);
   homeServ = inject(HomeServ);
   themeService = inject(ThemeService);
+  authService = inject(Auth);
+  notificationService = inject(NotificationService);
   categories = signal<Category[]>([]);
 
   // Computed signal for logo path that reacts to theme changes
@@ -56,5 +60,13 @@ export class Nav {
 
   openSearch() {
     this.searchModal?.openModal();
+  }
+
+  logout() {
+    this.notificationService.stopConnection();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('role');
+    this.router.navigate(['/login']);
   }
 }

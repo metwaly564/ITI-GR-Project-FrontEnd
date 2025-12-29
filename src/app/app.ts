@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { Footer } from './shared/footer/footer';
 import { Nav } from './shared/nav/nav';
 import { ThemeService } from './services/theme.service';
+import { NotificationService } from './services/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { ThemeService } from './services/theme.service';
 export class App implements OnInit {
   protected readonly title = signal('ITI-Front');
   private themeService = inject(ThemeService);
+  private notificationService = inject(NotificationService);
 
   ngOnInit() {
     // Theme service is initialized automatically via constructor

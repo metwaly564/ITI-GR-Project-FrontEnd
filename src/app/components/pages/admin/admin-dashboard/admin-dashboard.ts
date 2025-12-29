@@ -1,6 +1,13 @@
-import { Component } from '@angular/core';
-
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AdminService } from '../../../../services/admin-serv';
+import { ToastService } from '../../../../services/toast.service';
+import { NotificationService } from '../../../../services/notification.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { BranchServ } from '../../../../services/branch-serv';
+import { ProductServ } from '../../../../services/product-serv';
+import { Router } from '@angular/router';
 
 /**
  * Admin Dashboard Component
@@ -31,11 +38,118 @@ interface DashboardItem {
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule, CommonModule],
   templateUrl: './admin-dashboard.html',
   styleUrls: ['./admin-dashboard.css']
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit {
+  private adminService = inject(AdminService);
+  private toastService = inject(ToastService);
+  private branchService = inject(BranchServ);
+  private productService = inject(ProductServ);
+  private router = inject(Router);
+  
+  lowStockProducts = signal<any[]>([]);
+  expiredProducts = signal<any[]>([]);
+  branches = signal<any[]>([]);
+  allProducts = signal<any[]>([]);
+  realTimeNotifications = signal<any[]>([]);
+  private notificationService = inject(NotificationService);
+
+  // Manual Notification Form
+  notificationData = {
+    userId: '',
+    message: '',
+    title: 'Admin Alert',
+    type: 'General',
+    target: 'All' // 'All' or 'Specific'
+  };
+
+  // Transfer Form
+  transferData = {
+    productId: 0,
+    fromBranchId: 0,
+    toBranchId: 0,
+    quantity: 1,
+    reason: 'Restocking'
+  };
+
+  ngOnInit() {
+    this.checkAuth();
+    this.loadInventoryAlerts();
+    this.loadBranchesAndProducts();
+    this.listenToRealTimeNotifications();
+  }
+
+  listenToRealTimeNotifications() {
+    this.notificationService.notifications$.subscribe(notifications => {
+      this.realTimeNotifications.set(notifications);
+    });
+  }
+
+  checkAuth() {
+    const token = localStorage.getItem('token') || localStorage.getItem('userToken') || localStorage.getItem('Token');
+    if (!token) {
+      this.toastService.info('Please login as admin');
+      this.router.navigate(['/login']);
+    }
+  }
+
+  private handleApiError(err: any) {
+    if (err.status === 401 || err.status === 403) {
+      this.toastService.error('Session expired or unauthorized. Please login again.');
+      this.router.navigate(['/login']);
+    } else {
+      console.error('API Error:', err);
+    }
+  }
+
+  loadInventoryAlerts() {
+    this.adminService.getLowStockProducts().subscribe({
+      next: (res: any[]) => this.lowStockProducts.set(res),
+      error: (err) => this.handleApiError(err)
+    });
+    this.adminService.getExpiredProducts().subscribe({
+      next: (res: any[]) => this.expiredProducts.set(res),
+      error: (err) => this.handleApiError(err)
+    });
+  }
+
+  loadBranchesAndProducts() {
+    this.branchService.getBranches().subscribe((res: any) => this.branches.set(res));
+    this.productService.getProduct().subscribe((res: any) => this.allProducts.set(res));
+  }
+
+  sendNotification() {
+    if (this.notificationData.target === 'All') {
+      this.adminService.broadcastNotification(this.notificationData.message, this.notificationData.title, this.notificationData.type)
+        .subscribe(() => {
+          this.toastService.success('Notification broadcasted successfully');
+          this.notificationData.message = '';
+        });
+    } else {
+      this.adminService.sendManualNotification(this.notificationData.userId, this.notificationData.message, this.notificationData.title, this.notificationData.type)
+        .subscribe(() => {
+          this.toastService.success('Manual notification sent');
+          this.notificationData.message = '';
+        });
+    }
+  }
+
+  initiateTransfer() {
+    this.adminService.initiateTransfer(this.transferData).subscribe(() => {
+      this.toastService.success('Product transfer initiated');
+      this.loadInventoryAlerts();
+    }, err => {
+      this.toastService.error('Transfer failed: ' + (err.error || 'Check stock levels'));
+    });
+  }
+
+  triggerAlerts() {
+    this.adminService.triggerStockAlerts().subscribe((res: any) => {
+      this.toastService.info(`Triggered ${res.alertsSent} alerts`);
+    });
+  }
   getIconPath(iconName: string): string {
     const iconPaths: Record<string, string> = {
       heroShoppingBag: 'M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z',
@@ -62,7 +176,7 @@ export class AdminDashboardComponent {
   dashboardItems: DashboardItem[] = [
     {
       label: 'Edit Products',
-      route: '/AdminEditProducts',
+      route: '/admin/products',
       iconName: 'heroShoppingBag',
       iconColor: 'text-blue-500'
     },

@@ -8,7 +8,16 @@
         
         @if (errorMessage()) {
           <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
-            {{ errorMessage() }}
+            <div class="flex items-center justify-between">
+              <span>{{ errorMessage() }}</span>
+              @if (isAuthError()) {
+                <button
+                  (click)="goToLogin()"
+                  class="ml-4 px-4 py-2 bg-[#a5b2d2] hover:bg-[#8a9bd6] text-white rounded-lg font-semibold transition-colors text-sm whitespace-nowrap">
+                  Go to Login
+                </button>
+              }
+            </div>
           </div>
         }
 
@@ -64,7 +73,7 @@
                 required
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#a5b2d2] focus:border-transparent"
               >
-                <option value="0">Select a city</option>
+                <option [value]="0">Select a city</option>
                 @for (city of cities(); track city.id) {
                   <option [value]="city.id">{{ city.name }}</option>
                 }
